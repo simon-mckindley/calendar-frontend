@@ -1,0 +1,40 @@
+// Vars
+@use 'sass:color';
+
+:root {
+  // base
+  --base-txt-color: #222;
+  --heading-color: #000;
+  --base-font-family: 'Maven-Regular', serif;
+  --body-bg: rgba(45, 255, 255, 0.05);
+
+  // colors  
+  $brand-color: #9260b4;
+  --brand-color: #{$brand-color};
+  --link-color: --brand-color;
+  --primary-color: #ff2d2d;
+  --secondary-color: #00aaaa;
+  --light-secondary-color: #00a8a880;
+  --shadow-color: #00000066;
+
+  // app header
+  --app-header-height: 60px;
+  --app-header-txt-color: rgb(0, 0, 0);
+  --app-header-bg-color: rgba(0, 0, 0, 0.05);
+  --app-header-title-font-size: 2rem;
+
+  // shoelace tokens
+  // full list here:
+  // https://github.com/shoelace-style/shoelace/blob/current/src/styles/base.scss
+  --sl-color-primary-50: #f4f4f4;
+  --sl-color-primary-100: #{color.adjust($brand-color, $lightness: 40%)};
+  --sl-color-primary-200: #{color.adjust($brand-color, $lightness: 30%)};
+  --sl-color-primary-300: #{color.adjust($brand-color, $lightness: 20%)};
+  --sl-color-primary-400: #{color.adjust($brand-color, $lightness: 10%)};
+  --sl-color-primary-500: #{$brand-color};
+  --sl-color-primary-600: #{color.adjust($brand-color, $lightness: -10%)};
+  --sl-color-primary-700: #{color.adjust($brand-color, $lightness: -20%)};
+  --sl-color-primary-800: #{color.adjust($brand-color, $lightness: -30%)};
+  --sl-color-primary-900: #{color.adjust($brand-color, $lightness: -40%)};
+  --sl-focus-ring-color-primary: #{rgba($brand-color, 0.1)};
+}

@@ -1,0 +1,30 @@
+@use 'vars' as *;
+@use 'base' as *;
+@use 'forms' as *;
+@use 'shoelace' as *;
+@use 'toast' as *;
+
+@font-face {
+    font-family: "Maven-Regular";
+    src: url('../../fonts/maven_pro/MavenPro-Regular.ttf');
+}
+
+@font-face {
+    font-family: "Maven-Medium";
+    src: url('../../fonts/maven_pro/MavenPro-Medium.ttf');
+}
+
+@font-face {
+    font-family: "Maven-SemiBold";
+    src: url('../../fonts/maven_pro/MavenPro-SemiBold.ttf');
+}
+
+@font-face {
+    font-family: "Maven-Bold";
+    src: url('../../fonts/maven_pro/MavenPro-Bold.ttf');
+}
+
+@font-face {
+    font-family: "Lemon-Regular";
+    src: url("../../fonts/lemon/Lemon-Regular.ttf");
+}

@@ -1,0 +1,35 @@
+{
+  "name": "calendar-frontend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "parcel src/index.html",
+    "prod": "parcel build src/index.html"
+  },
+  "author": "Simon Mckindley",
+  "license": "ISC",
+  "dependencies": {
+    "@shoelace-style/shoelace": "^2.17.1",
+    "fullcalendar": "^6.1.15",
+    "gsap": "^3.12.5",
+    "lit": "^3.2.0",
+    "lit-element": "^4.1.0",
+    "moment": "^2.30.1",
+    "parcel-plugin-static-files-copy": "^2.6.0",
+    "scss": "^0.2.4"
+  },
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.12.0",
+    "parcel": "^2.12.0",
+    "parcel-reporter-static-files-copy": "^1.5.3",
+    "sass": "^1.79.4"
+  },
+  "browserslist": [
+    "since 2017-06"
+  ],
+  "staticFiles": {
+    "staticPath": "static",
+    "watcherGlob": "**"
+  },
+  "description": ""
+}
