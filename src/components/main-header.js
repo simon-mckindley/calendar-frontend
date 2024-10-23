@@ -115,6 +115,7 @@ customElements.define('main-header', class AppHeader extends LitElement {
         border: 1px solid var(--secondary-color);
         border-radius: 5px;
         box-shadow: 2px 2px 4px 0px var(--shadow-color);
+        z-index: 1000;
         transition: right 500ms
       }
 
@@ -152,7 +153,7 @@ customElements.define('main-header', class AppHeader extends LitElement {
       <span class="app-title">ClanCalendar</span>
 
       ${Auth.currentUser ? html`
-        <nav class="top-nav">       
+        <nav class="top-nav">
           <button type="button" class="nav-button" @click="${() => this.showMenu()}">
               ${Auth.currentUser && Auth.currentUser.firstName}
               <sl-avatar style="--size: 28px;" image=${(Auth.currentUser && Auth.currentUser.avatar) ?

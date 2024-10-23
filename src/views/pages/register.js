@@ -1,10 +1,10 @@
-import App from './../../App'
-import Auth from './../../Auth'
+import App from '../../App'
+import Auth from '../../Auth'
 import { html, render } from 'lit'
-import { anchorRoute, gotoRoute } from './../../Router'
-import Utils from './../../Utils'
+import { anchorRoute, gotoRoute } from '../../Router'
+import Utils from '../../Utils'
 
-class SignUpView {
+class RegisterView {
 
   init() {
     console.log('SignUpView.init')
@@ -26,7 +26,9 @@ class SignUpView {
   }
 
   render() {
-    const template = html`      
+    const template = html`   
+      <main-header></main-header>
+         
       <div class="page-content page-centered">      
         <div class="signinup-box">
         <img class="signinup-logo" src="/images/logo.svg">
@@ -55,4 +57,4 @@ class SignUpView {
 }
 
 
-export default new SignUpView()
+export default new RegisterView()

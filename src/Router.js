@@ -1,21 +1,21 @@
 // import views
 import homeView from './views/pages/home'
 import fourOFourView from './views/pages/404'
-import signinView from './views/pages/signin'
-import signupView from './views/pages/signup'
+import loginView from './views/pages/login'
+import registerView from './views/pages/register'
 import profileView from './views/pages/profile'
 import editProfileView from './views/pages/editProfile'
-import calendar from './views/pages/calendar'
+import calendarView from './views/pages/calendar'
 
 // define routes
 const routes = {
 	'/': homeView,
 	'404': fourOFourView,
-	'/signin': signinView,
-	'/signup': signupView,
+	'/login': loginView,
+	'/register': registerView,
 	'/profile': profileView,
 	'/editProfile': editProfileView,
-	'/calendar': calendar
+	'/calendar': calendarView
 }
 
 class Router {

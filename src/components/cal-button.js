@@ -4,7 +4,11 @@ class CalButton extends LitElement {
   static get properties() {
     return {
       // The button type: primary or secondary
-      type: { type: String },
+      buttonType: { type: String },
+      // If is submit button
+      submit: { type: Boolean },
+      // Inline style
+      style: { type: String },
       // The function to call when the button is clicked
       onClick: { type: Function }
     };
@@ -17,7 +21,6 @@ class CalButton extends LitElement {
         font-family: "Maven-SemiBold";
         font-size: 1em;
         padding: 0.5em 1.5em;
-        /* width: 100%; */
         border-radius: 1000px;
         border: none;
         outline-width: 2px;
@@ -43,8 +46,7 @@ class CalButton extends LitElement {
       }
 
       .cal-btn.primary:hover {
-        color: var(--primary-color);
-        background-color: #ffffff;
+        background-color: #cc0000;
       }
 
       /* Secondary button style */
@@ -61,13 +63,19 @@ class CalButton extends LitElement {
 
   constructor() {
     super();
-    this.type = 'primary'; // Default button type
+    this.buttonType = 'primary'; // Default button type
+    this.submit = false;        // Default submit status
+    this.style = '';          // Default inline style
     this.onClick = () => { }; // Default empty function
   }
 
   render() {
     return html`
-      <button class="cal-btn ${this.type}" @click="${this.onClick}">
+      <button 
+        class="cal-btn ${this.buttonType}" 
+        type="${this.submit ? 'submit' : 'button'}"
+        style="${this.style}"
+        @click="${this.onClick}">
         <slot></slot> <!-- Slot for custom button text/content -->
       </button>
     `;

@@ -28,13 +28,13 @@ class HomeView {
         <div style="color: black; font-size: xx-large;">
           <i class="fa-solid fa-bars"></i>
         </div>
-        <cal-button .onClick=${() => alert('Primary Button Clicked')} type="primary">
+        <cal-button .onClick=${() => alert('Primary Button Clicked')} buttonType="primary" submit=true>
           Primary Button
         </cal-button>
 
         <div style="height: 10px"></div>
 
-        <cal-button .onClick=${() => alert('Secondary Button Clicked')} type="secondary">
+        <cal-button .onClick=${() => alert('Secondary Button Clicked')} buttonType="secondary">
           Secondary Button
         </cal-button>
 

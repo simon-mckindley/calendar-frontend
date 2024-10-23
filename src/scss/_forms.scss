@@ -1,8 +1,6 @@
 // Forms
 
-.input-group {
-  margin-bottom: .5em;
-}
-.page-form {
-  max-width: 700px;
+.form-login {
+  display: flex;
+  flex-direction: column;
 }
