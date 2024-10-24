@@ -30,14 +30,6 @@ class CalButton extends LitElement {
         box-shadow: 2px 2px 5px 1px var(--shadow-color);
         transition: background-color 300ms ease, color 300ms ease;
       }
-      
-      .cal-btn:focus-visible {
-        outline: 2px solid #000000;
-      }
-
-      .cal-btn:active {
-        box-shadow: 1px 1px 2px 0px var(--shadow-color);
-      }
 
       /* Primary button style */
       .cal-btn.primary {
@@ -57,6 +49,14 @@ class CalButton extends LitElement {
 
       .cal-btn.secondary:hover {
         background-color: var(--secondary-color);
+      }
+   
+      .cal-btn:focus-visible {
+        outline-color: #444;
+      }
+
+      .cal-btn:active {
+        box-shadow: 1px 1px 2px 0px var(--shadow-color);
       }
     `;
   }

@@ -13,17 +13,6 @@ customElements.define('main-header', class AppHeader extends LitElement {
     this.handleGlobalClick = this.handleGlobalClick.bind(this);
   }
 
-  // static get properties() {
-  //   return {
-  //     title: {
-  //       type: String
-  //     },
-  //     user: {
-  //       type: Object
-  //     }
-  //   }
-  // }
-
   createRenderRoot() {
     return this; // This makes the component render in the light DOM
   }
@@ -60,6 +49,8 @@ customElements.define('main-header', class AppHeader extends LitElement {
   }
 
   handleGlobalClick(event) {
+    if (!Auth.currentUser) return;
+
     if (event.target !== this.navBtn && event.target !== this.menu && event.target !== this.avatar) {
       this.menu.classList.remove("show-menu");
     }

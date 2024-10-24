@@ -6,6 +6,7 @@ class CalInput extends LitElement {
       type: { type: String },  // Type of the input (text, password, email, etc.)
       label: { type: String },      // Label for the input
       name: { type: String },       // Name for the input
+      hasError: { type: Boolean },  // Indicates if input has error state
       placeholder: { type: String }, // Input placeholder tex
       style: { type: String },    // Inline style
       value: { type: String }       // Value of the input (for returning form data)
@@ -49,6 +50,10 @@ class CalInput extends LitElement {
       .cal-input-wrapper input:focus-visible+label {
         translate: 1em;
       }
+
+      .cal-input-wrapper .error {
+        outline: 1px solid var(--primary-color);
+      }
     `;
   }
 
@@ -56,7 +61,8 @@ class CalInput extends LitElement {
     super();
     this.type = 'text';  // Default input type
     this.label = '';          // Default label
-    this.name = 'cal-input';    // Default name
+    this.name = this.label;    // Default name
+    this.hasError = false     // Default error state
     this.placeholder = '';    // Default placeholder
     this.style = '';          // Default inline style
     this.value = '';          // Default value
@@ -65,9 +71,10 @@ class CalInput extends LitElement {
   handleInputChange(e) {
     // Update the value when the user types in the input field
     this.value = e.target.value;
+    // this.hasError = false;
     // Emit a custom event so parent forms can catch the value
     this.dispatchEvent(new CustomEvent('input-change', {
-      detail: { value: this.value },
+      detail: { name: this.name, value: this.value },
       bubbles: true,
       composed: true
     }));
@@ -80,6 +87,7 @@ class CalInput extends LitElement {
           id="id_${this.name.replace(' ', '_')}"
           name="${this.name.replace(' ', '_')}"
           type="${this.type}"
+          class="${this.hasError ? 'error' : ''}"
           placeholder="${this.placeholder}"
           maxlength="100"
           .value="${this.value}"

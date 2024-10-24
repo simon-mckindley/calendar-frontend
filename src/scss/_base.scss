@@ -16,6 +16,7 @@ body {
 
 img {
   display: block;
+  width: 100%;
 }
 
 
@@ -115,7 +116,28 @@ a {
 }
 
 .login-logo {
-  
+  margin-left: auto;
+  max-width: 28em;
+  translate: 0 40rem;
+  rotate: -20deg;
+  scale: 1.2;
+  filter: drop-shadow(6px 6px 8px var(--shadow-color));
+  animation: login-logo 1800ms ease-out 800ms forwards;
+}
+
+@keyframes login-logo {
+  60% {
+    rotate: -20deg;
+    scale: 1.2;
+    filter: drop-shadow(6px 6px 8px var(--shadow-color));
+  }
+
+  100% {
+    translate: 0 0;
+    rotate: -10deg;
+    scale: 1;
+    filter: drop-shadow(3px 3px 4px var(--shadow-color));
+  }
 }
 
 // guide page ---------------

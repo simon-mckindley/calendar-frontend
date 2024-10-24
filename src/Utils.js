@@ -17,6 +17,11 @@ class Utils {
     if (!pageContent) return
     gsap.fromTo(pageContent, { opacity: 0, y: -12 }, { opacity: 1, y: 0, ease: 'power2.out', duration: 0.3 })
   }
+
+  validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
 }
 
 export default new Utils()
