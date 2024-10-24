@@ -3,22 +3,58 @@ import Auth from '../../Auth'
 import { html, render } from 'lit'
 import { anchorRoute, gotoRoute } from '../../Router'
 import Utils from '../../Utils'
+import Toast from '../../Toast'
+
+let formData;
 
 class RegisterView {
-
   init() {
-    console.log('SignUpView.init')
-    document.title = 'Sign In'
-    this.render()
-    Utils.pageIntroAnim()
+    document.title = 'Register';
+    formData = {};
+    this.render();
+    Utils.pageIntroAnim();
   }
 
-  signUpSubmitHandler(e) {
-    e.preventDefault()
-    const submitBtn = document.querySelector('.submit-btn')
-    submitBtn.setAttribute('loading', '')
-    const formData = e.detail.formData
+  // Handle input changes
+  handleInputChange(event) {
+    event.target.removeAttribute("hasError");
+    const { name, value } = event.detail;
+    formData[name] = value;  // Dynamically update form data
+  }
+
+  registerSubmitHandler(e) {
+    // Checks if all data is present
     console.log(formData);
+    let error = "";
+    const fields = ['firstname', 'lastname', 'email', 'password'];
+
+    fields.forEach(field => {
+      if (!formData[field]) {
+        document.querySelector(`cal-input[name="${field}"]`).setAttribute("hasError", "true");
+        error += error ? `, ${field.toUpperCase()}` : field.toUpperCase();
+      }
+    });
+
+    if (error) {
+      Toast.show(`Please enter your ${error}`, 'error');
+      return;
+    }
+
+    // Validates email address
+    if (!Utils.validateEmail(formData['email'])) {
+      document.querySelector(`cal-input[name="email"]`).setAttribute("hasError", "true");
+      Toast.show(`Please enter a valid EMAIL address`, 'error');
+      return;
+    }
+
+    let encodedFormData = new FormData();
+    for (const key in formData) {
+      if (formData.hasOwnProperty(key)) {
+        encodedFormData.append(key, formData[key]);
+      }
+    }
+    const submitBtn = document.querySelector('cal-button');
+    submitBtn.textContent = "Loading...";
 
     // sign up using Auth
     // Auth.signUp(formData, () => {
@@ -31,26 +67,45 @@ class RegisterView {
       <main-header></main-header>
 
       <div class="page-content page-centered">      
-        <div class="signinup-box">
-        <img class="signinup-logo" src="/images/logo.svg">
-          <h1>Sign Up</h1>
-          <sl-form class="form-signup" @sl-submit=${this.signUpSubmitHandler}>
-            <div class="input-group">
-              <sl-input name="firstName" type="text" placeholder="First Name" required></sl-input>
+        <div class="register-wrapper">
+          <form class="form-register">
+
+            <div class="input-wrapper">
+              <cal-input label="First Name" name="firstname" type="text"
+                @input-change=${this.handleInputChange}>
+              </cal-input>
             </div>
-            <div class="input-group">
-              <sl-input name="lastName" type="text" placeholder="Last Name" required></sl-input>
+            <div class="input-wrapper">
+              <cal-input label="Last Name" name="lastname" type="text"
+                @input-change=${this.handleInputChange}>
+              </cal-input>
             </div>
-            <div class="input-group">
-              <sl-input name="email" type="email" placeholder="Email" required></sl-input>
+            <div class="input-wrapper">
+              <cal-input label="Email" name="email" type="email"
+                @input-change=${this.handleInputChange}>
+              </cal-input>
             </div>
-            <div class="input-group">
-              <sl-input name="password" type="password" placeholder="Password" required toggle-password></sl-input>
-            </div>            
-            <sl-button type="primary" class="submit-btn" submit style="width: 100%;">Sign Up</sl-button>
-            <button type="submit">kkk</button>
-          </sl-form>
-          <p>Have an account? <a href="/login" @click=${anchorRoute}>Sign In</a></p>
+            <div class="input-wrapper">
+              <cal-input label="Password" name="password" type="password"
+                @input-change=${this.handleInputChange}>
+              </cal-input>
+            </div>
+            <div class="input-wrapper">
+              <cal-input label="User Type" name="accessLevel" type="text"
+                @input-change=${this.handleInputChange}>
+              </cal-input>
+            </div>
+
+            <cal-button
+              buttonType="primary"
+              addStyle="width: 100%; margin-block-start: 2em;" 
+              .onClick=${() => this.registerSubmitHandler()}
+            >Register</cal-button>
+          </form>
+
+          <p class="acc-link">Already registered? 
+            <a href="/login" @click=${anchorRoute}>Login</a>
+          </p>
         </div>
       </div>
     `

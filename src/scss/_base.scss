@@ -11,7 +11,7 @@ body {
   color: var(--base-txt-color);
   font-family: var(--base-font-family);
   background: var(--body-bg);
-  height: 100vh;
+  min-height: 100vh;
 }
 
 img {
@@ -85,6 +85,8 @@ a {
   position: absolute;
   inset: 0;
   overflow: hidden;
+  max-width: 1600px;
+  margin-inline: auto;
 }
 
 // page --------------------
@@ -138,6 +140,23 @@ a {
     scale: 1;
     filter: drop-shadow(3px 3px 4px var(--shadow-color));
   }
+}
+
+.register-wrapper {
+  width: clamp(20em, 50vw, 40em);
+  padding-bottom: 5em;
+
+  .acc-link {
+    text-align: center;
+
+    a {
+      font-weight: bold;
+    }
+  }
+}
+
+.input-wrapper:not(:first-child) {
+  margin-block-start: 0.5em;
 }
 
 // guide page ---------------

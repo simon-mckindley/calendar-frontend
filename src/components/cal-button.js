@@ -8,7 +8,7 @@ class CalButton extends LitElement {
       // If is submit button
       submit: { type: Boolean },
       // Inline style
-      style: { type: String },
+      addStyle: { type: String },
       // The function to call when the button is clicked
       onClick: { type: Function }
     };
@@ -65,7 +65,7 @@ class CalButton extends LitElement {
     super();
     this.buttonType = 'primary'; // Default button type
     this.submit = false;        // Default submit status
-    this.style = '';          // Default inline style
+    this.addStyle = '';          // Default inline style
     this.onClick = () => { }; // Default empty function
   }
 
@@ -74,7 +74,7 @@ class CalButton extends LitElement {
       <button 
         class="cal-btn ${this.buttonType}" 
         type="${this.submit ? 'submit' : 'button'}"
-        style="${this.style}"
+        style="${this.addStyle}"
         @click="${this.onClick}">
         <slot></slot> <!-- Slot for custom button text/content -->
       </button>

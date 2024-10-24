@@ -9,10 +9,10 @@ let formData;
 
 class LoginView {
   init() {
-    document.title = 'Login'
+    document.title = 'Login';
     formData = {};
-    this.render()
-    Utils.pageIntroAnim()
+    this.render();
+    Utils.pageIntroAnim();
   }
 
   // Handle input changes
@@ -23,7 +23,7 @@ class LoginView {
   }
 
   // Handle form submission
-  signInSubmitHandler() {
+  loginSubmitHandler() {
     // Checks if all data is present
     let error = "";
     const fields = ['email', 'password'];
@@ -74,23 +74,26 @@ class LoginView {
           </div>
  
           <form class="form-login">
-            <cal-input label="Email" name="email" type="email"
-              @input-change=${this.handleInputChange}>
-            </cal-input>
-            <cal-input label="Password" name="password" type="password"
-              @input-change=${this.handleInputChange}
-              style="margin-block-start: 0.5em">
-            </cal-input>
+            <div class="input-wrapper">
+              <cal-input label="Email" name="email" type="email"
+                @input-change=${this.handleInputChange}>
+              </cal-input>
+            </div>
+            <div class="input-wrapper">
+              <cal-input label="Password" name="password" type="password"
+                @input-change=${this.handleInputChange}>
+              </cal-input>
+            </div>
 
             <cal-button
               buttonType="primary"
-              style="width: 100%; margin-block-start: 1em" 
-              .onClick=${() => this.signInSubmitHandler()}
+              addStyle="width: 100%; margin-block-start: 2em;" 
+              .onClick=${() => this.loginSubmitHandler()}
             >Login</cal-button>
 
             <cal-button 
               buttonType="secondary" 
-              style="width: 100%; margin-block-start: 0.5em" 
+              addStyle="width: 100%; margin-block-start: 1em;" 
               .onClick=${() => gotoRoute('/register')}
             >Register</cal-button>
           </form>

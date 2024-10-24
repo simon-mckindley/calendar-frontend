@@ -8,7 +8,7 @@ class CalInput extends LitElement {
       name: { type: String },       // Name for the input
       hasError: { type: Boolean },  // Indicates if input has error state
       placeholder: { type: String }, // Input placeholder tex
-      style: { type: String },    // Inline style
+      addStyle: { type: String },    // Inline style
       value: { type: String }       // Value of the input (for returning form data)
     };
   }
@@ -64,14 +64,13 @@ class CalInput extends LitElement {
     this.name = this.label;    // Default name
     this.hasError = false     // Default error state
     this.placeholder = '';    // Default placeholder
-    this.style = '';          // Default inline style
+    this.addStyle = '';          // Default inline style
     this.value = '';          // Default value
   }
 
   handleInputChange(e) {
     // Update the value when the user types in the input field
     this.value = e.target.value;
-    // this.hasError = false;
     // Emit a custom event so parent forms can catch the value
     this.dispatchEvent(new CustomEvent('input-change', {
       detail: { name: this.name, value: this.value },
@@ -82,7 +81,7 @@ class CalInput extends LitElement {
 
   render() {
     return html`
-      <div class="cal-input-wrapper" style="${this.style}">
+      <div class="cal-input-wrapper" style="${this.addStyle}">
         <input
           id="id_${this.name.replace(' ', '_')}"
           name="${this.name.replace(' ', '_')}"
