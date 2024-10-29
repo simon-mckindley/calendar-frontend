@@ -3,6 +3,7 @@ import Router, { gotoRoute } from './Router'
 import splash from './views/partials/splash'
 import { html, render } from 'lit'
 import Toast from './Toast'
+import Utils from './Utils'
 
 class Auth {
 
@@ -24,7 +25,9 @@ class Auth {
       // show error      
       Toast.show(`Problem getting user: ${response.status}`)
       // run fail() functon if set
-      if (typeof fail == 'function') fail()
+      if (typeof fail == 'function') fail();
+
+      return;
     }
     /// sign up success - show toast and redirect to sign in page
     Toast.show('Account created, please sign in')
@@ -54,12 +57,14 @@ class Auth {
 
     // sign in success
     const data = await response.json()
+    data.user.firstName = Utils.titleCase(data.user.firstName);
+    data.user.lastName = Utils.titleCase(data.user.lastName);
     Toast.show(`Welcome  ${data.user.firstName}`)
     // save access token (jwt) to local storage
-    localStorage.setItem('accessToken', data.accessToken)
+    localStorage.setItem('cal_accessToken', data.token)
     // set current user
     this.currentUser = data.user
-    // console.log(this.currentUser)           
+    console.log(this.currentUser);
     // redirect to home
     Router.init()
     gotoRoute('/')
@@ -71,7 +76,7 @@ class Auth {
     render(splash, App.rootEl)
 
     // check local token is there
-    if (!localStorage.accessToken) {
+    if (!localStorage.cal_accessToken) {
       // no local token!
       Toast.show("Please sign in")
       // redirect to sign in page      
@@ -83,7 +88,7 @@ class Auth {
     const response = await fetch(`${App.apiBase}/auth/validate`, {
       method: 'GET',
       headers: {
-        "Authorization": `Bearer ${localStorage.accessToken}`
+        "Authorization": `Bearer ${localStorage.cal_accessToken}`
       }
     })
 
@@ -93,18 +98,20 @@ class Auth {
       const err = await response.json()
       if (err) console.log(err)
       // delete local token
-      localStorage.removeItem('accessToken')
-      Toast.show("session expired, please sign in")
+      localStorage.removeItem('cal_accessToken')
+      Toast.show("Session expired, please sign in")
       // redirect to sign in      
       gotoRoute('/login')
       return
     }
 
     // token is valid!
-    const data = await response.json()
+    const data = await response.json();
+    data.user.firstName = Utils.titleCase(data.user.firstName);
+    data.user.lastName = Utils.titleCase(data.user.lastName);
     // console.log(data)
     // set currentUser obj
-    this.currentUser = data.user
+    this.currentUser = data.user;
     // run success
     success()
   }
@@ -112,7 +119,7 @@ class Auth {
   signOut() {
     Toast.show("You are signed out")
     // delete local token
-    localStorage.removeItem('accessToken')
+    localStorage.removeItem('cal_accessToken')
     // redirect to sign in    
     gotoRoute('/login')
     // unset currentUser

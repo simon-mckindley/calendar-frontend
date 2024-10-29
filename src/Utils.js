@@ -22,6 +22,18 @@ class Utils {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   }
+
+  titleCase(txt) {
+    if (!txt) return;
+
+    if (txt.length === 1) {
+      return txt.charAt(0).toUpperCase();
+    }
+    if (txt.length > 1) {
+      return txt.charAt(0).toUpperCase() + txt.slice(1);
+    }
+  }
+
 }
 
 export default new Utils()

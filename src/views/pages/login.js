@@ -15,6 +15,18 @@ class LoginView {
     Utils.pageIntroAnim();
   }
 
+  // handleLogoAnimation() {
+  //   console.log("Logo Animation");
+  //   document.querySelector(".login-logo").classList.add("login-logo-show");
+  // }
+
+  keyboardSubmit(event) {
+    if (event.key === "Enter") {
+      console.log("Keyboard Submit :-(");
+      this.loginSubmitHandler;
+    }
+  }
+
   // Handle input changes
   handleInputChange(event) {
     event.target.removeAttribute("hasError");
@@ -53,6 +65,7 @@ class LoginView {
         encodedFormData.append(key, formData[key]);
       }
     }
+
     const submitBtn = document.querySelector('cal-button');
     submitBtn.textContent = "Loading...";
     //submitBtn.setAttribute('loading', '');
@@ -70,10 +83,10 @@ class LoginView {
       <div class="page-content page-centered" style="overflow: hidden;">
         <div class="login-wrapper">
           <div>
-            <img class="login-logo" src="/images/calendar_image.png">      
+            <img class="login-logo login-logo-show" src="/images/calendar_image.png">      
           </div>
  
-          <form class="form-login">
+          <form class="form-login" @keyup=${this.keyboardSubmit}>
             <div class="input-wrapper">
               <cal-input label="Email" name="email" type="email"
                 @input-change=${this.handleInputChange}>

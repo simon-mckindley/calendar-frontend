@@ -1,5 +1,5 @@
 // import views
-import homeView from './views/pages/home'
+import homeView from './views/pages/user_home'
 import fourOFourView from './views/pages/404'
 import loginView from './views/pages/login'
 import registerView from './views/pages/register'

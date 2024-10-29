@@ -124,7 +124,10 @@ a {
   rotate: -20deg;
   scale: 1.2;
   filter: drop-shadow(6px 6px 8px var(--shadow-color));
-  animation: login-logo 1800ms ease-out 800ms forwards;
+}
+
+.login-logo-show {
+  animation: login-logo 1500ms ease-out 800ms forwards;
 }
 
 @keyframes login-logo {
@@ -157,6 +160,40 @@ a {
 
 .input-wrapper:not(:first-child) {
   margin-block-start: 0.5em;
+}
+
+// user home page
+.userhome-wrapper {
+  display: grid;
+  grid-template:
+    ". title"
+    "links events" / 1fr 1fr;
+  column-gap: 3em;
+
+  >* {
+    width: 40vw;
+  }
+
+  .links-wrapper {
+    grid-area: links;
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+  }
+
+  .events-title {
+    grid-area: title;
+    font-family: "Maven-SemiBold";
+    margin: 0;
+    padding-block-end: 0.5em;
+    border-bottom: 2px solid var(--shadow-color);
+  }
+
+  .events-wrapper {
+    grid-area: events;
+    height: 70vh;
+    overflow-y: scroll;
+  }
 }
 
 // guide page ---------------

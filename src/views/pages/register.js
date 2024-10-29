@@ -22,16 +22,23 @@ class RegisterView {
     formData[name] = value;  // Dynamically update form data
   }
 
-  registerSubmitHandler(e) {
+
+  registerSubmitHandler() {
+    formData["accessLevel"] = 2;
     // Checks if all data is present
     console.log(formData);
     let error = "";
-    const fields = ['firstname', 'lastname', 'email', 'password'];
+    const fields = ['firstName', 'lastName', 'email', 'password'];
 
     fields.forEach(field => {
+      if (formData[field]) {
+        formData[field] = formData[field].trim();
+      }
+
       if (!formData[field]) {
         document.querySelector(`cal-input[name="${field}"]`).setAttribute("hasError", "true");
-        error += error ? `, ${field.toUpperCase()}` : field.toUpperCase();
+        let fieldName = field.includes('Name') ? field.slice(0, -4).concat(" ", "name") : field;
+        error += error ? `, ${fieldName.toUpperCase()}` : fieldName.toUpperCase();
       }
     });
 
@@ -57,9 +64,9 @@ class RegisterView {
     submitBtn.textContent = "Loading...";
 
     // sign up using Auth
-    // Auth.signUp(formData, () => {
-    //   submitBtn.removeAttribute('loading')
-    // })
+    Auth.signUp(encodedFormData, () => {
+      submitBtn.textContent = "Register";
+    });
   }
 
   render() {
@@ -71,12 +78,12 @@ class RegisterView {
           <form class="form-register">
 
             <div class="input-wrapper">
-              <cal-input label="First Name" name="firstname" type="text"
+              <cal-input label="First Name" name="firstName" type="text"
                 @input-change=${this.handleInputChange}>
               </cal-input>
             </div>
             <div class="input-wrapper">
-              <cal-input label="Last Name" name="lastname" type="text"
+              <cal-input label="Last Name" name="lastName" type="text"
                 @input-change=${this.handleInputChange}>
               </cal-input>
             </div>
