@@ -5,18 +5,19 @@ import Auth from './../../Auth'
 import Utils from './../../Utils'
 
 class UserHomeView {
-    init() {
-        console.log('UserHomeView.init')
-        document.title = 'Home'
-        this.render()
-        Utils.pageIntroAnim()
-    }
+  init() {
+    console.log('UserHomeView.init')
+    this.items = [{ title: 'Event 1', date: 'October 14, 2024' }, { title: 'Event 2', date: 'October 16, 2024' }, { title: 'Event 3', date: 'October 29, 2024' }, { title: 'Event 1', date: 'October 14, 2024' }, { title: 'Event 2', date: 'October 16, 2024' }, { title: 'Event 3', date: 'October 29, 2024' }, { title: 'Event 1', date: 'October 14, 2024' }, { title: 'Event 2', date: 'October 16, 2024' }, { title: 'Event 3', date: 'October 29, 2024' }]; // test events
+    document.title = 'Home'
+    this.render()
+    Utils.pageIntroAnim()
+  }
 
-    render() {
-        const template = html`
+  render() {
+    const template = html`
         <main-header></main-header>
       
-        <div class="page-content  page-centered">
+        <div class="page-content page-centered">
           <div class="userhome-wrapper">
 
             <div class="links-wrapper">
@@ -42,15 +43,23 @@ class UserHomeView {
             <h2 class="events-title">Upcoming Events</h2>
 
             <div class="events-wrapper">
+              <!-- todo - get events, display a data-tile for each -->
+              ${this.items.map(
+                item => html`
+                  <data-tile 
+                    label=${item.title} 
+                    date=${item.date} 
+                    .onClick=${() => alert('Tile clicked!')}>
+                  </data-tile>`
+                )}
               <data-tile label="Event Title" date="October 14, 2024" .onClick=${() => alert('Tile clicked!')}></data-tile>
-                <!-- todo - get events, display a data-tile for each -->
             </div>
 
           </div>
         </div>
       `
-        render(template, App.rootEl)
-    }
+    render(template, App.rootEl)
+  }
 }
 
 export default new UserHomeView()

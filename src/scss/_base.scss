@@ -186,14 +186,24 @@ a {
     font-family: "Maven-SemiBold";
     margin: 0;
     padding-block-end: 0.5em;
-    border-bottom: 2px solid var(--shadow-color);
   }
 
   .events-wrapper {
     grid-area: events;
     height: 70vh;
     overflow-y: scroll;
+    border-top: 2px solid var(--shadow-color);
+    border-bottom: 2px solid var(--shadow-color);
+    // box-shadow: inset 0px 0px 6px 1px var(--shadow-color);
   }
+}
+
+.adminhome-wrapper {
+  display: flex;
+  flex-direction: column;
+  row-gap: 2em;
+  width: clamp(5em, 95vw, 30em);
+  margin-block-end: 20vh;
 }
 
 // guide page ---------------

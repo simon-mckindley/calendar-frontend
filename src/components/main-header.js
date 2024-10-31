@@ -86,10 +86,22 @@ customElements.define('main-header', class AppHeader extends LitElement {
       }
 
       .top-nav button {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
         font: inherit;
         background-color: transparent;
         border: none;
         cursor: pointer;
+      }
+
+      .user-title {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .user-title .header-username {
+        font-size: 1.2em;
       }
 
       .nav-dropdown-menu {
@@ -146,8 +158,11 @@ customElements.define('main-header', class AppHeader extends LitElement {
       ${Auth.currentUser ? html`
         <nav class="top-nav">
           <button type="button" class="nav-button" @click="${() => this.showMenu()}">
-              ${Auth.currentUser && Auth.currentUser.firstName}
-              <sl-avatar style="--size: 28px;" image=${(Auth.currentUser && Auth.currentUser.avatar) ?
+            <div class="user-title">
+              <span class="header-username">${Auth.currentUser && Auth.currentUser.firstName}</span>
+              <span>${Auth.currentUser.accessLevel === 1 ? "Admin " : ""}</span>
+            </div>
+            <sl-avatar style="--size: 32px;" image=${(Auth.currentUser && Auth.currentUser.avatar) ?
           `${App.apiBase}/images/${Auth.currentUser.avatar}` : ''}></sl-avatar> 
           </button>
           <div class="nav-dropdown-menu"> 

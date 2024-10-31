@@ -28,7 +28,8 @@ class TemplateView {
             start: 'prev today', // will normally be on the left. if RTL, will be on the right
             center: 'title',
             end: 'timeGridDay dayGridWeek dayGridMonth next' // will normally be on the right. if RTL, will be on the left
-          }
+          },
+          locale: 'en-au'
         });
         console.log(calendar);
         calendar.render();  // Render the calendar

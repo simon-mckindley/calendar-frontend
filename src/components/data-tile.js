@@ -1,20 +1,21 @@
 import { LitElement, html, css } from 'lit-element';
 
 class DataTile extends LitElement {
-    static get properties() {
-        return {
-            type: { type: String },     // Tile type
-            label: { type: String },      // Tile title
-            date: { type: String },       // Tile date
-            onClick: { type: Function }   // Click event handler
-        };
-    }
+  static get properties() {
+    return {
+      type: { type: String },     // Tile type
+      label: { type: String },      // Tile title
+      date: { type: String },       // Tile date
+      onClick: { type: Function }   // Click event handler
+    };
+  }
 
-    static get styles() {
-        return css`
+  static get styles() {
+    return css`
       .data-tile {
         display: flex;
         justify-content: space-between;
+        column-gap: 1em;
         align-items: center;
         padding: 1em;
         margin: 0.5em;
@@ -43,29 +44,29 @@ class DataTile extends LitElement {
         flex-direction: column;
       }
     `;
-    }
+  }
 
-    constructor() {
-        super();
-        this.type = 'event';     // Default tile type
-        this.label = '';         // Default title
-        this.date = '';          // Default date
-        this.onClick = () => { }; // Default empty function for onClick
-    }
+  constructor() {
+    super();
+    this.type = 'event';     // Default tile type
+    this.label = '';         // Default title
+    this.date = '';          // Default date
+    this.onClick = () => { }; // Default empty function for onClick
+  }
 
-    render() {
-        return html`
-      <div class="data-tile" @click="${this.onClick}">
+  render() {
+    return html`
+      <div class="data-tile" @click="${this.onClick}" tabindex="0">
         <div class="tile-title">${this.label}</div>
         <div class="tile-date">
           ${this.type === 'data' ? html`
             <span style="font-size: 0.8em">Created</span>`
-                : html``}
+        : html``}
           <span>${this.date}</span>
         </div>
       </div>
     `;
-    }
+  }
 }
 
 // Define the custom element

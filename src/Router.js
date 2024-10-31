@@ -1,5 +1,8 @@
+import Auth from './Auth.js'
+
 // import views
 import homeView from './views/pages/user_home'
+import adminHomeView from './views/pages/admin_home'
 import fourOFourView from './views/pages/404'
 import loginView from './views/pages/login'
 import registerView from './views/pages/register'
@@ -10,6 +13,7 @@ import calendarView from './views/pages/calendar'
 // define routes
 const routes = {
 	'/': homeView,
+	'/admin': adminHomeView,
 	'404': fourOFourView,
 	'/login': loginView,
 	'/register': registerView,
@@ -60,6 +64,9 @@ export default AppRouter
 
 // programmatically load any route
 export function gotoRoute(pathname) {
+	if (Auth.currentUser && Auth.currentUser.accessLevel === 1 && pathname === '/') {
+		pathname = '/admin'
+	}
 	AppRouter.gotoRoute(pathname)
 }
 
@@ -68,5 +75,8 @@ export function gotoRoute(pathname) {
 export function anchorRoute(e) {
 	e.preventDefault()
 	const pathname = e.target.closest('a').pathname
+	if (Auth.currentUser && Auth.currentUser.accessLevel === 1 && pathname === '/') {
+		pathname = '/admin'
+	}
 	AppRouter.gotoRoute(pathname)
 }
