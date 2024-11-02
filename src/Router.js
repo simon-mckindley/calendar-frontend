@@ -8,6 +8,7 @@ import loginView from './views/pages/login'
 import registerView from './views/pages/register'
 import profileView from './views/pages/profile'
 import editProfileView from './views/pages/editProfile'
+import familyView from './views/pages/family'
 import calendarView from './views/pages/calendar'
 
 // define routes
@@ -19,6 +20,7 @@ const routes = {
 	'/register': registerView,
 	'/profile': profileView,
 	'/editProfile': editProfileView,
+	'/family' : familyView,
 	'/calendar': calendarView
 }
 

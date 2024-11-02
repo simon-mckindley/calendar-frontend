@@ -20,7 +20,7 @@ customElements.define('main-header', class AppHeader extends LitElement {
   firstUpdated() {
     super.firstUpdated()
     this.navActiveLinks()
-    this.navBtn = this.querySelector(".nav-button");
+    this.navBtn = this.querySelector(".header-username");
     this.avatar = this.querySelector("sl-avatar");
     this.menu = this.querySelector(".nav-dropdown-menu");
   }
@@ -166,7 +166,8 @@ customElements.define('main-header', class AppHeader extends LitElement {
           `${App.apiBase}/images/${Auth.currentUser.avatar}` : ''}></sl-avatar> 
           </button>
           <div class="nav-dropdown-menu"> 
-              <button type="button" id="home-link" class="nav-link" @click="${() => gotoRoute('/')}">Home</button>          
+              <button type="button" id="home-link" class="nav-link" @click="${() => gotoRoute('/')}">Home</button>  
+              <button type="button" id="family-link" class="nav-link" @click="${() => gotoRoute('/family')}">Family</button>        
               <button type="button" id="profile-link" class="nav-link" @click="${() => gotoRoute('/profile')}">Profile</button>
               <button type="button" id="editprofile-link" class="nav-link" @click="${() => gotoRoute('/editProfile')}">Edit Profile</button>
               <button type="button" id="calendar-link" class="nav-link" @click="${() => gotoRoute('/calendar')}">Calendar</button>
