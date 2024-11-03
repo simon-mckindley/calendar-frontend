@@ -13,6 +13,8 @@ class FamilyView {
         console.log('FamilyView.init');
         document.title = 'Family';
         this.familyData = null;
+        this.adult = Auth.currentUser.accessLevel === 2;
+        console.log("IS ADULT: " + this.adult);
         this.render();
         Utils.pageIntroAnim();
         this.getFamily();
@@ -59,6 +61,8 @@ class FamilyView {
                 <div class="family-name-row">
                   <div class="family-name">${Utils.titleCase(this.familyData.name)}</div>
                   
+                  ${this.adult ?
+                    html`
                   <cal-button
                     .onClick=${() => alert('Button Clicked')} 
                     buttonType="secondary"
@@ -70,14 +74,16 @@ class FamilyView {
                     .onClick=${() => alert('Button Clicked')} 
                     buttonType="primary">
                     Leave
-                  </cal-button>
+                  </cal-button>` :
+                    html``
+                  }
                 </div>` :
                   html`
                 <div class="family-name no-family">No associated family</div>
                 <cal-button 
                   .onClick=${() => alert('Button Clicked')} 
                   buttonType="primary">
-                  Add Family
+                  Create Family
                 </cal-button>`
                 }
               </div>
@@ -88,12 +94,16 @@ class FamilyView {
               html`
               <div class="members-title">
                 <h2 class="scroll-box-title">Family Members</h2>
+                ${this.adult ?
+                  html`
                 <cal-button 
                   .onClick=${() => alert('Button Clicked')} 
                   buttonType="secondary"
                   addStyle="padding-inline: 0.75em;">
                   <i class="fa-solid fa-plus"></i>
-                </cal-button>
+                </cal-button>` :
+                  html``
+                }
               </div>
               <div class="members-wrapper data-scroll-box">
               ${this.familyData.users && this.familyData.users.length > 0 ?

@@ -198,9 +198,7 @@ a {
 // Family page
 .family-wrapper {
   display: grid;
-  grid-template:
-    ". title"
-    "links events" / 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   column-gap: 3em;
   width: clamp(5em, 95vw, 60em);
 
