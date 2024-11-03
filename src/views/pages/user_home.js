@@ -8,7 +8,7 @@ class UserHomeView {
   init() {
     console.log('UserHomeView.init')
     this.items = [{ title: 'Event 1', date: 'October 14, 2024' }, { title: 'Event 2', date: 'October 16, 2024' }, { title: 'Event 3', date: 'October 29, 2024' }, { title: 'Event 1', date: 'October 14, 2024' }, { title: 'Event 2', date: 'October 16, 2024' }, { title: 'Event 3', date: 'October 29, 2024' }, { title: 'Event 1', date: 'October 14, 2024' }, { title: 'Event 2', date: 'October 16, 2024' }, { title: 'Event 3', date: 'October 29, 2024' }]; // test events
-    this.items = []
+    // this.items = []
     document.title = 'Home'
     this.render()
     Utils.pageIntroAnim()

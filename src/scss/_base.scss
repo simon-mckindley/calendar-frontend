@@ -240,12 +240,19 @@ a {
 
   .family-title {
     padding-inline-start: 1rem;
-    
+
+    .family-name-row {
+      display: flex;
+      flex-wrap: wrap;
+      column-gap: 1rem;
+    }
+
     .family-name {
       font-family: "Maven-SemiBold";
       font-size: 2em;
+      margin-inline-end: 1rem;
       margin-block-end: 1rem;
-      
+
       &.no-family {
         font-size: 1.25em;
       }
@@ -255,6 +262,11 @@ a {
 
   .family-members {
     min-height: 70vh;
+
+    .members-title {
+      display: flex;
+      justify-content: space-between;
+    }
   }
 }
 

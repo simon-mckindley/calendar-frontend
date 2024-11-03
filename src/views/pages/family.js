@@ -56,7 +56,22 @@ class FamilyView {
                 <span>Family</span>
                 ${this.familyData.name ?
                   html`
-                <div class="family-name">${Utils.titleCase(this.familyData.name)}</div>` :
+                <div class="family-name-row">
+                  <div class="family-name">${Utils.titleCase(this.familyData.name)}</div>
+                  
+                  <cal-button
+                    .onClick=${() => alert('Button Clicked')} 
+                    buttonType="secondary"
+                    addStyle="padding-inline: 0.75em;">
+                    <i class="fa-solid fa-pen"></i>
+                  </cal-button>
+
+                  <cal-button
+                    .onClick=${() => alert('Button Clicked')} 
+                    buttonType="primary">
+                    Leave
+                  </cal-button>
+                </div>` :
                   html`
                 <div class="family-name no-family">No associated family</div>
                 <cal-button 
@@ -71,7 +86,15 @@ class FamilyView {
             <div class="family-members">
             ${this.familyData.name ?
               html`
-              <h2 class="members-title scroll-box-title">Family Members</h2>
+              <div class="members-title">
+                <h2 class="scroll-box-title">Family Members</h2>
+                <cal-button 
+                  .onClick=${() => alert('Button Clicked')} 
+                  buttonType="secondary"
+                  addStyle="padding-inline: 0.75em;">
+                  <i class="fa-solid fa-plus"></i>
+                </cal-button>
+              </div>
               <div class="members-wrapper data-scroll-box">
               ${this.familyData.users && this.familyData.users.length > 0 ?
                 html`
