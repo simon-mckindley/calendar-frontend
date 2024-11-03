@@ -8,6 +8,7 @@ class UserHomeView {
   init() {
     console.log('UserHomeView.init')
     this.items = [{ title: 'Event 1', date: 'October 14, 2024' }, { title: 'Event 2', date: 'October 16, 2024' }, { title: 'Event 3', date: 'October 29, 2024' }, { title: 'Event 1', date: 'October 14, 2024' }, { title: 'Event 2', date: 'October 16, 2024' }, { title: 'Event 3', date: 'October 29, 2024' }, { title: 'Event 1', date: 'October 14, 2024' }, { title: 'Event 2', date: 'October 16, 2024' }, { title: 'Event 3', date: 'October 29, 2024' }]; // test events
+    this.items = []
     document.title = 'Home'
     this.render()
     Utils.pageIntroAnim()
@@ -40,19 +41,18 @@ class UserHomeView {
               >Family</cal-button>
             </div>
 
-            <h2 class="events-title">Upcoming Events</h2>
-
-            <div class="events-wrapper">
-              <!-- todo - get events, display a data-tile for each -->
-              ${this.items.map(
-                item => html`
-                  <data-tile 
-                    label=${item.title} 
-                    date=${item.date} 
-                    .onClick=${() => alert('Tile clicked!')}>
-                  </data-tile>`
-                )}
-              <data-tile label="Event Title" date="October 14, 2024" .onClick=${() => alert('Tile clicked!')}></data-tile>
+            <h2 class="events-title scroll-box-title">Upcoming Events</h2>
+            <div class="events-wrapper data-scroll-box">
+            ${this.items && this.items.length > 0
+              ? this.items.map(item => html`
+              <data-tile 
+                label=${item.title} 
+                date=${item.date} 
+                .onClick=${() => alert('Tile clicked!')}>
+              </data-tile>`) : 
+              html`
+              <div>No current events</div>`
+            }
             </div>
 
           </div>

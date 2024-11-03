@@ -34,6 +34,13 @@ class Utils {
     }
   }
 
+  // Utility function to format date in "25 February 2024" format
+  formatDateAU(date) {
+    const formattedDate = new Date(date);
+    const options = { day: "numeric", month: "long", year: "numeric" };
+    return formattedDate.toLocaleDateString("en-AU", options);
+  }
+
 }
 
 export default new Utils()

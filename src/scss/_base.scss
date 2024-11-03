@@ -80,6 +80,22 @@ a {
   background: #fff;
 }
 
+.scroll-box-title {
+  grid-area: title;
+  font-family: "Maven-SemiBold";
+  margin: 0;
+  padding-block-end: 0.5em;
+}
+
+.data-scroll-box {
+  grid-area: scroll-box;
+  height: 70vh;
+  overflow-y: auto;
+  border-top: 2px solid var(--shadow-color);
+  border-bottom: 2px solid var(--shadow-color);
+  // box-shadow: inset 0px 0px 6px 1px var(--shadow-color);
+}
+
 // root ---------------
 #root {
   position: absolute;
@@ -167,12 +183,9 @@ a {
   display: grid;
   grid-template:
     ". title"
-    "links events" / 1fr 1fr;
+    "links scroll-box" / 1fr 1fr;
   column-gap: 3em;
-
-  >* {
-    width: 40vw;
-  }
+  width: clamp(5em, 95vw, 60em);
 
   .links-wrapper {
     grid-area: links;
@@ -180,24 +193,72 @@ a {
     flex-direction: column;
     gap: 2em;
   }
+}
 
-  .events-title {
-    grid-area: title;
-    font-family: "Maven-SemiBold";
-    margin: 0;
-    padding-block-end: 0.5em;
+// Family page
+.family-wrapper {
+  display: grid;
+  grid-template:
+    ". title"
+    "links events" / 1fr 1fr;
+  column-gap: 3em;
+  width: clamp(5em, 95vw, 60em);
+
+  .user-header {
+    font-family: "Maven-Medium";
+    margin-block-end: 1.5rem;
+
+    >* {
+      padding-inline-start: 1rem;
+    }
+
+    .avatar-row {
+      display: flex;
+      flex-wrap: wrap;
+      column-gap: 1rem;
+      align-items: center;
+      margin-block-end: 1em;
+      padding-inline-start: 0;
+
+      .name {
+        font-family: "Maven-Bold";
+        font-size: 2em;
+      }
+    }
+
+    .email {
+      font-size: 1.5em;
+      margin-block-end: 0.5rem;
+    }
+
+    .date {
+      span {
+        font-size: 1.25em;
+      }
+    }
   }
 
-  .events-wrapper {
-    grid-area: events;
-    height: 70vh;
-    overflow-y: scroll;
-    border-top: 2px solid var(--shadow-color);
-    border-bottom: 2px solid var(--shadow-color);
-    // box-shadow: inset 0px 0px 6px 1px var(--shadow-color);
+  .family-title {
+    padding-inline-start: 1rem;
+    
+    .family-name {
+      font-family: "Maven-SemiBold";
+      font-size: 2em;
+      margin-block-end: 1rem;
+      
+      &.no-family {
+        font-size: 1.25em;
+      }
+    }
+
+  }
+
+  .family-members {
+    min-height: 70vh;
   }
 }
 
+// Admin home
 .adminhome-wrapper {
   display: flex;
   flex-direction: column;

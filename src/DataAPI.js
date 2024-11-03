@@ -37,7 +37,7 @@ class DataAPI {
 
     // fetch the json data
     const response = await fetch(`${App.apiBase}/family/${familyId}`, {
-      headers: { "Authorization": `Bearer ${localStorage.accessToken}` }
+      headers: { "Authorization": `Bearer ${localStorage.cal_accessToken}` }
     })
 
     // if response not ok
