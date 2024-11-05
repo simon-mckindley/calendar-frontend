@@ -7,7 +7,7 @@ class CalInput extends LitElement {
       label: { type: String },      // Label for the input
       name: { type: String },       // Name for the input
       hasError: { type: Boolean },  // Indicates if input has error state
-      placeholder: { type: String }, // Input placeholder tex
+      placeholder: { type: String }, // Input placeholder text
       addStyle: { type: String },    // Inline style
       value: { type: String }       // Value of the input (for returning form data)
     };

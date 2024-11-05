@@ -6,15 +6,16 @@ import Utils from './../../Utils'
 import Toast from '../../Toast'
 import DataAPI from '../../DataAPI'
 
-let userTypes = { 2: "Adult", 3: "Child" };
+let formData;
 
 class FamilyView {
   init() {
     console.log('FamilyView.init');
     document.title = 'Family';
+    formData = {};
     this.familyData = null;
+    this.editFamilyDialog = null;
     this.adult = Auth.currentUser.accessLevel === 2;
-    console.log("IS ADULT: " + this.adult);
     this.render();
     Utils.pageIntroAnim();
     this.getFamily();
@@ -28,10 +29,47 @@ class FamilyView {
         this.familyData = {};
       }
       this.render();
+      this.editFamilyDialog = document.querySelector('.dialog-edit-family');
     } catch (err) {
       Toast.show(err, 'error');
     }
   }
+
+  // Handle input changes
+  handleInputChange(event) {
+    event.target.removeAttribute("hasError");
+    const { name, value } = event.detail;
+    formData[name] = value;  // Dynamically update form data
+  }
+
+  // Handle update submission
+  async updateFamilyHandler() {
+    // Checks if data is present
+    const field = 'name';
+    const input = document.querySelector(`cal-input[name="${field}"]`);
+
+    if (!formData[field]) {
+      input.setAttribute("hasError", "true");
+      Toast.show(`Please enter the ${field.toUpperCase()}`, 'error');
+      return;
+    }
+
+    let encodedFormData = new FormData();
+    for (const key in formData) {
+      if (formData.hasOwnProperty(key)) {
+        encodedFormData.append(key, formData[key]);
+      }
+    }
+
+    // call api    
+    await DataAPI.updateFamily(this.familyData._id, encodedFormData);
+
+    this.editFamilyDialog.hide();
+    this.getFamily();
+    input.value = '';
+    formData = {};
+  }
+
 
   render() {
     const template = html`
@@ -70,7 +108,7 @@ class FamilyView {
                 ? html`
                           <sl-tooltip content="Edit family name">
                             <cal-button
-                              .onClick="${() => alert('Button Clicked')}" 
+                              .onClick="${() => this.editFamilyDialog.show()}" 
                               buttonType="secondary"
                               addStyle="padding-inline: 0.6em;">
                               <i class="fa-solid fa-pen"></i>
@@ -127,7 +165,31 @@ class FamilyView {
                   </div>`
             : html``}
             </div>
-          </div>`
+          </div>
+          
+          <sl-dialog label="Edit Family Name" class="dialog-edit-family">
+            <cal-input 
+              placeholder=${Utils.titleCase(this.familyData.name)} 
+              name="name" type="text"
+              addStyle="margin-block-end: 1rem;"
+              @input-change=${this.handleInputChange}>
+            </cal-input>
+
+            <cal-button
+              id="update-submit"
+              slot="footer"
+              .onClick="${() => this.updateFamilyHandler()}" 
+              buttonType="secondary">
+              Save
+            </cal-button>
+
+            <cal-button
+              slot="footer"
+              .onClick="${() => this.editFamilyDialog.hide()}" 
+              buttonType="primary">
+              Cancel
+            </cal-button>
+          </sl-dialog>`
       }
     </div>`;
 
