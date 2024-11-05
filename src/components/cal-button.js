@@ -65,7 +65,7 @@ class CalButton extends LitElement {
     super();
     this.buttonType = 'primary'; // Default button type
     this.submit = false;        // Default submit status
-    this.addStyle = '';          // Default inline style
+    this.addStyle = '';         // Default inline style
     this.onClick = () => { }; // Default empty function
   }
 

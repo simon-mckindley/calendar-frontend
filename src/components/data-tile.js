@@ -36,7 +36,7 @@ class DataTile extends LitElement {
       }
 
       .tile-title {
-        font-size: 1.2em;
+        font-size: 1.25em;
       }
 
       .tile-date {
