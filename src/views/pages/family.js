@@ -14,8 +14,11 @@ class FamilyView {
     document.title = 'Family';
     formData = {};
     this.familyData = null;
-    this.editFamilyDialog = null;
     this.adult = Auth.currentUser.accessLevel === 2;
+    this.isOnlyAdult = true;
+    this.displayUser = null;
+    this.invitationFamily = null;
+    this.getInvitationFamily();
     this.render();
     Utils.pageIntroAnim();
     this.getFamily();
@@ -25,14 +28,74 @@ class FamilyView {
     try {
       if (Auth.currentUser.family) {
         this.familyData = await DataAPI.getFamily(Auth.currentUser.family);
+        this.getIsOnlyAdult();
       } else {
         this.familyData = {};
       }
       this.render();
-      this.editFamilyDialog = document.querySelector('.dialog-edit-family');
     } catch (err) {
       Toast.show(err, 'error');
     }
+  }
+
+  async getInvitationFamily() {
+    try {
+      if (Auth.currentUser.invitation) {
+        this.invitationFamily = await DataAPI.getFamily(Auth.currentUser.invitation);
+      }
+    } catch (err) {
+      console.log("Invitation family error ", err);
+    }
+  }
+
+  getIsOnlyAdult() {
+    this.familyData.users.forEach(user => {
+      if (user.accessLevel === 2) {
+        this.isOnlyAdult = false;
+        return;
+      }
+    });
+  }
+
+  showDialog(id) {
+    const dialog = document.getElementById(id);
+    dialog.show();
+  }
+
+  hideDialog(id) {
+    const dialog = document.getElementById(id);
+    dialog.hide();
+  }
+
+
+  displayFamilyMember(displayUser) {
+    console.log(displayUser);
+    this.displayUser = displayUser;
+    const dialog = document.getElementById('dialog-show-member');
+
+    const today = new Date();
+    let nextEvent = null;
+
+    if (displayUser.events) {
+      displayUser.events.forEach((evnt) => {
+        const eventStartDate = new Date(evnt.startDate); // Ensure startDate is a Date object
+
+        if (eventStartDate > today && (!nextEvent || eventStartDate < new Date(nextEvent.startDate))) {
+          nextEvent = evnt;
+        }
+      });
+    }
+
+    document.getElementById("show-next-event").innerText = nextEvent
+      ? `Next Event: ${nextEvent}` : "No upcoming events";
+
+    document.getElementById("display-avatar").image = displayUser.avatar
+      ? `${App.apiBase}/images/${Auth.currentUser.avatar}` : '';
+
+
+    dialog.setAttribute("label", `${Utils.titleCase(displayUser.firstName)} ${Utils.titleCase(displayUser.lastName)}`);
+
+    dialog.show();
   }
 
   // Handle input changes
@@ -47,6 +110,10 @@ class FamilyView {
     // Checks if data is present
     const field = 'name';
     const input = document.querySelector(`cal-input[name="${field}"]`);
+
+    if (formData[field]) {
+      formData[field] = formData[field].trim();
+    }
 
     if (!formData[field]) {
       input.setAttribute("hasError", "true");
@@ -64,7 +131,7 @@ class FamilyView {
     // call api    
     await DataAPI.updateFamily(this.familyData._id, encodedFormData);
 
-    this.editFamilyDialog.hide();
+    document.getElementById('dialog-edit-family').hide();
     this.getFamily();
     input.value = '';
     formData = {};
@@ -108,21 +175,26 @@ class FamilyView {
                 ? html`
                           <sl-tooltip content="Edit family name">
                             <cal-button
-                              .onClick="${() => this.editFamilyDialog.show()}" 
+                              .onClick="${() => this.showDialog('dialog-edit-family')}" 
                               buttonType="secondary"
                               addStyle="padding-inline: 0.6em;">
                               <i class="fa-solid fa-pen"></i>
                             </cal-button>
                           </sl-tooltip>
 
+                          ${this.isOnlyAdult
+                    ? html``
+                    : html`
                           <sl-tooltip content="Leave family">
                             <cal-button
-                              .onClick="${() => alert('Button Clicked')}" 
+                              .onClick="${() => this.showDialog('dialog-leave-family')}" 
                               buttonType="primary"
                               addStyle="padding-inline: 0.7em;">
                               <i class="fa-solid fa-xmark"></i>
                             </cal-button>
-                          </sl-tooltip>`
+                          </sl-tooltip>
+                          `}
+                          `
                 : html``}
                     </div>`
             : html`
@@ -134,6 +206,33 @@ class FamilyView {
                     </cal-button>`
           }
               </div>
+
+              ${Auth.currentUser.invitation
+            ? html`
+              <div class="invitation-wrapper">
+                <div class="invitation-text">
+                  You have been invited to the
+                  <span> ${Utils.titleCase(this.invitationFamily.name)} </span>
+                  family
+
+                <cal-button
+                  id="invite-accept"
+                  addStyle="margin-inline-end: 1rem;"
+                  .onClick="${() => this.hideDialog('dialog-leave-family')}" 
+                  buttonType="primary">
+                  Accept
+                </cal-button>
+
+                <cal-button
+                  id="invite-decline"
+                  .onClick="${() => this.hideDialog('dialog-leave-family')}" 
+                  buttonType="secondary">
+                  Decline
+                </cal-button>
+                </div>
+              </div>`
+            : html``
+          }
             </div>
 
             <div class="family-members">
@@ -145,7 +244,7 @@ class FamilyView {
                 ? html`
                         <sl-tooltip content="Invite family member">
                           <cal-button 
-                            .onClick="${() => alert('Button Clicked')}" 
+                            .onClick="${() => this.showDialog('dialog-invite-member')}" 
                             buttonType="secondary"
                             addStyle="padding-inline: 0.7em;">
                             <i class="fa-solid fa-plus"></i>
@@ -160,15 +259,21 @@ class FamilyView {
                         ${this.familyData.users
                     .filter(item => item.email !== Auth.currentUser.email) // Exclude current user
                     .sort((a, b) => a.accessLevel - b.accessLevel) // Sort by accessLevel ascending
-                    .map(member => html`<user-tile .user="${member}"></user-tile>`)}`
+                    .map(member => html`
+                      <user-tile 
+                        .user="${member}"
+                        .onClick="${() => this.displayFamilyMember(member)}" >
+                      </user-tile>`)}`
                 : html`<div>No other family members</div>`}
                   </div>`
             : html``}
             </div>
           </div>
           
-          <sl-dialog label="Edit Family Name" class="dialog-edit-family">
-            <cal-input 
+          
+          <!-- Dialog box to edit the family name -->
+          <sl-dialog label="Edit Family Name" id="dialog-edit-family">
+            <cal-input
               placeholder=${Utils.titleCase(this.familyData.name)} 
               name="name" type="text"
               addStyle="margin-block-end: 1rem;"
@@ -178,16 +283,93 @@ class FamilyView {
             <cal-button
               id="update-submit"
               slot="footer"
+              addStyle="margin-inline-end: 1rem;"
               .onClick="${() => this.updateFamilyHandler()}" 
-              buttonType="secondary">
+              buttonType="primary">
               Save
             </cal-button>
 
             <cal-button
               slot="footer"
-              .onClick="${() => this.editFamilyDialog.hide()}" 
-              buttonType="primary">
+              .onClick="${() => this.hideDialog('dialog-edit-family')}" 
+              buttonType="secondary">
               Cancel
+            </cal-button>
+          </sl-dialog>
+          
+
+          <!-- Dialog box to confirm leaving associated family -->
+          <sl-dialog label="Leave associated family?" id="dialog-leave-family">
+            If you leave this family, you'll need an invitation from a current member to rejoin.
+
+            <cal-button
+              id="leave-submit"
+              slot="footer"
+              addStyle="margin-inline-end: 1rem;"
+              .onClick="${() => this.hideDialog('dialog-leave-family')}" 
+              buttonType="primary">
+              Leave
+            </cal-button>
+
+            <cal-button
+              slot="footer"
+              .onClick="${() => this.hideDialog('dialog-leave-family')}" 
+              buttonType="secondary">
+              Cancel
+            </cal-button>
+          </sl-dialog>
+          
+          
+          <!-- Dialog box to invite users to the family -->
+          <sl-dialog label="Invite a new member to your family" id="dialog-invite-member">
+            Enter the email address of the user you would like to invite to this family.
+            <cal-input
+              placeholder="Email" 
+              name="name" type="email"
+              addStyle="margin: 0.75rem 0 1rem 0; "
+              @input-change=${this.handleInputChange}>
+            </cal-input>
+
+            <cal-button
+              id="invite-submit"
+              slot="footer"
+              addStyle="margin-inline-end: 1rem;"
+              .onClick="${() => this.hideDialog('dialog-invite-member')}" 
+              buttonType="primary">
+              Invite
+            </cal-button>
+
+            <cal-button
+              slot="footer"
+              .onClick="${() => this.hideDialog('dialog-invite-member')}" 
+              buttonType="secondary">
+              Cancel
+            </cal-button>
+          </sl-dialog>
+          
+          
+          <!-- Dialog box to show family members details -->
+          <sl-dialog id="dialog-show-member">        
+            <div class="show-member-body">
+              <sl-avatar id="display-avatar" style="--size: 5rem;"></sl-avatar>
+              <div id="show-next-event">
+              </div>
+            </div>
+
+            <!-- <cal-button
+              id="invite-submit"
+              slot="footer"
+              addStyle="margin-inline-end: 1rem;"
+              .onClick="${() => this.hideDialog('dialog-show-member')}" 
+              buttonType="primary">
+              Edit
+            </cal-button> -->
+
+            <cal-button
+              slot="footer"
+              .onClick="${() => this.hideDialog('dialog-show-member')}" 
+              buttonType="secondary">
+              Close
             </cal-button>
           </sl-dialog>`
       }

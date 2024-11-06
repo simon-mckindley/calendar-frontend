@@ -88,7 +88,7 @@ class CalInput extends LitElement {
           type="${this.type}"
           class="${this.hasError ? 'error' : ''}"
           placeholder="${this.placeholder}"
-          maxlength="100"
+          maxlength="20"
           .value="${this.value}"
           @input="${this.handleInputChange}"
         />

@@ -255,7 +255,18 @@ a {
         font-size: 1.25em;
       }
     }
+  }
 
+  .invitation-wrapper {
+    margin-block-start: 2rem;
+
+    .invitation-text {
+      font-size: 1.2em;
+
+      span {
+        font-weight: bold;
+      }
+    }
   }
 
   .family-members {
@@ -265,6 +276,17 @@ a {
       display: flex;
       justify-content: space-between;
     }
+  }
+}
+
+// Family dialog
+.show-member-body {
+  display: flex;
+  column-gap: 0.5rem;
+  // font-size: 1.25em;
+
+  #show-next-event {
+    margin-inline: auto;
   }
 }
 
