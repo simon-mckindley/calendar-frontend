@@ -37,7 +37,7 @@ class UserAPI {
 
     // fetch the json data
     const response = await fetch(`${App.apiBase}/user/${userId}`, {
-      headers: { "Authorization": `Bearer ${localStorage.accessToken}` }
+      headers: { "Authorization": `Bearer ${localStorage.cal_accessToken}` }
     })
 
     // if response not ok

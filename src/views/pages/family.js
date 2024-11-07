@@ -4,7 +4,8 @@ import { gotoRoute, anchorRoute } from './../../Router'
 import Auth from './../../Auth'
 import Utils from './../../Utils'
 import Toast from '../../Toast'
-import DataAPI from '../../DataAPI'
+import UserAPI from '../../UserAPI'
+import FamilyAPI from '../../FamilyAPI'
 
 let formData;
 
@@ -27,7 +28,7 @@ class FamilyView {
   async getFamily() {
     try {
       if (Auth.currentUser.family) {
-        this.familyData = await DataAPI.getFamily(Auth.currentUser.family);
+        this.familyData = await FamilyAPI.getFamily(Auth.currentUser.family);
         this.getIsOnlyAdult();
       } else {
         this.familyData = {};
@@ -41,7 +42,7 @@ class FamilyView {
   async getInvitationFamily() {
     try {
       if (Auth.currentUser.invitation) {
-        this.invitationFamily = await DataAPI.getFamily(Auth.currentUser.invitation);
+        this.invitationFamily = await FamilyAPI.getFamily(Auth.currentUser.invitation);
       }
     } catch (err) {
       console.log("Invitation family error ", err);
@@ -69,7 +70,6 @@ class FamilyView {
 
 
   displayFamilyMember(displayUser) {
-    console.log(displayUser);
     this.displayUser = displayUser;
     const dialog = document.getElementById('dialog-show-member');
 
@@ -98,6 +98,7 @@ class FamilyView {
     dialog.show();
   }
 
+
   // Handle input changes
   handleInputChange(event) {
     event.target.removeAttribute("hasError");
@@ -105,11 +106,12 @@ class FamilyView {
     formData[name] = value;  // Dynamically update form data
   }
 
+
   // Handle update submission
   async updateFamilyHandler() {
     // Checks if data is present
     const field = 'name';
-    const input = document.querySelector(`cal-input[name="${field}"]`);
+    const input = document.getElementById('edit-input');
 
     if (formData[field]) {
       formData[field] = formData[field].trim();
@@ -129,9 +131,50 @@ class FamilyView {
     }
 
     // call api    
-    await DataAPI.updateFamily(this.familyData._id, encodedFormData);
+    await FamilyAPI.updateFamily(this.familyData._id, encodedFormData);
 
     document.getElementById('dialog-edit-family').hide();
+    this.getFamily();
+    input.value = '';
+    formData = {};
+  }
+
+
+  // Handle creation submission
+  async createFamilyHandler() {
+    // Checks if data is present
+    const field = 'name';
+    const input = document.getElementById('create-input');
+
+    if (formData[field]) {
+      formData[field] = formData[field].trim();
+    }
+
+    if (!formData[field]) {
+      input.setAttribute("hasError", "true");
+      Toast.show(`Please enter the ${field.toUpperCase()}`, 'error');
+      return;
+    }
+
+    formData.users = [Auth.currentUser.id];
+
+    let encodedFormData = new FormData();
+    for (const key in formData) {
+      if (formData.hasOwnProperty(key)) {
+        // Convert array to JSON string
+        const value = Array.isArray(formData[key]) ? JSON.stringify(formData[key]) : formData[key];
+        encodedFormData.append(key, value);
+      }
+    }
+
+    // call api's
+    const familyData = await FamilyAPI.createFamily(encodedFormData);
+    await FamilyAPI.addUser(familyData.family._id, Auth.currentUser.id);
+
+    const userData = await UserAPI.getUser(Auth.currentUser.id);
+    Auth.currentUser.family = userData.family;
+
+    document.getElementById('dialog-create-family').hide();
     this.getFamily();
     input.value = '';
     formData = {};
@@ -200,7 +243,7 @@ class FamilyView {
             : html`
                     <div class="family-name no-family">No associated family</div>
                     <cal-button 
-                      .onClick="${() => alert('Button Clicked')}" 
+                      .onClick="${() => this.showDialog('dialog-create-family')}" 
                       buttonType="primary">
                       Create Family
                     </cal-button>`
@@ -254,7 +297,7 @@ class FamilyView {
                   </div>
 
                   <div class="members-wrapper data-scroll-box">
-                    ${this.familyData.users && this.familyData.users.length > 0
+                    ${this.familyData.users && this.familyData.users.length > 1
                 ? html`
                         ${this.familyData.users
                     .filter(item => item.email !== Auth.currentUser.email) // Exclude current user
@@ -270,10 +313,12 @@ class FamilyView {
             </div>
           </div>
           
+          <!-- --------------------  Dialogs -------------------------- -->
           
           <!-- Dialog box to edit the family name -->
-          <sl-dialog label="Edit Family Name" id="dialog-edit-family">
+          <sl-dialog label="Edit family name" id="dialog-edit-family">
             <cal-input
+              id="edit-input"
               placeholder=${Utils.titleCase(this.familyData.name)} 
               name="name" type="text"
               addStyle="margin-block-end: 1rem;"
@@ -299,7 +344,7 @@ class FamilyView {
           
 
           <!-- Dialog box to confirm leaving associated family -->
-          <sl-dialog label="Leave associated family?" id="dialog-leave-family">
+          <sl-dialog label="Leave your associated family?" id="dialog-leave-family">
             If you leave this family, you'll need an invitation from a current member to rejoin.
 
             <cal-button
@@ -321,11 +366,12 @@ class FamilyView {
           
           
           <!-- Dialog box to invite users to the family -->
-          <sl-dialog label="Invite a new member to your family" id="dialog-invite-member">
+          <sl-dialog label="Invite a new member to your family group" id="dialog-invite-member">
             Enter the email address of the user you would like to invite to this family.
             <cal-input
+              id="invite-input"
               placeholder="Email" 
-              name="name" type="email"
+              name="email" type="email"
               addStyle="margin: 0.75rem 0 1rem 0; "
               @input-change=${this.handleInputChange}>
             </cal-input>
@@ -356,20 +402,39 @@ class FamilyView {
               </div>
             </div>
 
-            <!-- <cal-button
-              id="invite-submit"
-              slot="footer"
-              addStyle="margin-inline-end: 1rem;"
-              .onClick="${() => this.hideDialog('dialog-show-member')}" 
-              buttonType="primary">
-              Edit
-            </cal-button> -->
-
             <cal-button
               slot="footer"
               .onClick="${() => this.hideDialog('dialog-show-member')}" 
               buttonType="secondary">
               Close
+            </cal-button>
+          </sl-dialog>
+          
+          
+          <!-- Dialog box to create a new family -->
+          <sl-dialog label="Create a new family group" id="dialog-create-family">
+            <cal-input
+              id="create-input"
+              label="Family name" 
+              name="name" type="text"
+              addStyle="margin-block-end: 1rem;"
+              @input-change=${this.handleInputChange}>
+            </cal-input>
+
+            <cal-button
+              id="create-submit"
+              slot="footer"
+              addStyle="margin-inline-end: 1rem;"
+              .onClick="${() => this.createFamilyHandler()}" 
+              buttonType="primary">
+              Create
+            </cal-button>
+
+            <cal-button
+              slot="footer"
+              .onClick="${() => this.hideDialog('dialog-create-family')}" 
+              buttonType="secondary">
+              Cancel
             </cal-button>
           </sl-dialog>`
       }
