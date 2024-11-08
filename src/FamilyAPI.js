@@ -87,7 +87,7 @@ class FamilyAPI {
 
   async addUser(familyId, userId) {
     if (!familyId && !userId) return;
-    console.log("ADDUSER PATH: " + App.apiBase + " " + familyId + " " + userId);
+
     // make fetch request to backend
     const response = await fetch(`${App.apiBase}/family/${familyId}/addUser/${userId}`, {
       method: "PUT",
@@ -107,6 +107,33 @@ class FamilyAPI {
     // convert response payload into json - store as data
     const data = await response.json();
     Toast.show('Associated to family');
+    // return data
+    return data
+  }
+
+
+  async removeUser(familyId, userId) {
+    if (!familyId && !userId) return;
+
+    // make fetch request to backend
+    const response = await fetch(`${App.apiBase}/family/${familyId}/removeUser/${userId}`, {
+      method: "PUT",
+      headers: { "Authorization": `Bearer ${localStorage.cal_accessToken}` }
+    });
+
+    // if response not ok
+    if (!response.ok) {
+      // console log error
+      const err = await response.json();
+      if (err) console.log(err);
+      Toast.show('Problem removing user', 'err');
+      // throw error (exit this function)      
+      throw new Error('Problem removing user');
+    }
+
+    // convert response payload into json - store as data
+    const data = await response.json();
+    Toast.show('Family association removed');
     // return data
     return data
   }

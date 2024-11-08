@@ -51,7 +51,7 @@ class FamilyView {
 
   getIsOnlyAdult() {
     this.familyData.users.forEach(user => {
-      if (user.accessLevel === 2) {
+      if (user._id !== Auth.currentUser.id && user.accessLevel === 2) {
         this.isOnlyAdult = false;
         return;
       }
@@ -178,6 +178,17 @@ class FamilyView {
     this.getFamily();
     input.value = '';
     formData = {};
+  }
+
+
+  async removeFamilyHandler() {
+    const data = await FamilyAPI.removeUser(Auth.currentUser.family, Auth.currentUser.id);
+    console.log(data);
+    const userData = await UserAPI.getUser(Auth.currentUser.id);
+    Auth.currentUser.family = userData.family;
+    
+    document.getElementById('dialog-leave-family').hide();
+    this.getFamily();
   }
 
 
@@ -351,7 +362,7 @@ class FamilyView {
               id="leave-submit"
               slot="footer"
               addStyle="margin-inline-end: 1rem;"
-              .onClick="${() => this.hideDialog('dialog-leave-family')}" 
+              .onClick="${() => this.removeFamilyHandler()}"
               buttonType="primary">
               Leave
             </cal-button>

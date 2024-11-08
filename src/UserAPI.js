@@ -31,6 +31,7 @@ class UserAPI {
     return data
   }
 
+
   async getUser(userId) {
     // validate
     if (!userId) return
@@ -52,6 +53,32 @@ class UserAPI {
     // convert response payload into json - store as data
     const data = await response.json()
 
+    // return data
+    return data
+  }
+
+
+  async removeInvitation(userId, familyId) {
+    // validate
+    if (!userId || !familyId) return
+
+    const response = await fetch(`${App.apiBase}/user/${userId}/removeInvitation/${familyId}`, {
+      method: "PUT",
+      headers: { "Authorization": `Bearer ${localStorage.cal_accessToken}` }
+    })
+
+    // if response not ok
+    if (!response.ok) {
+      // console log error
+      const err = await response.json();
+      if (err) console.log(err);
+      Toast.show('Problem removing invitation', 'err');
+      throw new Error('Problem removing invitation')
+    }
+
+    // convert response payload into json - store as data
+    const data = await response.json();
+    Toast.show('Family invitation removed');
     // return data
     return data
   }
