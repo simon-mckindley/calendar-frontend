@@ -182,13 +182,52 @@ class FamilyView {
 
 
   async removeFamilyHandler() {
-    const data = await FamilyAPI.removeUser(Auth.currentUser.family, Auth.currentUser.id);
-    console.log(data);
+    await FamilyAPI.removeUser(Auth.currentUser.family, Auth.currentUser.id);
+
     const userData = await UserAPI.getUser(Auth.currentUser.id);
     Auth.currentUser.family = userData.family;
-    
+
     document.getElementById('dialog-leave-family').hide();
     this.getFamily();
+  }
+
+
+  async sendInvitationHandler() {
+    // Checks if data is present
+    const field = 'email';
+    const input = document.getElementById('invite-input');
+
+    if (formData[field]) {
+      formData[field] = formData[field].trim();
+    }
+
+    if (!formData[field]) {
+      input.setAttribute("hasError", "true");
+      Toast.show(`Please enter the ${field.toUpperCase()} address`, 'error');
+      return;
+    }
+
+    // Validates email address
+    if (!Utils.validateEmail(formData[field])) {
+      input.setAttribute("hasError", "true");
+      Toast.show(`Please enter a valid ${field.toUpperCase()} address`, 'error');
+      return;
+    }
+
+    const userData = await UserAPI.getUserByEmail(formData[field]);
+    console.log(userData);
+    let invite = new FormData();
+    invite.append("invitation", Auth.currentUser.family);
+
+    await UserAPI.updateUser(
+      userData._id,
+      invite,
+      `Invitation sent to ${Utils.titleCase(userData.firstName)}`
+    );
+
+    document.getElementById('dialog-invite-member').hide();
+    input.value = '';
+    formData = {};
   }
 
 
@@ -391,7 +430,7 @@ class FamilyView {
               id="invite-submit"
               slot="footer"
               addStyle="margin-inline-end: 1rem;"
-              .onClick="${() => this.hideDialog('dialog-invite-member')}" 
+              .onClick="${() => this.sendInvitationHandler()}" 
               buttonType="primary">
               Invite
             </cal-button>

@@ -4,29 +4,30 @@ import Toast from './Toast'
 
 class UserAPI {
 
-  async updateUser(userId, userData) {
+  async updateUser(userId, userData, message = "") {
     // validate
     if (!userId || !userData) return
 
     // make fetch request to backend
     const response = await fetch(`${App.apiBase}/user/${userId}`, {
       method: "PUT",
-      headers: { "Authorization": `Bearer ${localStorage.accessToken}` },
+      headers: { "Authorization": `Bearer ${localStorage.cal_accessToken}` },
       body: userData
     })
 
     // if response not ok
     if (!response.ok) {
       // console log error
-      const err = await response.json()
-      if (err) console.log(err)
+      const err = await response.json();
+      if (err) console.log(err);
+      Toast.show("Problem updating user", "err");
       // throw error (exit this function)      
-      throw new Error('Problem updating user')
+      throw new Error('Problem updating user');
     }
 
     // convert response payload into json - store as data
     const data = await response.json()
-
+    if(message) Toast.show(message);
     // return data
     return data
   }
@@ -53,6 +54,31 @@ class UserAPI {
     // convert response payload into json - store as data
     const data = await response.json()
 
+    // return data
+    return data
+  }
+
+
+  async getUserByEmail(userEmail) {
+    if (!userEmail) return;
+
+    // fetch the json data
+    const response = await fetch(`${App.apiBase}/user/email/${userEmail}`, {
+      headers: { "Authorization": `Bearer ${localStorage.cal_accessToken}` }
+    })
+
+    // if response not ok
+    if (!response.ok) {
+      // console log error
+      const err = await response.json()
+      if (err) console.log(err);
+      Toast.show('User not found', 'err');
+      // throw error (exit this function)      
+      throw new Error('Problem getting user')
+    }
+
+    // convert response payload into json - store as data
+    const data = await response.json();
     // return data
     return data
   }
