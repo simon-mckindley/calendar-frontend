@@ -84,7 +84,7 @@ class UserAPI {
   }
 
 
-  async removeInvitation(userId, familyId) {
+  async removeInvitation(userId, familyId, message = "") {
     // validate
     if (!userId || !familyId) return
 
@@ -98,13 +98,13 @@ class UserAPI {
       // console log error
       const err = await response.json();
       if (err) console.log(err);
-      Toast.show('Problem removing invitation', 'err');
+      if (message) Toast.show('Problem declining invitation', 'err');
       throw new Error('Problem removing invitation')
     }
 
     // convert response payload into json - store as data
     const data = await response.json();
-    Toast.show('Family invitation removed');
+    if (message) Toast.show(message);
     // return data
     return data
   }

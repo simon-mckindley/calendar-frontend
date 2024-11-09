@@ -19,9 +19,9 @@ class FamilyView {
     this.isOnlyAdult = true;
     this.displayUser = null;
     this.invitationFamily = null;
-    this.getInvitationFamily();
     this.render();
     Utils.pageIntroAnim();
+    this.getInvitationFamily();
     this.getFamily();
   }
 
@@ -43,7 +43,11 @@ class FamilyView {
     try {
       if (Auth.currentUser.invitation) {
         this.invitationFamily = await FamilyAPI.getFamily(Auth.currentUser.invitation);
+      } else {
+        this.invitationFamily = null;
       }
+      this.render();
+      console.log(this.invitationFamily);
     } catch (err) {
       console.log("Invitation family error ", err);
     }
@@ -169,7 +173,10 @@ class FamilyView {
 
     // call api's
     const familyData = await FamilyAPI.createFamily(encodedFormData);
-    await FamilyAPI.addUser(familyData.family._id, Auth.currentUser.id);
+    await FamilyAPI.addUser(
+      familyData.family._id,
+      Auth.currentUser.id,
+      "Associated to family");
 
     const userData = await UserAPI.getUser(Auth.currentUser.id);
     Auth.currentUser.family = userData.family;
@@ -228,6 +235,32 @@ class FamilyView {
     document.getElementById('dialog-invite-member').hide();
     input.value = '';
     formData = {};
+  }
+
+
+  async acceptInvitationHandler() {
+    await FamilyAPI.addUser(
+      this.invitationFamily._id,
+      Auth.currentUser.id,
+      "Family invitation accepted");
+
+    await UserAPI.removeInvitation(Auth.currentUser.id, this.invitationFamily._id);
+
+    Auth.currentUser.family = this.invitationFamily._id;
+    Auth.currentUser.invitation = "";
+    this.getFamily();
+    this.getInvitationFamily();
+  }
+
+
+  async declineInvitationHandler() {
+    await UserAPI.removeInvitation(
+      Auth.currentUser.id,
+      this.invitationFamily._id,
+      "Family invitation declined");
+
+    Auth.currentUser.invitation = "";
+    this.getInvitationFamily();
   }
 
 
@@ -300,28 +333,35 @@ class FamilyView {
           }
               </div>
 
-              ${Auth.currentUser.invitation
+              ${this.invitationFamily
             ? html`
               <div class="invitation-wrapper">
                 <div class="invitation-text">
-                  You have been invited to the
+                  You have been invited to the 
                   <span> ${Utils.titleCase(this.invitationFamily.name)} </span>
                   family
+                </div>
 
-                <cal-button
-                  id="invite-accept"
-                  addStyle="margin-inline-end: 1rem;"
-                  .onClick="${() => this.hideDialog('dialog-leave-family')}" 
-                  buttonType="primary">
-                  Accept
-                </cal-button>
+                <div class="invitation-buttons">
+                  <sl-tooltip content="Accept invitation">
+                    <cal-button
+                      id="invite-accept"
+                      .onClick="${() => this.acceptInvitationHandler()}" 
+                      addStyle="padding-inline: 0.7em;"
+                      buttonType="primary">
+                      <i class="fa-solid fa-check"></i>
+                    </cal-button>
+                  </sl-tooltip>
 
-                <cal-button
-                  id="invite-decline"
-                  .onClick="${() => this.hideDialog('dialog-leave-family')}" 
-                  buttonType="secondary">
-                  Decline
-                </cal-button>
+                  <sl-tooltip content="Decline invitation">
+                    <cal-button
+                      id="invite-decline"
+                      .onClick="${() => this.declineInvitationHandler()}"
+                      addStyle="padding-inline: 0.7em;"
+                      buttonType="secondary">
+                      <i class="fa-solid fa-xmark"></i>
+                    </cal-button>
+                  <sl-tooltip>
                 </div>
               </div>`
             : html``

@@ -85,7 +85,7 @@ class FamilyAPI {
   }
 
 
-  async addUser(familyId, userId) {
+  async addUser(familyId, userId, message = "") {
     if (!familyId && !userId) return;
 
     // make fetch request to backend
@@ -99,14 +99,14 @@ class FamilyAPI {
       // console log error
       const err = await response.json();
       if (err) console.log(err);
-      Toast.show('Problem adding user', 'err');
+      if(message) Toast.show('Problem adding user', 'err');
       // throw error (exit this function)      
       throw new Error('Problem adding user');
     }
 
     // convert response payload into json - store as data
     const data = await response.json();
-    Toast.show('Associated to family');
+    if(message) Toast.show(message);
     // return data
     return data
   }
