@@ -34,25 +34,32 @@ class UserHomeView {
                 .onClick=${() => gotoRoute('/')}
               >Account</cal-button>
 
-              <cal-button
-                buttonType="secondary"
-                addStyle="width: 100%;"
-                .onClick=${() => gotoRoute('/family')}
-              >Family</cal-button>
+              <div style="position: relative;">
+                <cal-button
+                  buttonType="secondary"
+                  addStyle="width: 100%;"
+                  .onClick=${() => gotoRoute('/family')}
+                >Family</cal-button>
+        ${Auth.currentUser.invitation
+        ? html`
+                <sl-badge class="alert-pill" variant="danger" pill pulse>!</sl-badge>`
+        : html``
+      }
+              </div>
             </div>
 
             <h2 class="events-title scroll-box-title">Upcoming Events</h2>
             <div class="events-wrapper data-scroll-box">
             ${this.items && this.items.length > 0
-              ? this.items.map(item => html`
+        ? this.items.map(item => html`
               <data-tile 
                 label=${item.title} 
                 date=${item.date} 
                 .onClick=${() => alert('Tile clicked!')}>
-              </data-tile>`) : 
-              html`
+              </data-tile>`) :
+        html`
               <div>No current events</div>`
-            }
+      }
             </div>
 
           </div>

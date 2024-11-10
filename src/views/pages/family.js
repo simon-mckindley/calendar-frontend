@@ -189,6 +189,8 @@ class FamilyView {
 
 
   async removeFamilyHandler() {
+    if(this.isOnlyAdult) return;
+    
     await FamilyAPI.removeUser(Auth.currentUser.family, Auth.currentUser.id);
 
     const userData = await UserAPI.getUser(Auth.currentUser.id);
@@ -363,6 +365,7 @@ class FamilyView {
                     </cal-button>
                   <sl-tooltip>
                 </div>
+                <sl-badge class="alert-pill" variant="danger" pill pulse>!</sl-badge>
               </div>`
             : html``
           }
