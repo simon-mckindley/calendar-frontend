@@ -88,6 +88,10 @@ a {
   // box-shadow: inset 0px 0px 6px 1px var(--shadow-color);
 }
 
+sl-dialog::part(title) {
+  font-family: "Maven-SemiBold";
+}
+
 .alert-pill {
   position: absolute;
   top: -10px;
@@ -294,10 +298,60 @@ a {
 .show-member-body {
   display: flex;
   column-gap: 0.5rem;
-  // font-size: 1.25em;
 
   #show-next-event {
     margin-inline: auto;
+  }
+}
+
+// Calendar page
+.calendar-head {
+  margin: 1rem 3rem;
+  width: clamp(10rem, 80vw, 16rem);
+}
+
+.create-event-form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1.5em;
+
+  .date-inputs {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .input-label {
+    font-size: 1em;
+    font-family: "Maven-SemiBold";
+    margin-left: 1em;
+    margin-bottom: 3px;
+  }
+
+  #checkbox-wrapper {
+    display: flex;
+    gap: 0.5em;
+    flex-wrap: wrap;
+  }
+
+  input[type=checkbox] {
+    display: none;
+  }
+
+  .checkbox-label {
+    background-color: #fff;
+    border-radius: 1000px;
+    padding: 0.25em 1em;
+    outline: var(--light-secondary-color) solid 1px;
+    cursor: pointer;
+    box-shadow: 2px 2px 3px 1px var(--shadow-color);
+    transition: background-color 300ms, color 300ms, box-shadow 300ms;
+  }
+
+  input[type=checkbox]:checked+label {
+    color: #fff;
+    background-color: var(--light-secondary-color);
+    box-shadow: 1px 1px 2px 0px var(--shadow-color);;
   }
 }
 

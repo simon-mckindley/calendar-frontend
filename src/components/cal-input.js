@@ -42,12 +42,14 @@ class CalInput extends LitElement {
         width: 100%;
       }
 
-      .cal-input-wrapper input:focus-visible {
+      .cal-input-wrapper input:focus-visible,
+      .cal-input-wrapper input:focus-within {
         outline: 2px solid var(--secondary-color);
         outline-offset: -2px;
       }
 
-      .cal-input-wrapper input:focus-visible+label {
+      .cal-input-wrapper input:focus-visible+label,
+      .cal-input-wrapper input:focus-within+label {
         translate: 1em;
       }
 

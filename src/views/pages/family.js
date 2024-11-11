@@ -47,7 +47,6 @@ class FamilyView {
         this.invitationFamily = null;
       }
       this.render();
-      console.log(this.invitationFamily);
     } catch (err) {
       console.log("Invitation family error ", err);
     }
@@ -190,7 +189,7 @@ class FamilyView {
 
   async removeFamilyHandler() {
     if(this.isOnlyAdult) return;
-    
+
     await FamilyAPI.removeUser(Auth.currentUser.family, Auth.currentUser.id);
 
     const userData = await UserAPI.getUser(Auth.currentUser.id);
@@ -224,7 +223,6 @@ class FamilyView {
     }
 
     const userData = await UserAPI.getUserByEmail(formData[field]);
-    console.log(userData);
     let invite = new FormData();
     invite.append("invitation", Auth.currentUser.family);
 
