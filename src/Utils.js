@@ -41,6 +41,32 @@ class Utils {
     return formattedDate.toLocaleDateString("en-AU", options);
   }
 
+  validateDates(startDate, endDate) {
+    const now = new Date();
+
+    // Check if both dates are valid Date objects
+    if (!(startDate instanceof Date) || !(endDate instanceof Date)) {
+      throw new Error("Invalid date provided.");
+    }
+
+    // Check that both dates are in the future
+    if (startDate <= now) {
+      return { valid: false, message: "Start date must be in the future." };
+    }
+    if (endDate <= now) {
+      return { valid: false, message: "End date must be in the future." };
+    }
+
+    // Check that endDate is after startDate
+    if (endDate <= startDate) {
+      return { valid: false, message: "End date must be after Start date." };
+    }
+
+    // All checks passed
+    return { valid: true, message: "Dates are valid." };
+  }
+
+
 }
 
 export default new Utils()

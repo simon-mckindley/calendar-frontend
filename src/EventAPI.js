@@ -3,13 +3,13 @@ import Toast from './Toast'
 
 class FamilyAPI {
 
-  async createFamily(familyData) {
-    if (!familyData) return;
+  async createEvent(eventData) {
+    if (!eventData) return;
 
-    const response = await fetch(`${App.apiBase}/family`, {
+    const response = await fetch(`${App.apiBase}/event`, {
       method: 'POST',
       headers: { "Authorization": `Bearer ${localStorage.cal_accessToken}` },
-      body: familyData
+      body: eventData
     })
 
     // if response not ok
@@ -17,14 +17,15 @@ class FamilyAPI {
       // console log error
       const err = await response.json();
       if (err) console.log(err);
-      Toast.show('Problem creating family', 'err');
+      Toast.show('Problem creating event', 'err');
       // throw error (exit this function)      
-      throw new Error('Problem creating family');
+      throw new Error('Problem creating event');
     }
 
     // convert response payload into json - store as data
     const data = await response.json();
-    Toast.show('Family created');
+    console.log("API ", data)
+    Toast.show('Event created');
     // return data
     return data
   }

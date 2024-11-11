@@ -62,9 +62,9 @@ class CalendarView {
     try {
       if (Auth.currentUser.family) {
         this.familyData = await FamilyAPI.getFamily(Auth.currentUser.family);
-        this.render();
-        this.createUserCheckboxes();
       }
+      this.createUserCheckboxes();
+      this.render();
       console.log(this.familyData);
     } catch (err) {
       Toast.show(err, 'error');
@@ -79,10 +79,18 @@ class CalendarView {
     // Clear any existing content in the container
     container.innerHTML = '';
 
-    // Sort users alphabetically by firstName
-    const sortedUsers = [...this.familyData.users].sort((a, b) =>
-      a.firstName.localeCompare(b.firstName)
-    );
+    let sortedUsers = [{
+      _id: Auth.currentUser.id,
+      email: Auth.currentUser.email,
+      firstName: Auth.currentUser.firstName
+    }];
+
+    if (this.familyData) {
+      // Sort users alphabetically by firstName
+      sortedUsers = [...this.familyData.users].sort((a, b) =>
+        a.firstName.localeCompare(b.firstName)
+      );
+    }
 
     // Iterate through each sorted user and create the checkbox and label
     sortedUsers.forEach(user => {
@@ -148,6 +156,71 @@ class CalendarView {
     dialog.show();
   }
 
+  createEventHandler() {
+    // Checks if all data is present
+    console.log(formData);
+    let error = "";
+    const fields = ['title', 'startDate', 'endDate', 'description'];
+
+    fields.forEach(field => {
+      if (formData[field]) {
+        formData[field] = formData[field].trim();
+      }
+
+      if (field !== "description" && !formData[field]) {
+        document.querySelector(`cal-input[name="${field}"]`).setAttribute("hasError", "true");
+        let fieldName = field.includes('Date') ? field.slice(0, -4).concat(" ", "date") : field;
+        error += error ? `, ${fieldName.toUpperCase()}` : fieldName.toUpperCase();
+      }
+    });
+
+    const userCheckboxes = document.querySelectorAll('input[name="participant"]');
+    let usersArray = [];
+    if (userCheckboxes) {
+      userCheckboxes.forEach(box => {
+        if (box.checked) {
+          usersArray.push(box.value);
+        }
+      });
+    }
+
+    if (usersArray.length === 0) {
+      error += error ? ', USER' : 'USER';
+    }
+
+    if (error) {
+      Toast.show(`Please enter the ${error}`, 'error');
+      return;
+    }
+
+    const result = Utils.validateDates(new Date(formData.startDate), new Date(formData.endDate));
+    if (!result.valid) {
+      Toast.show(result.message, 'error');
+      return;
+    }
+
+    formData.users = usersArray;
+
+    console.log(formData);
+
+    return;
+
+    let encodedFormData = new FormData();
+    for (const key in formData) {
+      if (formData.hasOwnProperty(key)) {
+        encodedFormData.append(key, formData[key]);
+      }
+    }
+    const submitBtn = document.querySelector('cal-button');
+    submitBtn.textContent = "Loading...";
+
+    // sign up using Auth
+    Auth.signUp(encodedFormData, () => {
+      submitBtn.textContent = "Register";
+    });
+  }
+
+
   render() {
     const template = html`
       <main-header></main-header>
@@ -166,33 +239,51 @@ class CalendarView {
         <div id='calendar' style="padding: 2rem 4rem;"></div>
 
       </div>
+
+      <!-- --------------------  Dialogs -------------------------- -->
       
       <sl-dialog label="Create event" id="dialog-create-event" style="--width: fit-content;">
         <form class="create-event-form">
-          <cal-input label="Event Title" name="title" type="text"></cal-input>
+          <cal-input 
+            label="Event Title" 
+            name="title" 
+            type="text"
+            @input-change=${this.handleInputChange}>
+          </cal-input>
           
           <div class="date-inputs">
-            <cal-input label="Start" name="startDate" type="datetime-local"></cal-input>
-            <cal-input label="End" name="endDate" type="datetime-local"></cal-input>
+            <cal-input 
+              label="Start" 
+              name="startDate" 
+              type="datetime-local"
+              @input-change=${this.handleInputChange}>
+            </cal-input>
+            <cal-input 
+              label="End" 
+              name="endDate" 
+              type="datetime-local"
+              @input-change=${this.handleInputChange}>
+            </cal-input>
           </div>
           
-          <cal-input label="Description" name="description" type="text"></cal-input>
+          <cal-input 
+            label="Description" 
+            name="description" 
+            type="text"
+            @input-change=${this.handleInputChange}>
+          </cal-input>
 
-          ${this.familyData
-        ? html`
           <div>
             <div class="input-label">Participants</div>          
             <div id="checkbox-wrapper"></div>
-          </div>`
-        : html``
-      }
+          </div>
         </form>
 
         <cal-button
           id="create-submit"
           slot="footer"
           addStyle="min-width: 8rem; margin-inline-end: 1rem;"
-          .onClick="${() => this.hideDialog('dialog-create-event')}" 
+          .onClick="${() => this.createEventHandler()}" 
           buttonType="primary">
           Save
         </cal-button>
