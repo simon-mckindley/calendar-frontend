@@ -34,6 +34,11 @@ class Utils {
     }
   }
 
+  formatTextWithLineBreaks(text) {
+    return text.replace(/\n/g, "<br>");
+  }
+
+
   // Utility function to format date in "25 February 2024" format
   formatDateAU(date) {
     const formattedDate = new Date(date);

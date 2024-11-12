@@ -49,8 +49,8 @@ class UserHomeView {
       Utils.formatDateTimeAU(displayEvent.endDate);
 
     // Set the event description
-    document.getElementById("event-description").textContent =
-      Utils.titleCase(displayEvent.description) || "No description provided.";
+    document.getElementById("event-description").innerHTML =
+      Utils.formatTextWithLineBreaks(Utils.titleCase(displayEvent.description)) || "No description provided.";
 
     // Set the event participants
     const participantsContainer = document.getElementById("event-participants");
@@ -124,7 +124,6 @@ class UserHomeView {
             : html`<div>No current events</div>`
           }
             </div>
-
           </div>
           
           <!-- Dialog box to show family members details -->

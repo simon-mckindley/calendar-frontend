@@ -234,12 +234,11 @@ class CalendarView {
             </cal-input>
           </div>
           
-          <cal-input 
+          <cal-textinput 
             label="Description" 
-            name="description" 
-            type="text"
+            name="description"
             @input-change=${this.handleInputChange}>
-          </cal-input>
+          </cal-textinput>
 
           <div>
             <div class="input-label">Participants</div>          
