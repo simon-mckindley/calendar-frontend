@@ -41,6 +41,24 @@ class Utils {
     return formattedDate.toLocaleDateString("en-AU", options);
   }
 
+  formatDateTimeAU(date) {
+    const formattedDate = new Date(date);
+
+    // Options for the day, month, and year in the correct format
+    const dateOptions = { day: "numeric", month: "long", year: "numeric" };
+    const datePart = formattedDate.toLocaleDateString("en-AU", dateOptions);
+
+    // Extract the time in the format HH:MM with AM/PM
+    let hours = formattedDate.getHours();
+    const minutes = formattedDate.getMinutes().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'pm' : 'am';
+
+    hours = hours % 12 || 12; // Convert to 12-hour format and handle midnight as 12
+
+    // Combine time and date parts
+    return `${hours}:${minutes}${ampm} ${datePart}`;
+  }
+
   validateDates(startDate, endDate) {
     const now = new Date();
 

@@ -16,6 +16,7 @@ import './components/cal-input'
 import './components/cal-search'
 import './components/user-tile'
 import './components/invite-tile'
+import './components/main-spinner'
 
 
 // app.init

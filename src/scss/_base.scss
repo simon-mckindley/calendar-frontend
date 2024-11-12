@@ -41,14 +41,19 @@ a {
   position: fixed;
   background: #fff;
   color: #777;
-  display: flex;
+  display: grid;
   left: 0;
   top: 0;
   right: 0;
   bottom: 0;
-  align-items: center;
-  justify-content: center;
+  place-items: center;
   text-align: center;
+
+  .inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
   .app-logo {
     width: 180px;
@@ -300,7 +305,18 @@ sl-dialog::part(title) {
   column-gap: 0.5rem;
 
   #show-next-event {
+    font-size: 1.2em;
     margin-inline: auto;
+    background-color: #fff;
+    border: 2px solid var(--primary-color);
+    border-radius: 10px;
+    padding: 1rem 2rem;
+    box-shadow: 1px 1px 2px 1px var(--shadow-color);
+
+    .event-title {
+      font-size: 1.2em;
+      font-weight: bold;
+    }
   }
 }
 
@@ -351,7 +367,8 @@ sl-dialog::part(title) {
   input[type=checkbox]:checked+label {
     color: #fff;
     background-color: var(--light-secondary-color);
-    box-shadow: 1px 1px 2px 0px var(--shadow-color);;
+    box-shadow: 1px 1px 2px 0px var(--shadow-color);
+    ;
   }
 }
 

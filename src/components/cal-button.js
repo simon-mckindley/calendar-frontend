@@ -53,6 +53,7 @@ class CalButton extends LitElement {
    
       .cal-btn:focus-visible {
         outline-color: #444;
+        outline-offset: 3px;
       }
 
       .cal-btn:active {

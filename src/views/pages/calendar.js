@@ -5,6 +5,7 @@ import Auth from '../../Auth'
 import Utils from '../../Utils'
 import Toast from '../../Toast'
 import FamilyAPI from '../../FamilyAPI'
+import EventAPI from '../../EventAPI'
 import { Calendar } from 'fullcalendar'
 
 let formData;
@@ -126,36 +127,6 @@ class CalendarView {
   }
 
 
-
-  displayEvent() {
-    this.displayUser = displayUser;
-    const dialog = document.getElementById('dialog-show-member');
-
-    const today = new Date();
-    let nextEvent = null;
-
-    if (displayUser.events) {
-      displayUser.events.forEach((evnt) => {
-        const eventStartDate = new Date(evnt.startDate); // Ensure startDate is a Date object
-
-        if (eventStartDate > today && (!nextEvent || eventStartDate < new Date(nextEvent.startDate))) {
-          nextEvent = evnt;
-        }
-      });
-    }
-
-    document.getElementById("show-next-event").innerText = nextEvent
-      ? `Next Event: ${nextEvent}` : "No upcoming events";
-
-    document.getElementById("display-avatar").image = displayUser.avatar
-      ? `${App.apiBase}/images/${Auth.currentUser.avatar}` : '';
-
-
-    dialog.setAttribute("label", `${Utils.titleCase(displayUser.firstName)} ${Utils.titleCase(displayUser.lastName)}`);
-
-    dialog.show();
-  }
-
   createEventHandler() {
     // Checks if all data is present
     console.log(formData);
@@ -203,21 +174,18 @@ class CalendarView {
 
     console.log(formData);
 
-    return;
-
     let encodedFormData = new FormData();
     for (const key in formData) {
       if (formData.hasOwnProperty(key)) {
-        encodedFormData.append(key, formData[key]);
+        // Convert array to JSON string
+        const value = Array.isArray(formData[key]) ? JSON.stringify(formData[key]) : formData[key];
+        encodedFormData.append(key, value);
       }
     }
-    const submitBtn = document.querySelector('cal-button');
-    submitBtn.textContent = "Loading...";
 
-    // sign up using Auth
-    Auth.signUp(encodedFormData, () => {
-      submitBtn.textContent = "Register";
-    });
+    EventAPI.createEvent(encodedFormData);
+
+    document.getElementById('dialog-create-event').hide();
   }
 
 

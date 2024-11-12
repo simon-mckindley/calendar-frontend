@@ -4,6 +4,7 @@ class DataTile extends LitElement {
   static get properties() {
     return {
       type: { type: String },     // Tile type
+      icon: { type: String },     // Data icon
       label: { type: String },      // Tile title
       date: { type: String },       // Tile date
       onClick: { type: Function }   // Click event handler
@@ -49,6 +50,7 @@ class DataTile extends LitElement {
   constructor() {
     super();
     this.type = 'event';     // Default tile type
+    this.icon = 'fa-regular fa-calendar';  // Data icon
     this.label = '';         // Default title
     this.date = '';          // Default date
     this.onClick = () => { }; // Default empty function for onClick
@@ -57,9 +59,16 @@ class DataTile extends LitElement {
   render() {
     return html`
       <div class="data-tile" @click="${this.onClick}" tabindex="0">
-        <div class="tile-title">${this.label}</div>
+        <div>
+      ${this.type === 'event'
+        ? html``
+        : html``
+      }  
+          <div class="tile-title">${this.label}</div>
+        </div>
         <div class="tile-date">
-          ${this.type === 'data' ? html`
+          ${this.type === 'data'
+        ? html`
             <span style="font-size: 0.8em">Created</span>`
         : html``}
           <span>${this.date}</span>

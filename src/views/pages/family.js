@@ -17,7 +17,6 @@ class FamilyView {
     this.familyData = null;
     this.adult = Auth.currentUser.accessLevel === 2;
     this.isOnlyAdult = true;
-    this.displayUser = null;
     this.invitationFamily = null;
     this.render();
     Utils.pageIntroAnim();
@@ -41,11 +40,10 @@ class FamilyView {
 
   async getInvitationFamily() {
     try {
-      if (Auth.currentUser.invitation) {
-        this.invitationFamily = await FamilyAPI.getFamily(Auth.currentUser.invitation);
-      } else {
-        this.invitationFamily = null;
-      }
+      Auth.currentUser.invitation
+        ? this.invitationFamily = await FamilyAPI.getFamily(Auth.currentUser.invitation)
+        : this.invitationFamily = null;
+
       this.render();
     } catch (err) {
       console.log("Invitation family error ", err);
@@ -72,25 +70,43 @@ class FamilyView {
   }
 
 
-  displayFamilyMember(displayUser) {
-    this.displayUser = displayUser;
+  async getEvents(userId) {
+    try {
+      let events = null;
+      const user = await UserAPI.getUser(userId);
+      user.events
+        ? events = user.events
+        : events = [];
+
+      return events;
+    } catch (err) {
+      console.log(err);
+      Toast.show('Error getting user events', 'error');
+    }
+  }
+
+
+  async displayFamilyMember(displayUser) {
     const dialog = document.getElementById('dialog-show-member');
 
     const today = new Date();
     let nextEvent = null;
 
-    if (displayUser.events) {
-      displayUser.events.forEach((evnt) => {
-        const eventStartDate = new Date(evnt.startDate); // Ensure startDate is a Date object
+    const userEvents = await this.getEvents(displayUser._id);
 
-        if (eventStartDate > today && (!nextEvent || eventStartDate < new Date(nextEvent.startDate))) {
-          nextEvent = evnt;
-        }
-      });
-    }
+    userEvents.forEach((evnt) => {
+      const eventStartDate = new Date(evnt.startDate); // Ensure startDate is a Date object
+      if (eventStartDate > today && (!nextEvent || eventStartDate < new Date(nextEvent.startDate))) {
+        nextEvent = evnt;
+      }
+    });
 
-    document.getElementById("show-next-event").innerText = nextEvent
-      ? `Next Event: ${nextEvent}` : "No upcoming events";
+    document.getElementById("show-next-event").innerHTML = nextEvent
+      ? `Next Event:<br>
+        <span class="event-title">${Utils.titleCase(nextEvent.title)}</span><br><br> 
+        ${Utils.formatDateAU(nextEvent.startDate)} <br>
+        ${Utils.titleCase(nextEvent.description)}`
+      : "No upcoming events";
 
     document.getElementById("display-avatar").image = displayUser.avatar
       ? `${App.apiBase}/images/${Auth.currentUser.avatar}` : '';
@@ -188,7 +204,7 @@ class FamilyView {
 
 
   async removeFamilyHandler() {
-    if(this.isOnlyAdult) return;
+    if (this.isOnlyAdult) return;
 
     await FamilyAPI.removeUser(Auth.currentUser.family, Auth.currentUser.id);
 
@@ -270,7 +286,7 @@ class FamilyView {
 
     <div class="page-content page-centered">
       ${this.familyData == null
-        ? html`<sl-spinner></sl-spinner>`
+        ? html`<main-spinner></main-spinner>`
         : html`
           <div class="family-wrapper">
             <div>
@@ -488,7 +504,7 @@ class FamilyView {
           <!-- Dialog box to show family members details -->
           <sl-dialog id="dialog-show-member">        
             <div class="show-member-body">
-              <sl-avatar id="display-avatar" style="--size: 5rem;"></sl-avatar>
+              <sl-avatar id="display-avatar" style="--size: 6rem;"></sl-avatar>
               <div id="show-next-event">
               </div>
             </div>
