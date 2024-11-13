@@ -1,19 +1,27 @@
 // Shoelace
 
 sl-tooltip::part(body),
-sl-tooltip::part(base__arrow){
+sl-tooltip::part(base__arrow) {
   background-color: var(--secondary-color);
 }
 
 // sl-dialog
-sl-dialog::part(title){
+sl-dialog::part(header) {
+  background-color: var(--light-primary-color);
+}
+
+sl-dialog::part(panel) {
+  border: 1px solid var(--secondary-color);
+}
+
+sl-dialog::part(title) {
   font-weight: 500;
   font-size: 1.6em;
 }
 
 
 // RESPONSIVE - MOBILE -------------------
-@media all and (max-width: 768px){ 
+@media all and (max-width: 768px) {
 
   sl-dialog::part(panel) {
     width: 100%;

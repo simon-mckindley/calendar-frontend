@@ -104,8 +104,8 @@ class FamilyView {
     document.getElementById("show-next-event").innerHTML = nextEvent
       ? `Next Event:<br>
         <span class="event-title">${Utils.titleCase(nextEvent.title)}</span><br><br> 
-        ${Utils.formatDateAU(nextEvent.startDate)} <br>
-        ${Utils.titleCase(nextEvent.description)}`
+        ${Utils.formatDateTimeAU(nextEvent.startDate)} <br><br>
+        ${Utils.formatTextWithLineBreaks(Utils.titleCase(nextEvent.description))}`
       : "No upcoming events";
 
     document.getElementById("display-avatar").image = displayUser.avatar
@@ -150,12 +150,16 @@ class FamilyView {
     }
 
     // call api    
-    await FamilyAPI.updateFamily(this.familyData._id, encodedFormData);
+    try {
+      await FamilyAPI.updateFamily(this.familyData._id, encodedFormData);
 
-    document.getElementById('dialog-edit-family').hide();
-    this.getFamily();
-    input.value = '';
-    formData = {};
+      document.getElementById('dialog-edit-family').hide();
+      this.getFamily();
+      input.value = '';
+      formData = {};
+    } catch (error) {
+      console.log(error);
+    }
   }
 
 
@@ -187,32 +191,44 @@ class FamilyView {
     }
 
     // call api's
-    const familyData = await FamilyAPI.createFamily(encodedFormData);
-    await FamilyAPI.addUser(
-      familyData.family._id,
-      Auth.currentUser.id,
-      "Associated to family");
+    try {
+      const familyData = await FamilyAPI.createFamily(encodedFormData);
+      await FamilyAPI.addUser(
+        familyData.family._id,
+        Auth.currentUser.id,
+        "Associated to family");
 
-    const userData = await UserAPI.getUser(Auth.currentUser.id);
-    Auth.currentUser.family = userData.family;
+      const userData = await UserAPI.getUser(Auth.currentUser.id);
+      Auth.currentUser.family = userData.family;
 
-    document.getElementById('dialog-create-family').hide();
-    this.getFamily();
-    input.value = '';
-    formData = {};
+      document.getElementById('dialog-create-family').hide();
+      this.getFamily();
+      input.value = '';
+      formData = {};
+
+    } catch (error) {
+      console.log(error);
+    }
+
   }
 
 
   async removeFamilyHandler() {
     if (this.isOnlyAdult) return;
 
-    await FamilyAPI.removeUser(Auth.currentUser.family, Auth.currentUser.id);
+    try {
+      await FamilyAPI.removeUser(Auth.currentUser.family, Auth.currentUser.id);
 
-    const userData = await UserAPI.getUser(Auth.currentUser.id);
-    Auth.currentUser.family = userData.family;
+      const userData = await UserAPI.getUser(Auth.currentUser.id);
+      Auth.currentUser.family = userData.family;
 
-    document.getElementById('dialog-leave-family').hide();
-    this.getFamily();
+      document.getElementById('dialog-leave-family').hide();
+      this.getFamily();
+
+    } catch (error) {
+      console.log(error);
+    }
+
   }
 
 
@@ -238,45 +254,60 @@ class FamilyView {
       return;
     }
 
-    const userData = await UserAPI.getUserByEmail(formData[field]);
-    let invite = new FormData();
-    invite.append("invitation", Auth.currentUser.family);
+    try {
+      const userData = await UserAPI.getUserByEmail(formData[field]);
+      let invite = new FormData();
+      invite.append("invitation", Auth.currentUser.family);
 
-    await UserAPI.updateUser(
-      userData._id,
-      invite,
-      `Invitation sent to ${Utils.titleCase(userData.firstName)}`
-    );
+      await UserAPI.updateUser(
+        userData._id,
+        invite,
+        `Invitation sent to ${Utils.titleCase(userData.firstName)}`
+      );
 
-    document.getElementById('dialog-invite-member').hide();
-    input.value = '';
-    formData = {};
+      document.getElementById('dialog-invite-member').hide();
+      input.value = '';
+      formData = {};
+
+    } catch (error) {
+      console.log(error);
+    }
   }
 
 
   async acceptInvitationHandler() {
-    await FamilyAPI.addUser(
-      this.invitationFamily._id,
-      Auth.currentUser.id,
-      "Family invitation accepted");
+    try {
+      await FamilyAPI.addUser(
+        this.invitationFamily._id,
+        Auth.currentUser.id,
+        "Family invitation accepted");
 
-    await UserAPI.removeInvitation(Auth.currentUser.id, this.invitationFamily._id);
+      await UserAPI.removeInvitation(Auth.currentUser.id, this.invitationFamily._id);
 
-    Auth.currentUser.family = this.invitationFamily._id;
-    Auth.currentUser.invitation = "";
-    this.getFamily();
-    this.getInvitationFamily();
+      Auth.currentUser.family = this.invitationFamily._id;
+      Auth.currentUser.invitation = "";
+      this.getFamily();
+      this.getInvitationFamily();
+
+    } catch (error) {
+      console.log(error);
+    }
   }
 
 
   async declineInvitationHandler() {
-    await UserAPI.removeInvitation(
-      Auth.currentUser.id,
-      this.invitationFamily._id,
-      "Family invitation declined");
+    try {
+      await UserAPI.removeInvitation(
+        Auth.currentUser.id,
+        this.invitationFamily._id,
+        "Family invitation declined");
 
-    Auth.currentUser.invitation = "";
-    this.getInvitationFamily();
+      Auth.currentUser.invitation = "";
+      this.getInvitationFamily();
+
+    } catch (error) {
+      console.log(error);
+    }
   }
 
 

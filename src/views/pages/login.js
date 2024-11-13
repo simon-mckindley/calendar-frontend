@@ -67,8 +67,7 @@ class LoginView {
     }
 
     const submitBtn = document.querySelector('cal-button');
-    submitBtn.textContent = "Loading...";
-    //submitBtn.setAttribute('loading', '');
+    submitBtn.innerHTML = "<sl-spinner></sl-spinner>";
 
     // sign in using Auth    
     Auth.signIn(encodedFormData, () => {
@@ -83,7 +82,7 @@ class LoginView {
       <div class="page-content page-centered" style="overflow: hidden;">
         <div class="login-wrapper">
           <div>
-            <img class="login-logo login-logo-show" src="/images/calendar_image.png">      
+            <img class="login-logo login-logo-show" src="/images/calendar_image_med.png">      
           </div>
  
           <form class="form-login" @keyup=${this.keyboardSubmit}>

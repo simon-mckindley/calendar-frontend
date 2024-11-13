@@ -127,9 +127,26 @@ class CalendarView {
   }
 
 
+  resetCreateForm() {
+    const inputs = document.querySelectorAll(".create-event-form cal-input");
+    if (inputs) {
+      inputs.forEach(input => input.value = "");
+    }
+
+    const textinp = document.querySelector(".create-event-form cal-textinput");
+    if (textinp) textinp.value = "";
+
+    const checkboxes = document.querySelectorAll('.create-event-form input[type="checkbox"]');
+    if (checkboxes) {
+      checkboxes.forEach(checkbox => {
+        checkbox.checked = checkbox.value === Auth.currentUser.id;
+      });
+    }
+  }
+
+
   createEventHandler() {
     // Checks if all data is present
-    console.log(formData);
     let error = "";
     const fields = ['title', 'startDate', 'endDate', 'description'];
 
@@ -166,13 +183,13 @@ class CalendarView {
 
     const result = Utils.validateDates(new Date(formData.startDate), new Date(formData.endDate));
     if (!result.valid) {
+      document.querySelector(`cal-input[name="startDate"]`).setAttribute("hasError", "true");
+      document.querySelector(`cal-input[name="endDate"]`).setAttribute("hasError", "true");
       Toast.show(result.message, 'error');
       return;
     }
 
     formData.users = usersArray;
-
-    console.log(formData);
 
     let encodedFormData = new FormData();
     for (const key in formData) {
@@ -183,9 +200,16 @@ class CalendarView {
       }
     }
 
-    EventAPI.createEvent(encodedFormData);
+    try {
+      EventAPI.createEvent(encodedFormData);
+      this.resetCreateForm();
+      formData = {};
+      document.getElementById('dialog-create-event').hide();
+      
+    } catch (error) {
+      console.log(error);
+    }
 
-    document.getElementById('dialog-create-event').hide();
   }
 
 

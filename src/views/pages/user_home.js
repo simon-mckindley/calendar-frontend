@@ -128,7 +128,7 @@ class UserHomeView {
           
           <!-- Dialog box to show family members details -->
           <sl-dialog id="dialog-show-event" style="--body-spacing: 0">
-            <div class="show-event-body" style="padding-inline: 1.5rem;">
+            <div class="show-event-body">
               <div class="event-dates">
                 <div>Start: <span id="start-date"></span></div>
                 <div>End: <span id="end-date"></span></div>

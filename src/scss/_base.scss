@@ -56,9 +56,10 @@ a {
   }
 
   .app-logo {
-    width: 180px;
+    width: 120px;
     display: block;
-    margin-bottom: 1em;
+    margin-bottom: 4em;
+    rotate: -20deg;
   }
 }
 
@@ -203,6 +204,46 @@ sl-dialog::part(title) {
   }
 }
 
+#dialog-show-event {
+  .show-event-body {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1.5rem;
+    padding: 0.5rem 1.5rem;
+  }
+
+  .data-label {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-block-end: 3px;
+  }
+
+  .event-dates span {
+    font-weight: bold;
+  }
+
+  #event-description {
+    min-height: 4.5rem;
+    padding: 0.5rem;
+    border: 1px solid var(--secondary-color);
+    border-radius: 10px;
+    box-shadow: 1px 1px 2px 1px var(--shadow-color);
+  }
+
+  #event-participants {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.25rem;
+
+    >* {
+      padding: 0.25rem 0.75rem;
+      border-radius: 10px;
+      box-shadow: 1px 1px 2px 1px var(--shadow-color);
+    }
+  }
+}
+
 // Family page
 .family-wrapper {
   display: grid;
@@ -302,13 +343,13 @@ sl-dialog::part(title) {
 // Family dialog
 .show-member-body {
   display: flex;
-  column-gap: 0.5rem;
+  column-gap: 1.5rem;
 
   #show-next-event {
     font-size: 1.2em;
     margin-inline: auto;
-    background-color: #fff;
-    border: 2px solid var(--primary-color);
+    background-color: rgba(45, 255, 255, 0.05);
+    border: 2px solid var(--secondary-color);
     border-radius: 10px;
     padding: 1rem 2rem;
     box-shadow: 1px 1px 2px 1px var(--shadow-color);

@@ -61,7 +61,7 @@ class RegisterView {
       }
     }
     const submitBtn = document.querySelector('cal-button');
-    submitBtn.textContent = "Loading...";
+    submitBtn.innerHTML = "<sl-spinner></sl-spinner>";
 
     // sign up using Auth
     Auth.signUp(encodedFormData, () => {

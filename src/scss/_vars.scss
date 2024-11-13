@@ -9,11 +9,12 @@
   --body-bg: rgba(45, 255, 255, 0.05);
 
   // colors  
-  $brand-color: #9260b4;
+  $brand-color: #ff2d2d;
   --brand-color: #{$brand-color};
   --link-color: --brand-color;
   --primary-color: #ff2d2d;
   --secondary-color: #00aaaa;
+  --light-primary-color: hwb(0 18% 0% / 0.1);
   --light-secondary-color: #00a8a880;
   --shadow-color: #00000066;
 
