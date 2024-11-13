@@ -19,6 +19,10 @@ sl-dialog::part(title) {
   font-size: 1.6em;
 }
 
+sl-checkbox::part(control--checked) {
+  background: var(--secondary-color);
+}
+
 
 // RESPONSIVE - MOBILE -------------------
 @media all and (max-width: 768px) {

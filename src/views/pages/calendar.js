@@ -7,6 +7,7 @@ import Toast from '../../Toast'
 import FamilyAPI from '../../FamilyAPI'
 import EventAPI from '../../EventAPI'
 import { Calendar } from 'fullcalendar'
+import UserAPI from '../../UserAPI'
 
 let formData;
 
@@ -14,12 +15,14 @@ class CalendarView {
   init() {
     document.title = 'Calendar';
     formData = {};
+    this.events = null;
     this.familyData = null;
     this.render();
-    this.showCalendar();
     Utils.pageIntroAnim();
     this.getFamily();
+    this.getAllEvents();
   }
+
 
   showCalendar() {
     // Wait for the DOM to update before querying the element
@@ -34,9 +37,10 @@ class CalendarView {
             center: 'title',
             end: 'timeGridDay dayGridWeek dayGridMonth next' // will normally be on the right. if RTL, will be on the left
           },
-          locale: 'en-au'
+          locale: 'en-au',
+          events: this.events
         });
-        console.log(calendar);
+        // console.log(calendar);
         calendar.render();  // Render the calendar
 
         calendar.on('dateClick', function (info) {
@@ -64,13 +68,49 @@ class CalendarView {
       if (Auth.currentUser.family) {
         this.familyData = await FamilyAPI.getFamily(Auth.currentUser.family);
       }
-      this.createUserCheckboxes();
-      this.render();
-      console.log(this.familyData);
     } catch (err) {
       Toast.show(err, 'error');
     }
   }
+
+
+  async getAllEvents() {
+    try {
+      // Initialize events with the current user's events
+      const currentUserData = await UserAPI.getUser(Auth.currentUser.id);
+      this.events = currentUserData.events;
+
+      if (this.familyData) {
+
+        // Create a Set to track unique event IDs
+        const uniqueEventIds = new Set(this.events.map(event => event._id));
+
+        // Fetch events for each family member and add unique events
+        for (const user of this.familyData.users) {
+          if (user._id !== Auth.currentUser.id) {
+            const userData = await UserAPI.getUser(user._id);
+
+            userData.events.forEach(event => {
+              if (!uniqueEventIds.has(event._id)) {
+                this.events.push(event);
+                uniqueEventIds.add(event._id); // Add to the Set to avoid future duplicates
+              }
+            });
+          }
+        }
+
+      }
+
+      console.log(this.events);
+      this.render();
+      this.createUserCheckboxes();
+      this.showCalendar();
+
+    } catch (err) {
+      Toast.show(err, 'error');
+    }
+  }
+
 
 
   createUserCheckboxes() {
@@ -148,7 +188,7 @@ class CalendarView {
   createEventHandler() {
     // Checks if all data is present
     let error = "";
-    const fields = ['title', 'startDate', 'endDate', 'description'];
+    const fields = ['title', 'start', 'description'];
 
     fields.forEach(field => {
       if (formData[field]) {
@@ -157,7 +197,7 @@ class CalendarView {
 
       if (field !== "description" && !formData[field]) {
         document.querySelector(`cal-input[name="${field}"]`).setAttribute("hasError", "true");
-        let fieldName = field.includes('Date') ? field.slice(0, -4).concat(" ", "date") : field;
+        let fieldName = field.includes('start') ? field.concat(" date") : field;
         error += error ? `, ${fieldName.toUpperCase()}` : fieldName.toUpperCase();
       }
     });
@@ -181,13 +221,16 @@ class CalendarView {
       return;
     }
 
-    const result = Utils.validateDates(new Date(formData.startDate), new Date(formData.endDate));
+    const result = Utils.validateDates(new Date(formData.start), new Date(formData.end));
     if (!result.valid) {
-      document.querySelector(`cal-input[name="startDate"]`).setAttribute("hasError", "true");
-      document.querySelector(`cal-input[name="endDate"]`).setAttribute("hasError", "true");
+      document.querySelector(`cal-input[name="start"]`).setAttribute("hasError", "true");
+      document.querySelector(`cal-input[name="end"]`).setAttribute("hasError", "true");
       Toast.show(result.message, 'error');
       return;
     }
+
+    const allDay = document.querySelector(".all-day-input");
+    if (allDay.checked) formData.allDay = true;
 
     formData.users = usersArray;
 
@@ -205,7 +248,7 @@ class CalendarView {
       this.resetCreateForm();
       formData = {};
       document.getElementById('dialog-create-event').hide();
-      
+
     } catch (error) {
       console.log(error);
     }
@@ -215,81 +258,90 @@ class CalendarView {
 
   render() {
     const template = html`
-      <main-header></main-header>
-      <div class="page-content">
+    <main-header></main-header>
     
-        <div class="calendar-head">    
-          <cal-button 
-            class="create-btn"
-            addStyle="width: 100%;"
-            .onClick=${() => this.showDialog("dialog-create-event")} 
-            buttonType="primary">
-            Create Event
-          </cal-button>
-        </div>
-        
-        <div id='calendar' style="padding: 2rem 4rem;"></div>
-
-      </div>
-
-      <!-- --------------------  Dialogs -------------------------- -->
-      
-      <sl-dialog label="Create event" id="dialog-create-event" style="--width: fit-content;">
-        <form class="create-event-form">
-          <cal-input 
-            label="Event Title" 
-            name="title" 
-            type="text"
-            @input-change=${this.handleInputChange}>
-          </cal-input>
-          
-          <div class="date-inputs">
-            <cal-input 
-              label="Start" 
-              name="startDate" 
-              type="datetime-local"
-              @input-change=${this.handleInputChange}>
-            </cal-input>
-            <cal-input 
-              label="End" 
-              name="endDate" 
-              type="datetime-local"
-              @input-change=${this.handleInputChange}>
-            </cal-input>
+    <div class="page-content">
+      ${this.events == null
+        ? html`
+        <div class="page-centered" style="height: 80vh;">
+          <main-spinner></main-spinner>
+        </div>`
+        : html`
+          <div class="calendar-head">    
+            <cal-button 
+              class="create-btn"
+              addStyle="width: 100%;"
+              .onClick=${() => this.showDialog("dialog-create-event")} 
+              buttonType="primary">
+              Create Event
+            </cal-button>
           </div>
           
-          <cal-textinput 
-            label="Description" 
-            name="description"
-            @input-change=${this.handleInputChange}>
-          </cal-textinput>
+          <div id='calendar' style="padding: 2rem 4rem;"></div>
 
-          <div>
-            <div class="input-label">Participants</div>          
-            <div id="checkbox-wrapper"></div>
-          </div>
-        </form>
+          <!-- --------------------  Dialogs -------------------------- -->
+          
+          <sl-dialog label="Create event" id="dialog-create-event" style="--width: fit-content;">
+            <form class="create-event-form">
+              <cal-input 
+                label="Event Title" 
+                name="title" 
+                type="text"
+                @input-change=${this.handleInputChange}>
+              </cal-input>
+              
+              <div class="date-inputs">
+                <cal-input 
+                  label="Start" 
+                  name="start" 
+                  type="datetime-local"
+                  @input-change=${this.handleInputChange}>
+                </cal-input>
+                <cal-input 
+                  label="End" 
+                  name="end" 
+                  type="datetime-local"
+                  @input-change=${this.handleInputChange}>
+                </cal-input>
+              </div>
 
-        <cal-button
-          id="create-submit"
-          slot="footer"
-          addStyle="min-width: 8rem; margin-inline-end: 1rem;"
-          .onClick="${() => this.createEventHandler()}" 
-          buttonType="primary">
-          Save
-        </cal-button>
+              <sl-checkbox class="all-day-input">All Day Event</sl-checkbox>
+              
+              <cal-textinput 
+                label="Description" 
+                name="description"
+                @input-change=${this.handleInputChange}>
+              </cal-textinput>
 
-        <cal-button
-          slot="footer"
-          addStyle="min-width: 8rem;"
-          .onClick="${() => this.hideDialog('dialog-create-event')}" 
-          buttonType="secondary">
-          Cancel
-        </cal-button>
-      </sl-dialog>
-    `
-    render(template, App.rootEl)
+              <div>
+                <div class="input-label">Participants</div>          
+                <div id="checkbox-wrapper"></div>
+              </div>
+            </form>
+
+            <cal-button
+              id="create-submit"
+              slot="footer"
+              addStyle="min-width: 8rem; margin-inline-end: 1rem;"
+              .onClick=${() => this.createEventHandler()} 
+              buttonType="primary">
+              Save
+            </cal-button>
+
+            <cal-button
+              slot="footer"
+              addStyle="min-width: 8rem;"
+              .onClick=${() => this.hideDialog('dialog-create-event')} 
+              buttonType="secondary">
+              Cancel
+            </cal-button>
+          </sl-dialog>
+        `}
+    </div>
+  `;
+    render(template, App.rootEl);
   }
+
 }
 
 

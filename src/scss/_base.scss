@@ -218,6 +218,16 @@ sl-dialog::part(title) {
     margin-block-end: 3px;
   }
 
+  .all-day-wrap {
+    font-weight: bold;
+
+    i {
+      color: var(--primary-color);
+      font-size: 1.4em;
+      margin-inline-end: 0.25rem;
+    }
+  }
+
   .event-dates span {
     font-weight: bold;
   }
@@ -378,6 +388,11 @@ sl-dialog::part(title) {
     flex-wrap: wrap;
   }
 
+  .all-day-input {
+    margin-inline: auto;
+    font-size: 1.2em;
+  }
+
   .input-label {
     font-size: 1em;
     font-family: "Maven-SemiBold";
@@ -411,6 +426,26 @@ sl-dialog::part(title) {
     box-shadow: 1px 1px 2px 0px var(--shadow-color);
     ;
   }
+}
+
+
+.fc .fc-button {
+  text-transform: capitalize;
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+  box-shadow: 2px 2px 5px 1px var(--shadow-color);
+}
+
+.fc .fc-button:active {
+  box-shadow: 1px 1px 2px 0px var(--shadow-color);
+}
+
+.fc .fc-button-primary:focus {
+  box-shadow: 1px 1px 2px 0px var(--shadow-color);
+}
+
+.fc-event-title {
+  text-transform: capitalize;
 }
 
 // Admin home

@@ -42,15 +42,28 @@ class UserHomeView {
 
     const dialog = document.getElementById('dialog-show-event');
 
+    // Set all day text 
+    document.querySelector(".all-day-wrap").style.display =
+      displayEvent.allDay ? "" : "none";
+
     // Set the start and end dates
     document.getElementById("start-date").textContent =
-      Utils.formatDateTimeAU(displayEvent.startDate);
-    document.getElementById("end-date").textContent =
-      Utils.formatDateTimeAU(displayEvent.endDate);
+      Utils.formatDateTimeAU(displayEvent.start);
+    if (displayEvent.end) {
+      document.getElementById("end-cont").style = "";
+      document.getElementById("end-date").textContent =
+        Utils.formatDateTimeAU(displayEvent.end);
+    } else {
+      document.getElementById("end-cont").style.display = "none";
+    }
 
     // Set the event description
-    document.getElementById("event-description").innerHTML =
-      Utils.formatTextWithLineBreaks(Utils.titleCase(displayEvent.description)) || "No description provided.";
+    if (displayEvent.description) {
+      document.getElementById("event-description").innerHTML =
+        Utils.formatTextWithLineBreaks(Utils.titleCase(displayEvent.description));
+    } else {
+      document.getElementById("event-description").textContent = "No description provided";
+    }
 
     // Set the event participants
     const participantsContainer = document.getElementById("event-participants");
@@ -113,11 +126,11 @@ class UserHomeView {
             <div class="events-wrapper data-scroll-box">
             ${this.events && this.events.length > 0
             ? this.events
-              .sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) // Sorts by startDate ascending
+              .sort((a, b) => new Date(a.start) - new Date(b.start)) // Sorts by start ascending
               .map(item => html`
               <data-tile 
                 label=${Utils.titleCase(item.title)} 
-                date=${Utils.formatDateTimeAU(item.startDate)} 
+                date=${Utils.formatDateTimeAU(item.start)} 
                 .onClick=${() => this.displayEvent(item)}>
               </data-tile>
             `)
@@ -129,9 +142,14 @@ class UserHomeView {
           <!-- Dialog box to show family members details -->
           <sl-dialog id="dialog-show-event" style="--body-spacing: 0">
             <div class="show-event-body">
+              <div class="all-day-wrap">
+                <i class="fa-regular fa-calendar-check"></i>
+                <span>All Day Event</span>
+              </div>
+
               <div class="event-dates">
                 <div>Start: <span id="start-date"></span></div>
-                <div>End: <span id="end-date"></span></div>
+                <div id="end-cont">End: <span id="end-date"></span></div>
               </div>
 
               <div>

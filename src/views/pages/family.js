@@ -95,16 +95,17 @@ class FamilyView {
     const userEvents = await this.getEvents(displayUser._id);
 
     userEvents.forEach((evnt) => {
-      const eventStartDate = new Date(evnt.startDate); // Ensure startDate is a Date object
-      if (eventStartDate > today && (!nextEvent || eventStartDate < new Date(nextEvent.startDate))) {
+      const eventStartDate = new Date(evnt.start); // Ensure start is a Date object
+      if (eventStartDate > today && (!nextEvent || eventStartDate < new Date(nextEvent.start))) {
         nextEvent = evnt;
       }
     });
 
     document.getElementById("show-next-event").innerHTML = nextEvent
       ? `Next Event:<br>
-        <span class="event-title">${Utils.titleCase(nextEvent.title)}</span><br><br> 
-        ${Utils.formatDateTimeAU(nextEvent.startDate)} <br><br>
+        <span class="event-title">${Utils.titleCase(nextEvent.title)}</span><br><br>
+        <i class="fa-regular fa-clock"></i> 
+        <span>${Utils.formatDateTimeAU(nextEvent.start)}</span><br><br>
         ${Utils.formatTextWithLineBreaks(Utils.titleCase(nextEvent.description))}`
       : "No upcoming events";
 
@@ -533,7 +534,7 @@ class FamilyView {
           
           
           <!-- Dialog box to show family members details -->
-          <sl-dialog id="dialog-show-member">        
+          <sl-dialog id="dialog-show-member" style="--width: fit-content">        
             <div class="show-member-body">
               <sl-avatar id="display-avatar" style="--size: 6rem;"></sl-avatar>
               <div id="show-next-event">
