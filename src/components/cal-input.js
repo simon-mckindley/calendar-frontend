@@ -9,7 +9,8 @@ class CalInput extends LitElement {
       hasError: { type: Boolean },  // Indicates if input has error state
       placeholder: { type: String }, // Input placeholder text
       addStyle: { type: String },    // Inline style
-      value: { type: String }       // Value of the input (for returning form data)
+      value: { type: String },       // Value of the input (for returning form data)
+      disabled: { type: Boolean }     // Sets the input to disabled 
     };
   }
 
@@ -36,6 +37,10 @@ class CalInput extends LitElement {
         border-radius: 1000px;
         width: calc(100% - 2em);
         box-shadow: 2px 2px 5px 1px var(--shadow-color);
+      }
+
+      .cal-input-wrapper input:disabled {
+        background-color: #e5e5e5;
       }
 
       .cal-input-wrapper input[type="search"]{
@@ -68,6 +73,7 @@ class CalInput extends LitElement {
     this.placeholder = '';    // Default placeholder
     this.addStyle = '';          // Default inline style
     this.value = '';          // Default value
+    this.disabled = false;    // Default not disabled
   }
 
   handleInputChange(e) {
@@ -91,6 +97,7 @@ class CalInput extends LitElement {
           class="${this.hasError ? 'error' : ''}"
           placeholder="${this.placeholder}"
           maxlength="20"
+          ?disabled="${this.disabled}"
           .value="${this.value}"
           @input="${this.handleInputChange}"
         />

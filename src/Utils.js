@@ -11,7 +11,6 @@ class Utils {
     }
   }
 
-
   pageIntroAnim() {
     const pageContent = document.querySelector('.page-content')
     if (!pageContent) return
@@ -34,7 +33,7 @@ class Utils {
     }
   }
 
-  formatTextWithLineBreaks(text) {
+  formatTextWithLineBreaks(text = "") {
     return text.replace(/\n/g, "<br>");
   }
 

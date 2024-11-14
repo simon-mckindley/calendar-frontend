@@ -11,7 +11,12 @@ import UserAPI from '../../UserAPI'
 
 let formData;
 
+
 class CalendarView {
+  constructor() {
+    this.calendar = null;  // Declare calendar as a class property
+  }
+
   init() {
     document.title = 'Calendar';
     formData = {};
@@ -27,28 +32,34 @@ class CalendarView {
   showCalendar() {
     // Wait for the DOM to update before querying the element
     setTimeout(() => {
-      const calendarEl = document.getElementById('calendar')
+      const calendarEl = document.getElementById('calendar');
 
-      if (calendarEl) {
-        const calendar = new Calendar(calendarEl, {
-          initialView: 'dayGridMonth',  // 'dayGridWeek', 'timeGridDay', 'listWeek'
+      if (calendarEl && !this.calendar) {  // Initialize only if calendar is not already created
+        this.calendar = new Calendar(calendarEl, {
+          initialView: 'dayGridMonth',
+
           headerToolbar: {
-            start: 'prev today', // will normally be on the left. if RTL, will be on the right
+            start: 'prev today',
             center: 'title',
-            end: 'timeGridDay dayGridWeek dayGridMonth next' // will normally be on the right. if RTL, will be on the left
+            end: 'timeGridDay dayGridWeek dayGridMonth next'
           },
+
           locale: 'en-au',
-          events: this.events
-        });
-        // console.log(calendar);
-        calendar.render();  // Render the calendar
 
-        calendar.on('dateClick', function (info) {
-          console.log('clicked on ' + info.dateStr);
-          calendar.changeView('timeGridDay', info.date);
+          events: this.events,
+
+          eventClick: (el) => {
+            this.displayEvent(el.event._def.extendedProps._id);
+          },
+
+          dateClick: (info) => {
+            this.calendar.changeView('timeGridDay', info.date);
+          },
         });
 
-      } else {
+        this.calendar.render();  // Render the calendar
+
+      } else if (!calendarEl) {
         console.error("Calendar element not found");
       }
     }, 10);
@@ -185,8 +196,23 @@ class CalendarView {
   }
 
 
-  createEventHandler() {
-    // Checks if all data is present
+  allDayOnclick(checkbox) {
+    const endInput = document.querySelector('cal-input[name="end"]');
+
+    if (endInput) {
+      if (checkbox.checked) {
+        endInput.setAttribute('disabled', 'true');
+        endInput.value = "";
+        formData.end = "";
+      } else {
+        endInput.removeAttribute('disabled');
+      }
+    }
+  }
+
+  // Creates a new event for the user
+  async createEventHandler() {
+    // Checks if all required data is present
     let error = "";
     const fields = ['title', 'start', 'description'];
 
@@ -202,6 +228,7 @@ class CalendarView {
       }
     });
 
+    // Validates checkboxes
     const userCheckboxes = document.querySelectorAll('input[name="participant"]');
     let usersArray = [];
     if (userCheckboxes) {
@@ -221,6 +248,7 @@ class CalendarView {
       return;
     }
 
+    // Validates dates
     const result = Utils.validateDates(new Date(formData.start), new Date(formData.end));
     if (!result.valid) {
       document.querySelector(`cal-input[name="start"]`).setAttribute("hasError", "true");
@@ -229,11 +257,13 @@ class CalendarView {
       return;
     }
 
+    // Add allDay and users to formdata
     const allDay = document.querySelector(".all-day-input");
     if (allDay.checked) formData.allDay = true;
 
     formData.users = usersArray;
 
+    // Encode formData
     let encodedFormData = new FormData();
     for (const key in formData) {
       if (formData.hasOwnProperty(key)) {
@@ -244,15 +274,65 @@ class CalendarView {
     }
 
     try {
-      EventAPI.createEvent(encodedFormData);
+      // Add event to database
+      const eventData = await EventAPI.createEvent(encodedFormData);
       this.resetCreateForm();
       formData = {};
       document.getElementById('dialog-create-event').hide();
+      // Add event to calendar
+      this.calendar.addEvent(eventData.event);
 
     } catch (error) {
       console.log(error);
     }
+  }
 
+
+  async displayEvent(eventId) {
+    const displayEvent = await EventAPI.getEvent(eventId);
+
+    const dialog = document.getElementById('dialog-show-event');
+
+    // Set all day text 
+    document.querySelector(".all-day-wrap").style.display =
+      displayEvent.allDay ? "" : "none";
+
+    // Set the start and end dates
+    document.getElementById("start-date").textContent =
+      Utils.formatDateTimeAU(displayEvent.start);
+    if (displayEvent.end) {
+      document.getElementById("end-cont").style = "";
+      document.getElementById("end-date").textContent =
+        Utils.formatDateTimeAU(displayEvent.end);
+    } else {
+      document.getElementById("end-cont").style.display = "none";
+    }
+
+    // Set the event description
+    if (displayEvent.description) {
+      document.getElementById("event-description").innerHTML =
+        Utils.formatTextWithLineBreaks(Utils.titleCase(displayEvent.description));
+    } else {
+      document.getElementById("event-description").textContent = "No description provided";
+    }
+
+    // Set the event participants
+    const participantsContainer = document.getElementById("event-participants");
+    participantsContainer.innerHTML = ""; // Clear any existing content
+
+    if (displayEvent.users && displayEvent.users.length > 0) {
+      displayEvent.users.forEach(participant => {
+        const participantDiv = document.createElement("div");
+        participantDiv.textContent = Utils.titleCase(participant.firstName);
+        participantsContainer.appendChild(participantDiv);
+      });
+    } else {
+      participantsContainer.textContent = "No participants added.";
+    }
+
+    dialog.setAttribute("label", `${Utils.titleCase(displayEvent.title)}`);
+
+    dialog.show();
   }
 
 
@@ -277,10 +357,10 @@ class CalendarView {
             </cal-button>
           </div>
           
-          <div id='calendar' style="padding: 2rem 4rem;"></div>
+          <div id='calendar' style="padding: 2rem 0rem;"></div>
 
           <!-- --------------------  Dialogs -------------------------- -->
-          
+          <!-- Create / Edit event dialog -->
           <sl-dialog label="Create event" id="dialog-create-event" style="--width: fit-content;">
             <form class="create-event-form">
               <cal-input 
@@ -305,7 +385,11 @@ class CalendarView {
                 </cal-input>
               </div>
 
-              <sl-checkbox class="all-day-input">All Day Event</sl-checkbox>
+              <sl-checkbox 
+                class="all-day-input"
+                @input="${(event) => this.allDayOnclick(event.target)}"
+                >All Day Event
+              </sl-checkbox>
               
               <cal-textinput 
                 label="Description" 
@@ -334,6 +418,48 @@ class CalendarView {
               .onClick=${() => this.hideDialog('dialog-create-event')} 
               buttonType="secondary">
               Cancel
+            </cal-button>
+          </sl-dialog>
+
+
+           <!---------- Dialog box to show event details ------------->
+          <sl-dialog id="dialog-show-event" style="--body-spacing: 0">
+            <div class="show-event-body">
+              <div class="all-day-wrap">
+                <i class="fa-regular fa-calendar-check"></i>
+                <span>All Day Event</span>
+              </div>
+
+              <div class="event-dates">
+                <div><i class="fa-regular fa-clock"></i> <span id="start-date"></span></div>
+                <div id="end-cont">To <span id="end-date"></span></div>
+              </div>
+
+              <div>
+                <div class="data-label">Description</div>
+                <div id="event-description"></div>
+              </div>
+
+              <div>
+                <div class="data-label">Participants</div>
+                <div id="event-participants"></div>
+              </div>
+            </div>
+
+            <cal-button
+              id="edit-btn"
+              slot="footer"
+              addStyle="margin-inline-end: 1rem;"
+              .onClick="${() => this.createFamilyHandler()}" 
+              buttonType="primary">
+              Edit
+            </cal-button>
+
+            <cal-button
+              slot="footer"
+              .onClick="${() => this.hideDialog('dialog-show-event')}" 
+              buttonType="secondary">
+              Close
             </cal-button>
           </sl-dialog>
         `}

@@ -2,6 +2,7 @@ import App from './../../App'
 import { html, render } from 'lit'
 import { gotoRoute, anchorRoute } from './../../Router'
 import Auth from './../../Auth'
+import Toast from './../../Toast'
 import Utils from './../../Utils'
 import UserAPI from '../../UserAPI'
 import EventAPI from '../../EventAPI'
@@ -139,7 +140,7 @@ class UserHomeView {
             </div>
           </div>
           
-          <!-- Dialog box to show family members details -->
+          <!---------- Dialog box to show event details ------------->
           <sl-dialog id="dialog-show-event" style="--body-spacing: 0">
             <div class="show-event-body">
               <div class="all-day-wrap">
@@ -148,8 +149,11 @@ class UserHomeView {
               </div>
 
               <div class="event-dates">
-                <div>Start: <span id="start-date"></span></div>
-                <div id="end-cont">End: <span id="end-date"></span></div>
+                <div>
+                  <i class="fa-regular fa-clock" style="color: var(--secondary-color);"></i> 
+                  <span id="start-date"></span>
+                </div>
+                <div id="end-cont">To <span id="end-date"></span></div>
               </div>
 
               <div>
@@ -169,8 +173,8 @@ class UserHomeView {
               buttonType="secondary">
               Close
             </cal-button>
-          </sl-dialog>`
-      }
+          </sl-dialog>
+      `}
       </div>`
     render(template, App.rootEl)
   }

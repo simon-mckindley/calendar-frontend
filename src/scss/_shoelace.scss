@@ -6,6 +6,10 @@ sl-tooltip::part(base__arrow) {
 }
 
 // sl-dialog
+sl-dialog {
+  --header-spacing: 0.75rem;
+}
+
 sl-dialog::part(header) {
   background-color: var(--light-primary-color);
 }
@@ -15,7 +19,7 @@ sl-dialog::part(panel) {
 }
 
 sl-dialog::part(title) {
-  font-weight: 500;
+  font-family: "Maven-SemiBold";
   font-size: 1.6em;
 }
 

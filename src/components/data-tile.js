@@ -36,6 +36,16 @@ class DataTile extends LitElement {
         outline-offset: -2px;
       }
 
+      .tile-head {
+        display: flex;
+        align-items: center;
+        coulmn-gap: 0.5rem;
+      }
+
+      .tile-head img{
+        width: 2rem;
+      }
+
       .tile-title {
         font-size: 1.25em;
       }
@@ -50,7 +60,7 @@ class DataTile extends LitElement {
   constructor() {
     super();
     this.type = 'event';     // Default tile type
-    this.icon = 'fa-regular fa-calendar';  // Data icon
+    this.icon = 'event_icon.svg';  // Data icon
     this.label = '';         // Default title
     this.date = '';          // Default date
     this.onClick = () => { }; // Default empty function for onClick
@@ -59,9 +69,9 @@ class DataTile extends LitElement {
   render() {
     return html`
       <div class="data-tile" @click="${this.onClick}" tabindex="0">
-        <div>
+        <div class="tile-head">
       ${this.type === 'event'
-        ? html``
+      ? html`<img src="/images/icons/${this.icon}">`
         : html``
       }  
           <div class="tile-title">${this.label}</div>
@@ -69,8 +79,9 @@ class DataTile extends LitElement {
         <div class="tile-date">
           ${this.type === 'data'
         ? html`
-            <span style="font-size: 0.8em">Created</span>`
-        : html``}
+          <span style="font-size: 0.8em">Created</span>`
+        : html``
+        }
           <span>${this.date}</span>
         </div>
       </div>
