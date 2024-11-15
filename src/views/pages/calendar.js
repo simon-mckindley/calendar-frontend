@@ -20,6 +20,7 @@ class CalendarView {
   init() {
     document.title = 'Calendar';
     formData = {};
+    this.displayEvent = null;
     this.events = null;
     this.familyData = null;
     this.render();
@@ -49,7 +50,8 @@ class CalendarView {
           events: this.events,
 
           eventClick: (el) => {
-            this.displayEvent(el.event._def.extendedProps._id);
+            console.log(el);
+            this.displayEventHandler(el.event._def.publicId);
           },
 
           dateClick: (info) => {
@@ -71,6 +73,7 @@ class CalendarView {
     event.target.removeAttribute("hasError");
     const { name, value } = event.detail;
     formData[name] = value;  // Dynamically update form data
+    console.log(formData)
   }
 
 
@@ -112,7 +115,15 @@ class CalendarView {
 
       }
 
+      // Rename "_id" to "id" for each object
+      this.events = this.events.map(({ _id, ...rest }) => ({
+        id: _id,
+        ...rest
+      }));
+
       console.log(this.events);
+
+
       this.render();
       this.createUserCheckboxes();
       this.showCalendar();
@@ -122,8 +133,7 @@ class CalendarView {
     }
   }
 
-
-
+  // Creates the checkboxes in the event form for each family member
   createUserCheckboxes() {
     // Get the container element where checkboxes and labels will be appended
     const container = document.getElementById("checkbox-wrapper");
@@ -210,7 +220,7 @@ class CalendarView {
     }
   }
 
-  // Creates a new event for the user
+  // Create a new event
   async createEventHandler() {
     // Checks if all required data is present
     let error = "";
@@ -259,9 +269,19 @@ class CalendarView {
 
     // Add allDay and users to formdata
     const allDay = document.querySelector(".all-day-input");
-    if (allDay.checked) formData.allDay = true;
+    if (allDay.checked) {
+      formData.allDay = true;
+      delete formData['end'];
+    }
 
     formData.users = usersArray;
+
+    // Removes blank value entries
+    Object.keys(formData).forEach(key => {
+      if (formData[key] === '' || formData[key] === null) {
+        delete formData[key];
+      }
+    });
 
     // Encode formData
     let encodedFormData = new FormData();
@@ -274,13 +294,17 @@ class CalendarView {
     }
 
     try {
-      // Add event to database
       const eventData = await EventAPI.createEvent(encodedFormData);
-      this.resetCreateForm();
       formData = {};
       document.getElementById('dialog-create-event').hide();
+      this.resetCreateForm();
+
+      // Rename "_id" to "id" for each object
+      const updatedEvent = { id: eventData.event._id, ...eventData.event };
+      delete updatedEvent._id;
+
       // Add event to calendar
-      this.calendar.addEvent(eventData.event);
+      this.calendar.addEvent(updatedEvent);
 
     } catch (error) {
       console.log(error);
@@ -288,30 +312,128 @@ class CalendarView {
   }
 
 
-  async displayEvent(eventId) {
-    const displayEvent = await EventAPI.getEvent(eventId);
+  // Update an existing event
+  async updateEventHandler(eventId) {
+    // Checks if all required data is present
+    let error = "";
+    const fields = ['title', 'start', 'description'];
+
+    for (const key in formData) {
+      formData[key] = formData[key].trim();
+      console.log(`Key: ${key}, Value: ${formData[key]}`);
+
+      if (key !== "description" && key !== "end" && !formData[key]) {
+        document.querySelector(`cal-input[name="${key}"]`).setAttribute("hasError", "true");
+        let fieldName = key.includes('start') ? key.concat(" date") : key;
+        error += error ? `, ${fieldName.toUpperCase()}` : fieldName.toUpperCase();
+      }
+    }
+
+    // Validates checkboxes
+    const userCheckboxes = document.querySelectorAll('input[name="participant"]');
+    let usersArray = [];
+    if (userCheckboxes) {
+      userCheckboxes.forEach(box => {
+        if (box.checked) {
+          usersArray.push(box.value);
+        }
+      });
+    }
+
+    if (usersArray.length === 0) {
+      error += error ? ', USER' : 'USER';
+    }
+
+    if (error) {
+      Toast.show(`Please enter the ${error}`, 'error');
+      return;
+    }
+
+    if (formData.start || formData.end) {
+      // Validates dates
+      const result = Utils.validateDates(new Date(formData.start), new Date(formData.end));
+      if (!result.valid) {
+        document.querySelector(`cal-input[name="start"]`).setAttribute("hasError", "true");
+        document.querySelector(`cal-input[name="end"]`).setAttribute("hasError", "true");
+        Toast.show(result.message, 'error');
+        return;
+      }
+    }
+
+    // Add allDay and users to formdata
+    const allDay = document.querySelector(".all-day-input");
+    if (allDay.checked) formData.allDay = true;
+
+    formData.users = usersArray;
+
+    // Removes blank value entries
+    Object.keys(formData).forEach(key => {
+      if (formData[key] === '' || formData[key] === null) {
+        delete formData[key];
+      }
+    });
+
+    // Encode formData
+    let encodedFormData = new FormData();
+    for (const key in formData) {
+      if (formData.hasOwnProperty(key)) {
+        // Convert array to JSON string
+        const value = Array.isArray(formData[key]) ? JSON.stringify(formData[key]) : formData[key];
+        encodedFormData.append(key, value);
+      }
+    }
+
+    try {
+      // Update event in database
+      const eventData = await EventAPI.updateEvent(eventId, encodedFormData, "Event updated");
+
+      formData = {};
+      document.getElementById('dialog-create-event').hide();
+      this.resetCreateForm();
+
+      const existingEvent = this.calendar.getEventById(eventId);
+      if (existingEvent) {
+        existingEvent.remove(); // Remove the old version if it exists
+      }
+
+      // Rename "_id" to "id" for each object
+      const updatedEvent = { id: eventData.event._id, ...eventData.event };
+      delete updatedEvent._id;
+
+      // Add event to calendar
+      this.calendar.addEvent(updatedEvent);
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // Adds event data to the event view dialog box before showing it
+  async displayEventHandler(eventId) {
+    this.displayEvent = await EventAPI.getEvent(eventId);
 
     const dialog = document.getElementById('dialog-show-event');
+    console.log(this.displayEvent);
 
     // Set all day text 
     document.querySelector(".all-day-wrap").style.display =
-      displayEvent.allDay ? "" : "none";
+      this.displayEvent.allDay ? "" : "none";
 
     // Set the start and end dates
     document.getElementById("start-date").textContent =
-      Utils.formatDateTimeAU(displayEvent.start);
-    if (displayEvent.end) {
+      Utils.formatDateTimeAU(this.displayEvent.start);
+    if (this.displayEvent.end) {
       document.getElementById("end-cont").style = "";
       document.getElementById("end-date").textContent =
-        Utils.formatDateTimeAU(displayEvent.end);
+        Utils.formatDateTimeAU(this.displayEvent.end);
     } else {
       document.getElementById("end-cont").style.display = "none";
     }
 
     // Set the event description
-    if (displayEvent.description) {
+    if (this.displayEvent.description) {
       document.getElementById("event-description").innerHTML =
-        Utils.formatTextWithLineBreaks(Utils.titleCase(displayEvent.description));
+        Utils.formatTextWithLineBreaks(Utils.titleCase(this.displayEvent.description));
     } else {
       document.getElementById("event-description").textContent = "No description provided";
     }
@@ -320,8 +442,8 @@ class CalendarView {
     const participantsContainer = document.getElementById("event-participants");
     participantsContainer.innerHTML = ""; // Clear any existing content
 
-    if (displayEvent.users && displayEvent.users.length > 0) {
-      displayEvent.users.forEach(participant => {
+    if (this.displayEvent.users && this.displayEvent.users.length > 0) {
+      this.displayEvent.users.forEach(participant => {
         const participantDiv = document.createElement("div");
         participantDiv.textContent = Utils.titleCase(participant.firstName);
         participantsContainer.appendChild(participantDiv);
@@ -330,9 +452,71 @@ class CalendarView {
       participantsContainer.textContent = "No participants added.";
     }
 
-    dialog.setAttribute("label", `${Utils.titleCase(displayEvent.title)}`);
+    dialog.setAttribute("label", `${Utils.titleCase(this.displayEvent.title)}`);
 
     dialog.show();
+  }
+
+
+  // Adds event data to the event form so it can be updated by the user
+  populateDialogForm() {
+    this.hideDialog('dialog-show-event');
+
+    const dialog = document.getElementById("dialog-create-event");
+
+    if (this.displayEvent) {
+      const { _id, title, start, end, allDay, description, users } = this.displayEvent;
+
+      // Format text fields
+      const titleFormat = title ? Utils.titleCase(title) : "";
+      const descFormat = description ? Utils.titleCase(description) : "";
+
+      // Convert dates to local timezone for datetime-local inputs
+      const formatToLocal = (date) => {
+        if (!date) return "";
+        const localDate = new Date(date); // Parse the ISO date
+        // Adjust for local timezone offset, including DST
+        const offset = localDate.getTimezoneOffset() * 60000; // Convert offset to milliseconds
+        const adjustedDate = new Date(localDate.getTime() - offset); // Adjust for timezone
+        return adjustedDate.toISOString().slice(0, 16); // Format as "YYYY-MM-DDTHH:MM"
+      };
+
+
+      const startFormat = formatToLocal(start);
+      const endFormat = formatToLocal(end);
+
+      // Populate input fields
+      dialog.querySelector('cal-input[name="title"]').value = titleFormat || '';
+      dialog.querySelector('cal-input[name="start"]').value = startFormat || '';
+      dialog.querySelector('cal-input[name="end"]').value = endFormat || '';
+      dialog.querySelector('cal-textinput[name="description"]').value = descFormat || '';
+
+      // Set checkbox state for "All Day Event"
+      const allDayCheckbox = dialog.querySelector('.all-day-input');
+      if (allDayCheckbox) {
+        allDayCheckbox.checked = allDay || false;
+        this.allDayOnclick(allDayCheckbox); // Adjust input fields if "All Day" is checked
+      }
+
+      // Populate participants checkboxes if they exist
+      const checkboxWrapper = dialog.querySelector('#checkbox-wrapper');
+      if (checkboxWrapper && users) {
+        Array.from(checkboxWrapper.querySelectorAll('input[type="checkbox"]')).forEach(checkbox => {
+          checkbox.checked = users.some(user => user._id === checkbox.value);
+        });
+      }
+
+      const submitBtn = dialog.querySelector('#create-submit');
+      if (submitBtn) {
+        submitBtn.onClick = () => this.updateEventHandler(_id);
+      }
+
+      dialog.setAttribute("label", `Edit - ${Utils.titleCase(title)}`);
+      dialog.show();
+
+    } else {
+      Toast.show("Error retrieving event", "err");
+    }
   }
 
 
@@ -423,7 +607,7 @@ class CalendarView {
 
 
            <!---------- Dialog box to show event details ------------->
-          <sl-dialog id="dialog-show-event" style="--body-spacing: 0">
+          <sl-dialog id="dialog-show-event">
             <div class="show-event-body">
               <div class="all-day-wrap">
                 <i class="fa-regular fa-calendar-check"></i>
@@ -446,20 +630,54 @@ class CalendarView {
               </div>
             </div>
 
+            <sl-tooltip content="Delete event" slot="footer">
+              <cal-button
+                id="delete-event-btn"
+                .onClick="${() => this.acceptInvitationHandler()}" 
+                addStyle="padding-inline: 0.7em;"
+                buttonType="primary">
+                <i class="fa-solid fa-trash-can"></i>
+              </cal-button>
+            </sl-tooltip>
+
             <cal-button
               id="edit-btn"
               slot="footer"
-              addStyle="margin-inline-end: 1rem;"
-              .onClick="${() => this.createFamilyHandler()}" 
+              addStyle="min-width: 6rem; margin-inline: 12rem 1rem;"
+              .onClick="${() => this.populateDialogForm()}" 
               buttonType="primary">
               Edit
             </cal-button>
 
             <cal-button
               slot="footer"
+              addStyle="min-width: 6rem;"
               .onClick="${() => this.hideDialog('dialog-show-event')}" 
               buttonType="secondary">
               Close
+            </cal-button>
+          </sl-dialog>
+
+          <!-- Dialog box to confirm deleting event -->
+          <sl-dialog id="dialog-delete-event">
+            <span style="color: var(--primary-color);">
+              Deleted events cannot be recovered!
+            </span>
+
+            <cal-button
+              id="delete-submit"
+              slot="footer"
+              addStyle="margin-inline-end: 1rem;"
+              .onClick="${() => this.removeFamilyHandler()}"
+              buttonType="primary">
+              Delete
+            </cal-button>
+
+            <cal-button
+              slot="footer"
+              .onClick="${() => this.hideDialog('dialog-delete-event')}" 
+              buttonType="secondary">
+              Cancel
             </cal-button>
           </sl-dialog>
         `}

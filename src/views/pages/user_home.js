@@ -127,7 +127,8 @@ class UserHomeView {
             <div class="events-wrapper data-scroll-box">
             ${this.events && this.events.length > 0
             ? this.events
-              .sort((a, b) => new Date(a.start) - new Date(b.start)) // Sorts by start ascending
+              .filter(event => new Date(event.start) > new Date()) // Filter for future events
+              .sort((a, b) => new Date(a.start) - new Date(b.start)) // Sort by start time ascending
               .map(item => html`
               <data-tile 
                 label=${Utils.titleCase(item.title)} 
@@ -141,7 +142,7 @@ class UserHomeView {
           </div>
           
           <!---------- Dialog box to show event details ------------->
-          <sl-dialog id="dialog-show-event" style="--body-spacing: 0">
+          <sl-dialog id="dialog-show-event">
             <div class="show-event-body">
               <div class="all-day-wrap">
                 <i class="fa-regular fa-calendar-check"></i>

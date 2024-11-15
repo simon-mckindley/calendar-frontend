@@ -54,6 +54,10 @@ class DataTile extends LitElement {
         display: flex;
         flex-direction: column;
       }
+
+      .date-span {
+        text-align: end;
+      }
     `;
   }
 
@@ -71,7 +75,7 @@ class DataTile extends LitElement {
       <div class="data-tile" @click="${this.onClick}" tabindex="0">
         <div class="tile-head">
       ${this.type === 'event'
-      ? html`<img src="/images/icons/${this.icon}">`
+        ? html`<img src="/images/icons/${this.icon}">`
         : html``
       }  
           <div class="tile-title">${this.label}</div>
@@ -81,8 +85,8 @@ class DataTile extends LitElement {
         ? html`
           <span style="font-size: 0.8em">Created</span>`
         : html``
-        }
-          <span>${this.date}</span>
+      }
+          <span class="date-span">${this.date}</span>
         </div>
       </div>
     `;
