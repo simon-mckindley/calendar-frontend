@@ -84,6 +84,34 @@ class FamilyAPI {
     return data
   }
 
+
+  async deleteEvent(eventId) {
+    // validate
+    if (!eventId) return;
+    console.log(eventId)
+    // fetch the json data
+    const response = await fetch(`${App.apiBase}/event/${eventId}`, {
+      method: "DELETE",
+      headers: { "Authorization": `Bearer ${localStorage.cal_accessToken}` }
+    });
+
+    // if response not ok
+    if (!response.ok) {
+      // console log error
+      const err = await response.json();
+      if (err) console.log(err);
+      Toast.show("Problem deleting event", "err");
+      // throw error (exit this function)      
+      throw new Error('Problem getting event');
+    }
+
+    // convert response payload into json - store as data
+    const data = await response.json()
+    Toast.show("Event deleted");
+    // return data
+    return data
+  }
+
 }
 
 export default new FamilyAPI()

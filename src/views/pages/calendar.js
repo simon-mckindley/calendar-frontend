@@ -50,7 +50,6 @@ class CalendarView {
           events: this.events,
 
           eventClick: (el) => {
-            console.log(el);
             this.displayEventHandler(el.event._def.publicId);
           },
 
@@ -73,7 +72,6 @@ class CalendarView {
     event.target.removeAttribute("hasError");
     const { name, value } = event.detail;
     formData[name] = value;  // Dynamically update form data
-    console.log(formData)
   }
 
 
@@ -122,7 +120,6 @@ class CalendarView {
       }));
 
       console.log(this.events);
-
 
       this.render();
       this.createUserCheckboxes();
@@ -320,7 +317,6 @@ class CalendarView {
 
     for (const key in formData) {
       formData[key] = formData[key].trim();
-      console.log(`Key: ${key}, Value: ${formData[key]}`);
 
       if (key !== "description" && key !== "end" && !formData[key]) {
         document.querySelector(`cal-input[name="${key}"]`).setAttribute("hasError", "true");
@@ -413,7 +409,6 @@ class CalendarView {
     this.displayEvent = await EventAPI.getEvent(eventId);
 
     const dialog = document.getElementById('dialog-show-event');
-    console.log(this.displayEvent);
 
     // Set all day text 
     document.querySelector(".all-day-wrap").style.display =
@@ -516,6 +511,32 @@ class CalendarView {
 
     } else {
       Toast.show("Error retrieving event", "err");
+    }
+  }
+
+  // Sets and displays the delete event confirm dialog
+  showDeleteConfirmDialog() {
+    const dialog = document.getElementById("dialog-delete-event");
+    dialog.setAttribute("label", `Delete "${Utils.titleCase(this.displayEvent.title)}"?`);
+    dialog.show();
+  }
+
+  // Deletes the selected event
+  async deleteEventHandler() {
+    try {
+      const data = await EventAPI.deleteEvent(this.displayEvent._id);
+
+      const existingEvent = this.calendar.getEventById(this.displayEvent._id);
+      if (existingEvent) {
+        existingEvent.remove(); // Remove the old version if it exists
+      }
+
+      this.displayEvent = null;
+      this.hideDialog("dialog-delete-event");
+      this.hideDialog("dialog-show-event");
+
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -633,7 +654,7 @@ class CalendarView {
             <sl-tooltip content="Delete event" slot="footer">
               <cal-button
                 id="delete-event-btn"
-                .onClick="${() => this.acceptInvitationHandler()}" 
+                .onClick="${() => this.showDeleteConfirmDialog()}" 
                 addStyle="padding-inline: 0.7em;"
                 buttonType="primary">
                 <i class="fa-solid fa-trash-can"></i>
@@ -659,8 +680,8 @@ class CalendarView {
           </sl-dialog>
 
           <!-- Dialog box to confirm deleting event -->
-          <sl-dialog id="dialog-delete-event">
-            <span style="color: var(--primary-color);">
+          <sl-dialog id="dialog-delete-event" style="--width: 40rem">
+            <span class="delete-text">
               Deleted events cannot be recovered!
             </span>
 
@@ -668,7 +689,7 @@ class CalendarView {
               id="delete-submit"
               slot="footer"
               addStyle="margin-inline-end: 1rem;"
-              .onClick="${() => this.removeFamilyHandler()}"
+              .onClick="${() => this.deleteEventHandler()}"
               buttonType="primary">
               Delete
             </cal-button>
