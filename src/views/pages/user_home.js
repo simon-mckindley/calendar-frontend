@@ -106,7 +106,7 @@ class UserHomeView {
               <cal-button
                 buttonType="secondary"
                 addStyle="width: 100%;"
-                .onClick=${() => gotoRoute('/')}
+                .onClick=${() => gotoRoute('/account')}
               >Account</cal-button>
 
               <div style="position: relative;">

@@ -169,7 +169,7 @@ customElements.define('main-header', class AppHeader extends LitElement {
           <div class="nav-dropdown-menu"> 
               <button type="button" id="home-link" class="nav-link" @click="${() => gotoRoute('/')}">Home</button>  
               <button type="button" id="family-link" class="nav-link" @click="${() => gotoRoute('/family')}">Family</button>        
-              <button type="button" id="profile-link" class="nav-link" @click="${() => gotoRoute('/profile')}">Profile</button>
+              <button type="button" id="account-link" class="nav-link" @click="${() => gotoRoute('/account')}">Profile</button>
               <button type="button" id="editprofile-link" class="nav-link" @click="${() => gotoRoute('/editProfile')}">Edit Profile</button>
               <button type="button" id="calendar-link" class="nav-link" @click="${() => gotoRoute('/calendar')}">Calendar</button>
               <button type="button" class="nav-link" @click="${() => Auth.signOut()}">Sign Out</button>

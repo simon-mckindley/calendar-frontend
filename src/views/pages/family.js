@@ -34,7 +34,8 @@ class FamilyView {
       }
       this.render();
     } catch (err) {
-      Toast.show(err, 'error');
+      console.log(err);
+      Toast.show('Error getting family data', 'error');
     }
   }
 

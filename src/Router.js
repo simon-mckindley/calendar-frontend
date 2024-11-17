@@ -6,7 +6,7 @@ import adminHomeView from './views/pages/admin_home'
 import fourOFourView from './views/pages/404'
 import loginView from './views/pages/login'
 import registerView from './views/pages/register'
-import profileView from './views/pages/profile'
+import accountView from './views/pages/account.js'
 import editProfileView from './views/pages/editProfile'
 import familyView from './views/pages/family'
 import calendarView from './views/pages/calendar'
@@ -20,9 +20,9 @@ const routes = {
 	'/login': loginView,
 	'/register': registerView,
 	'/guide': guideView,
-	'/profile': profileView,
+	'/account': accountView,
 	'/editProfile': editProfileView,
-	'/family' : familyView,
+	'/family': familyView,
 	'/calendar': calendarView
 }
 
