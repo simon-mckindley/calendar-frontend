@@ -73,6 +73,7 @@ customElements.define('main-header', class AppHeader extends LitElement {
         height: var(--app-header-height);
         padding-inline: 2vw;
         box-shadow: 2px 0px 4px 0px var(--shadow-color);
+        z-index: 50;
       }
 
       .center-title {

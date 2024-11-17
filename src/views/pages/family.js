@@ -321,7 +321,7 @@ class FamilyView {
         ? html`<main-spinner></main-spinner>`
         : html`
           <div class="family-wrapper">
-            <div>
+            <div class="user-column">
               <div class="user-header">
                 <div class="avatar-row">
                   <sl-avatar
@@ -417,11 +417,11 @@ class FamilyView {
           }
             </div>
 
-            <div class="family-members">
+            <div class="family-members display-box">
               ${this.familyData.name
             ? html`
-                  <div class="members-title">
-                    <h2 class="scroll-box-title">Family Members</h2>
+                  <div class="members-title scroll-box-title">
+                    <h2>Family Members</h2>
                     ${this.adult
                 ? html`
                         <sl-tooltip content="Invite family member">

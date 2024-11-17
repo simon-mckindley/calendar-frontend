@@ -123,21 +123,23 @@ class UserHomeView {
               </div>
             </div>
 
-            <h2 class="events-title scroll-box-title">Upcoming Events</h2>
-            <div class="events-wrapper data-scroll-box">
-            ${this.events && this.events.length > 0
+            <div class="display-box">
+              <h2 class="events-title scroll-box-title">Upcoming Events</h2>
+              <div class="events-wrapper data-scroll-box">
+              ${this.events && this.events.length > 0
             ? this.events
               .filter(event => new Date(event.start) > new Date()) // Filter for future events
               .sort((a, b) => new Date(a.start) - new Date(b.start)) // Sort by start time ascending
               .map(item => html`
-              <data-tile 
-                label=${Utils.titleCase(item.title)} 
-                date=${Utils.formatDateTimeAU(item.start)} 
-                .onClick=${() => this.displayEvent(item)}>
-              </data-tile>
-            `)
+                <data-tile 
+                  label=${Utils.titleCase(item.title)} 
+                  date=${Utils.formatDateTimeAU(item.start)} 
+                  .onClick=${() => this.displayEvent(item)}>
+                </data-tile>
+              `)
             : html`<div>No current events</div>`
           }
+              </div>
             </div>
           </div>
           

@@ -56,7 +56,7 @@ class Auth {
     }
 
     // sign in success
-    const data = await response.json()
+    const data = await response.json();
     data.user.firstName = Utils.titleCase(data.user.firstName);
     data.user.lastName = Utils.titleCase(data.user.lastName);
     Toast.show(`Welcome  ${data.user.firstName}`)
@@ -66,8 +66,11 @@ class Auth {
     this.currentUser = data.user
     console.log(this.currentUser);
     // redirect to home
-    Router.init()
-    gotoRoute('/')
+    Router.init();
+
+    data.user.newUser
+      ? gotoRoute('/guide')
+      : gotoRoute('/');
   }
 
 

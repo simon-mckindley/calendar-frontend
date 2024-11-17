@@ -78,19 +78,28 @@ a {
 }
 
 // generic ------------
+.display-box {
+  grid-area: display;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 1px 1px 2px 1px var(--shadow-color);
+}
+
 .scroll-box-title {
   grid-area: title;
   font-family: "Maven-SemiBold";
+  background-color: var(--light-primary-color);
   margin: 0;
-  padding-block-end: 0.5em;
+  padding: 0.5em;
 }
 
 .data-scroll-box {
   grid-area: scroll-box;
   height: 70vh;
   overflow-y: auto;
-  border-top: 2px solid var(--shadow-color);
-  border-bottom: 2px solid var(--shadow-color);
+  margin-inline: 0.5em;
+  // border-top: 2px solid var(--shadow-color);
+  // border-bottom: 2px solid var(--shadow-color);
   // box-shadow: inset 0px 0px 6px 1px var(--shadow-color);
 }
 
@@ -188,8 +197,7 @@ a {
 .userhome-wrapper {
   display: grid;
   grid-template:
-    ". title"
-    "links scroll-box" / 1fr 1fr;
+    "links display" / 1fr 1fr;
   column-gap: 3em;
   width: clamp(5em, 95vw, 60em);
 
@@ -198,6 +206,7 @@ a {
     display: flex;
     flex-direction: column;
     gap: 2em;
+    margin-block-start: 3.5em;
   }
 }
 
@@ -253,9 +262,14 @@ a {
 // Family page
 .family-wrapper {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template:
+    "user display" / 1fr 1fr;
   column-gap: 3em;
   width: clamp(5em, 95vw, 60em);
+
+  .user-column {
+    grid-area: user;
+  }
 
   .user-header {
     font-family: "Maven-Medium";
@@ -342,6 +356,11 @@ a {
     .members-title {
       display: flex;
       justify-content: space-between;
+      align-items: center;
+
+      >* {
+        margin: 0;
+      }
     }
   }
 }
@@ -369,8 +388,11 @@ a {
 
 // Calendar page
 .calendar-head {
+  position: sticky;
+  top: 0rem;
   margin: 1rem 3rem;
   width: clamp(10rem, 80vw, 16rem);
+  z-index: 50;
 }
 
 .create-event-form {
@@ -430,6 +452,9 @@ a {
   font-weight: bold;
 }
 
+.current-user-event {
+  border: 3px solid var(--primary-color);
+}
 
 .fc .fc-button {
   text-transform: capitalize;
@@ -459,16 +484,52 @@ a {
   margin-block-end: 20vh;
 }
 
-// guide page ---------------
-.guide-step {
+// guide page ----------------
+.guide-article,
+.guide-head {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  background-color: #fff;
+  border-radius: 10px;
+  max-width: 60rem;
   padding: 1em;
-  margin: 1.5em auto;
-  max-width: 600px;
+  margin-inline: auto;
+  margin-block-end: 2rem;
+  box-shadow: 1px 1px 2px 1px var(--shadow-color);
+
+  .guide-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
 
   img {
     width: 100%;
     height: auto;
+    border: 1px solid #777;
+    border-radius: 10px;
   }
+}
+
+.guide-head {
+  grid-template-columns: 2fr 1fr;
+  margin-block: 2rem 3rem;
+
+  .guide-app-name {
+    font-family: "Lemon-Regular";
+  }
+
+  img {
+    rotate: -10deg;
+    border: none;
+  }
+}
+
+.guide-exit {
+  position: fixed;
+  bottom: 2rem;
+  right: 3rem;
 }
 
 // RESPONSIVE - MOBILE -------------------

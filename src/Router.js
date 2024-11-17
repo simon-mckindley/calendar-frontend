@@ -10,6 +10,7 @@ import profileView from './views/pages/profile'
 import editProfileView from './views/pages/editProfile'
 import familyView from './views/pages/family'
 import calendarView from './views/pages/calendar'
+import guideView from './views/pages/guide'
 
 // define routes
 const routes = {
@@ -18,6 +19,7 @@ const routes = {
 	'404': fourOFourView,
 	'/login': loginView,
 	'/register': registerView,
+	'/guide': guideView,
 	'/profile': profileView,
 	'/editProfile': editProfileView,
 	'/family' : familyView,

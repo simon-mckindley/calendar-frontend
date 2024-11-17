@@ -18,15 +18,15 @@ class CalendarView {
   }
 
   init() {
+    console.log(Auth.currentUser);
     document.title = 'Calendar';
     formData = {};
     this.displayEvent = null;
     this.events = null;
     this.familyData = null;
     this.render();
-    Utils.pageIntroAnim();
     this.getFamily();
-    this.getAllEvents();
+    Utils.pageIntroAnim();
   }
 
 
@@ -49,10 +49,12 @@ class CalendarView {
 
           events: this.events,
 
+          // Shows the event dialog
           eventClick: (el) => {
             this.displayEventHandler(el.event._def.publicId);
           },
 
+          // Changes to day view
           dateClick: (info) => {
             this.calendar.changeView('timeGridDay', info.date);
           },
@@ -75,25 +77,32 @@ class CalendarView {
   }
 
 
+  // Gats data for the associated family
   async getFamily() {
     try {
       if (Auth.currentUser.family) {
         this.familyData = await FamilyAPI.getFamily(Auth.currentUser.family);
       }
+
+      this.getAllEvents();
+
     } catch (err) {
       Toast.show(err, 'error');
     }
   }
 
 
+  // Creates an array of all events for the associated family for the calendar
   async getAllEvents() {
     try {
       // Initialize events with the current user's events
       const currentUserData = await UserAPI.getUser(Auth.currentUser.id);
-      this.events = currentUserData.events;
+      this.events = currentUserData.events.map(event => ({
+        ...event,
+        className: "current-user-event" // Add className for current user events
+      }));
 
       if (this.familyData) {
-
         // Create a Set to track unique event IDs
         const uniqueEventIds = new Set(this.events.map(event => event._id));
 
@@ -110,7 +119,6 @@ class CalendarView {
             });
           }
         }
-
       }
 
       // Rename "_id" to "id" for each object
@@ -122,13 +130,16 @@ class CalendarView {
       console.log(this.events);
 
       this.render();
-      this.createUserCheckboxes();
-      this.showCalendar();
+      setTimeout(() => {
+        this.createUserCheckboxes();
+        this.showCalendar();
+      }, 1000);
 
     } catch (err) {
-      Toast.show(err, 'error');
+      Toast.show(err, "error");
     }
   }
+
 
   // Creates the checkboxes in the event form for each family member
   createUserCheckboxes() {
@@ -185,6 +196,7 @@ class CalendarView {
   }
 
 
+  // Clears and resets the form input elements
   resetCreateForm() {
     const inputs = document.querySelectorAll(".create-event-form cal-input");
     if (inputs) {
@@ -651,6 +663,9 @@ class CalendarView {
               </div>
             </div>
 
+            ${Auth.currentUser.accessLevel === 3
+            ? html``
+            : html`
             <sl-tooltip content="Delete event" slot="footer">
               <cal-button
                 id="delete-event-btn"
@@ -668,7 +683,8 @@ class CalendarView {
               .onClick="${() => this.populateDialogForm()}" 
               buttonType="primary">
               Edit
-            </cal-button>
+            </cal-button>`
+          }
 
             <cal-button
               slot="footer"
