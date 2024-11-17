@@ -3,12 +3,26 @@ import { html, render } from 'lit'
 import { gotoRoute, anchorRoute } from '../../Router'
 import Auth from '../../Auth'
 import Utils from '../../Utils'
+import UserAPI from '../../UserAPI'
 
 class GuideView {
   init() {
-    document.title = 'Template'
-    this.render()
-    Utils.pageIntroAnim()
+    document.title = 'Guide';
+    this.render();
+    Utils.pageIntroAnim();
+    this.updateUser();
+  }
+
+  // Sets the users newUser field to false
+  async updateUser() {
+    let update = new FormData();
+    update.append("newUser", false);
+
+    try {
+      const data = await UserAPI.updateUser(Auth.currentUser.id, update);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   render() {
@@ -45,7 +59,7 @@ class GuideView {
 
             <cal-button
               buttonType="secondary"
-              addStyle="width: 100%; margin-block-end: 2rem;"
+              addStyle="width: 100%; margin-block-end: 0.5rem;"
               .onClick=${() => gotoRoute('/')}
             >Go to your Home Page</cal-button>
           </div>
@@ -67,7 +81,7 @@ class GuideView {
 
             <cal-button
               buttonType="secondary"
-              addStyle="width: 100%; margin-block-end: 2rem;"
+              addStyle="width: 100%; margin-block-end: 0.5rem;"
               .onClick=${() => gotoRoute('/calendar')}
             >Go to your Calendar
             </cal-button>
@@ -90,7 +104,7 @@ class GuideView {
 
             <cal-button
               buttonType="secondary"
-              addStyle="width: 100%; margin-block-end: 2rem;"
+              addStyle="width: 100%; margin-block-end: 0.5rem;"
               .onClick=${() => gotoRoute('/family')}
             >Go to your Family Page
             </cal-button>

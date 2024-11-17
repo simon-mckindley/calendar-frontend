@@ -197,9 +197,9 @@ a {
 .userhome-wrapper {
   display: grid;
   grid-template:
-    "links display" / 1fr 1fr;
+    "links display" / 1fr 1.25fr;
   column-gap: 3em;
-  width: clamp(5em, 95vw, 60em);
+  width: clamp(5em, 95vw, 75em);
 
   .links-wrapper {
     grid-area: links;
@@ -263,9 +263,9 @@ a {
 .family-wrapper {
   display: grid;
   grid-template:
-    "user display" / 1fr 1fr;
+    "user display" / 1fr 1.25fr;
   column-gap: 3em;
-  width: clamp(5em, 95vw, 60em);
+  width: clamp(5em, 95vw, 70em);
 
   .user-column {
     grid-area: user;
@@ -373,7 +373,7 @@ a {
   #show-next-event {
     font-size: 1.2em;
     margin-inline: auto;
-    background-color: rgba(45, 255, 255, 0.05);
+    // background-color: rgba(45, 255, 255, 0.05);
     border: 2px solid var(--secondary-color);
     border-radius: 10px;
     padding: 1rem 2rem;
@@ -509,6 +509,16 @@ a {
     height: auto;
     border: 1px solid #777;
     border-radius: 10px;
+  }
+}
+
+.guide-article:nth-of-type(odd) {
+  :first-child {
+    grid-area: 1 / 2;
+  }
+
+  :last-child {
+    grid-area: 1 / 1;
   }
 }
 
