@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit-element'
 import { anchorRoute, gotoRoute } from '../Router'
 import Auth from '../Auth'
 import App from '../App'
+import Utils from '../Utils'
 
 customElements.define('main-header', class AppHeader extends LitElement {
   constructor() {
@@ -160,7 +161,7 @@ customElements.define('main-header', class AppHeader extends LitElement {
         <nav class="top-nav">
           <button type="button" class="nav-button" @click="${() => this.showMenu()}">
             <div class="user-title">
-              <span class="header-username">${Auth.currentUser && Auth.currentUser.firstName}</span>
+              <span class="header-username">${Auth.currentUser && Utils.titleCase(Auth.currentUser.firstName)}</span>
               <span>${Auth.currentUser.accessLevel === 1 ? "Admin " : ""}</span>
             </div>
             <sl-avatar style="--size: 32px;" image=${(Auth.currentUser && Auth.currentUser.avatar) ?

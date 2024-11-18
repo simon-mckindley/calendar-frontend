@@ -24,9 +24,7 @@ class RegisterView {
 
 
   registerSubmitHandler() {
-    formData["accessLevel"] = 2;
     // Checks if all data is present
-    console.log(formData);
     let error = "";
     const fields = ['firstName', 'lastName', 'email', 'password'];
 
@@ -51,6 +49,18 @@ class RegisterView {
     if (!Utils.validateEmail(formData['email'])) {
       document.querySelector(`cal-input[name="email"]`).setAttribute("hasError", "true");
       Toast.show(`Please enter a valid EMAIL address`, 'error');
+      return;
+    }
+
+    // Gets user access level
+    document.querySelectorAll('input[name="access-level"]').forEach(input => {
+      if (input.checked) {
+        formData['accessLevel'] = parseInt(input.value);
+      }
+    });
+
+    if (!formData['accessLevel'] || typeof (formData['accessLevel']) !== "number") {
+      Toast.show(`Invalid user type`, 'error');
       return;
     }
 
@@ -93,14 +103,20 @@ class RegisterView {
               </cal-input>
             </div>
             <div class="input-wrapper">
-              <cal-input label="Password" name="password" type="password"
+              <cal-input label="Password" name="password" type="text"
                 @input-change=${this.handleInputChange}>
               </cal-input>
             </div>
             <div class="input-wrapper">
-              <cal-input label="User Type" name="accessLevel" type="text"
-                @input-change=${this.handleInputChange}>
-              </cal-input>
+              <div class="input-label">User Type</div>
+              <div class="radio-wrapper">
+                <input type="radio" id="adult-access" name="access-level" value="2" checked>
+                <label for="adult-access">Adult</label>
+                <input type="radio" id="child-access" name="access-level" value="3">
+                <label for="child-access">Child</label>
+                <input type="radio" id="admin-access" name="access-level" value="1">
+                <label for="admin-access">Admin</label>
+              </div>
             </div>
 
             <cal-button

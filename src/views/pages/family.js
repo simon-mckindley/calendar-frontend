@@ -332,7 +332,7 @@ class FamilyView {
             : ''}">
                   </sl-avatar>
                   <div class="name">
-                    ${Auth.currentUser.firstName} ${Auth.currentUser.lastName}
+                    ${Utils.titleCase(Auth.currentUser.firstName)} ${Utils.titleCase(Auth.currentUser.lastName)}
                   </div>
                 </div>
                 <div class="email">${Auth.currentUser.email}</div>
@@ -418,9 +418,9 @@ class FamilyView {
           }
             </div>
 
-            <div class="family-members display-box">
               ${this.familyData.name
             ? html`
+            <div class="family-members display-box">
                   <div class="members-title scroll-box-title">
                     <h2>Family Members</h2>
                     ${this.adult
@@ -448,9 +448,9 @@ class FamilyView {
                         .onClick="${() => this.displayFamilyMember(member)}" >
                       </user-tile>`)}`
                 : html`<div>No other family members</div>`}
-                  </div>`
-            : html``}
-            </div>
+                  </div>
+            </div>`
+            : html`<div class="family-members"></div>`}
           </div>
           
           <!-- --------------------  Dialogs -------------------------- -->

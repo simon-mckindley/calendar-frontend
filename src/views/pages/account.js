@@ -100,7 +100,7 @@ class AccountView {
         <cal-button
           buttonType="primary"
           addStyle="width: 100%;"
-          .onClick=${() => gotoRoute('/account')}
+          .onClick=${() => gotoRoute('/editProfile')}
         >Edit account</cal-button>
 
       </div>

@@ -57,9 +57,7 @@ class Auth {
 
     // sign in success
     const data = await response.json();
-    data.user.firstName = Utils.titleCase(data.user.firstName);
-    data.user.lastName = Utils.titleCase(data.user.lastName);
-    Toast.show(`Welcome  ${data.user.firstName}`)
+    Toast.show(`Welcome  ${Utils.titleCase(data.user.firstName)}`)
     // save access token (jwt) to local storage
     localStorage.setItem('cal_accessToken', data.token)
     // set current user

@@ -17,18 +17,6 @@ class CalendarView {
     this.calendar = null;  // Declare calendar as a class property
   }
 
-  // init() {
-  //   console.log(Auth.currentUser);
-  //   document.title = 'Calendar';
-  //   formData = {};
-  //   this.displayEvent = null;
-  //   this.events = null;
-  //   this.familyData = null;
-  //   this.render();
-  //   this.getFamily();
-  //   Utils.pageIntroAnim();
-  // }
-
   async init() {
     console.log(Auth.currentUser);
     document.title = 'Calendar';
@@ -46,10 +34,7 @@ class CalendarView {
   }
 
 
-
   showCalendar() {
-    // Wait for the DOM to update before querying the element
-
     const calendarEl = document.getElementById('calendar');
 
     if (calendarEl && !this.calendar) {  // Initialize only if calendar is not already created

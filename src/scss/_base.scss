@@ -187,6 +187,39 @@ a {
       font-weight: bold;
     }
   }
+
+  .input-label {
+    font-size: 1em;
+    font-family: "Maven-SemiBold";
+    margin-left: 1em;
+    margin-bottom: 3px;
+  }
+
+  .radio-wrapper {
+    display: flex;
+    gap: 0.5em;
+    flex-wrap: wrap;
+  }
+
+  input[type=radio] {
+    display: none;
+  }
+
+  label {
+    flex-grow: 1;
+    background-color: #fff;
+    border-radius: 1000px;
+    padding: 0.25em 1em;
+    cursor: pointer;
+    box-shadow: 2px 2px 3px 1px var(--shadow-color);
+    transition: background-color 300ms, color 300ms, box-shadow 300ms;
+  }
+
+  input[type=radio]:checked+label {
+    color: #fff;
+    background-color: var(--light-secondary-color);
+    box-shadow: 1px 1px 2px 0px var(--shadow-color);
+  }
 }
 
 .input-wrapper:not(:first-child) {
@@ -559,11 +592,17 @@ a {
     font-size: 1.2em;
   }
 
+  sl-avatar {
+    margin-inline: auto;
+  }
+
   .name {
+    text-align: center;
     font-size: 2.5em;
   }
 
   .email {
+    text-align: center;
     font-size: 2em;
   }
 
@@ -571,6 +610,7 @@ a {
   .events {
     position: relative;
     padding: 0.5rem;
+    margin-block-end: 0.5rem;
     border-radius: 10px;
     box-shadow: 1px 1px 2px 1px var(--shadow-color);
 
