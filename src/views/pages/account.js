@@ -55,39 +55,54 @@ class AccountView {
         ? html`<main-spinner></main-spinner>`
         : html`
         <div class="user-wrapper">
-          <div class="avatar-row">
-            <sl-avatar
-              style="--size: 10rem;"
-              image="${this.user.avatar
+          <sl-avatar
+            style="--size: 10rem;"
+            image="${this.user.avatar
             ? `${App.apiBase}/images/${this.getUser.avatar}`
             : ''}">
-            </sl-avatar>
-            <div class="name">
-              ${Utils.titleCase(this.user.firstName)} ${Utils.titleCase(this.user.lastName)}
-            </div>
+          </sl-avatar>
+
+          <div class="name user-data">
+            ${Utils.titleCase(this.user.firstName)} ${Utils.titleCase(this.user.lastName)}
           </div>
 
-          <div class="email">${this.user.email}</div>
+          <div class="email user-data">${this.user.email}</div>
 
-          <div class="date">Joined <span>${Utils.formatDateAU(this.user.createdAt)}</span></div>
+          <div class="date user-label">Joined <span class="user-data">${Utils.formatDateAU(this.user.createdAt)}</span></div>
           
-          <div class="access">Access <span>${userType[this.user.accessLevel]}</span></div>
+          <div class="access user-label">Access <span class="user-data">${userType[this.user.accessLevel]}</span></div>
           
-          <div class="events">Current Events <span>${this.user.events.length}</span></div>
+          <div class="events user-label">Current Events 
+            <a class="user-link" href="/calendar"  @click=${anchorRoute}>
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+          ${(this.user.events || this.user.events.length === 0)
+            ? html`<span class="user-data">${this.user.events.length}</span>`
+            : html`<span class="user-data">No associated events</span>`
+          }
+          </div>
           
-          <div class="family">Family 
+          <div class="family">Family
+            <a class="user-link" href="/family"  @click=${anchorRoute}>
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
           ${this.familyData
             ? html`
-            <div class="family-name">${Utils.titleCase(this.familyData.name)}</div>
-            <div class="family-number">Members <span>${this.familyData.users.length}</span></div>
+            <div class="family-name user-data">${Utils.titleCase(this.familyData.name)}</div>
+            <div class="family-number user-label">Members <span class="user-data">${this.familyData.users.length}</span></div>
             `
-            : html`<span>No associated family</span>`
+            : html`<span class="user-data">No associated family</span>`
           } 
           </div>
           
         </div>
 
-        <sl-button @click=${() => gotoRoute('/editProfile')}>Edit Profile</sl-button>
+        <cal-button
+          buttonType="primary"
+          addStyle="width: 100%;"
+          .onClick=${() => gotoRoute('/account')}
+        >Edit account</cal-button>
+
       </div>
         `}    
     `

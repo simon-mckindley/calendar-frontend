@@ -17,55 +17,73 @@ class CalendarView {
     this.calendar = null;  // Declare calendar as a class property
   }
 
-  init() {
+  // init() {
+  //   console.log(Auth.currentUser);
+  //   document.title = 'Calendar';
+  //   formData = {};
+  //   this.displayEvent = null;
+  //   this.events = null;
+  //   this.familyData = null;
+  //   this.render();
+  //   this.getFamily();
+  //   Utils.pageIntroAnim();
+  // }
+
+  async init() {
     console.log(Auth.currentUser);
     document.title = 'Calendar';
+
     formData = {};
     this.displayEvent = null;
     this.events = null;
     this.familyData = null;
-    this.render();
-    this.getFamily();
+
+    this.render(); // Initial UI rendering
     Utils.pageIntroAnim();
+
+    // Fetch data and initialize calendar after data is ready
+    await this.getFamily();
   }
+
 
 
   showCalendar() {
     // Wait for the DOM to update before querying the element
-    setTimeout(() => {
-      const calendarEl = document.getElementById('calendar');
 
-      if (calendarEl && !this.calendar) {  // Initialize only if calendar is not already created
-        this.calendar = new Calendar(calendarEl, {
-          initialView: 'dayGridMonth',
+    const calendarEl = document.getElementById('calendar');
 
-          headerToolbar: {
-            start: 'prev today',
-            center: 'title',
-            end: 'timeGridDay dayGridWeek dayGridMonth next'
-          },
+    if (calendarEl && !this.calendar) {  // Initialize only if calendar is not already created
+      this.calendar = new Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
 
-          locale: 'en-au',
+        headerToolbar: {
+          start: 'prev today',
+          center: 'title',
+          end: 'timeGridDay dayGridWeek dayGridMonth next'
+        },
 
-          events: this.events,
+        locale: 'en-au',
 
-          // Shows the event dialog
-          eventClick: (el) => {
-            this.displayEventHandler(el.event._def.publicId);
-          },
+        events: this.events,
 
-          // Changes to day view
-          dateClick: (info) => {
-            this.calendar.changeView('timeGridDay', info.date);
-          },
-        });
+        // Shows the event dialog
+        eventClick: (el) => {
+          this.displayEventHandler(el.event._def.publicId);
+        },
 
+        // Changes to day view
+        dateClick: (info) => {
+          this.calendar.changeView('timeGridDay', info.date);
+        },
+      });
+
+      setTimeout(() => {
         this.calendar.render();  // Render the calendar
+      }, 100);
 
-      } else if (!calendarEl) {
-        console.error("Calendar element not found");
-      }
-    }, 10);
+    } else if (!calendarEl) {
+      console.error("Calendar element not found");
+    }
   }
 
 
@@ -133,7 +151,7 @@ class CalendarView {
       setTimeout(() => {
         this.createUserCheckboxes();
         this.showCalendar();
-      }, 1000);
+      }, 3000);
 
     } catch (err) {
       Toast.show(err, "error");
@@ -574,7 +592,11 @@ class CalendarView {
             </cal-button>
           </div>
           
-          <div id='calendar' style="padding: 2rem 0rem;"></div>
+          <div id='calendar' style="padding: 2rem 0rem;">
+            <div style="display: grid; place-items: center; width: 90vw">
+              <sl-spinner style="font-size: 2rem; margin-block: 4rem;"></sl-spinner>
+            </div>
+          </div>
 
           <!-- --------------------  Dialogs -------------------------- -->
           <!-- Create / Edit event dialog -->
