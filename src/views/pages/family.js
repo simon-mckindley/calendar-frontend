@@ -439,9 +439,9 @@ class FamilyView {
                   <div class="members-wrapper data-scroll-box">
                     ${this.familyData.users && this.familyData.users.length > 1
                 ? this.familyData.users
-                    .filter(item => item.email !== Auth.currentUser.email) // Exclude current user
-                    .sort((a, b) => a.accessLevel - b.accessLevel) // Sort by accessLevel ascending
-                    .map(member => html`
+                  .filter(item => item.email !== Auth.currentUser.email) // Exclude current user
+                  .sort((a, b) => a.accessLevel - b.accessLevel) // Sort by accessLevel ascending
+                  .map(member => html`
                       <user-tile 
                         .user="${member}"
                         .onClick="${() => this.displayFamilyMember(member)}" >
@@ -465,19 +465,19 @@ class FamilyView {
             </cal-input>
 
             <cal-button
-              id="update-submit"
               slot="footer"
               addStyle="margin-inline-end: 1rem;"
-              .onClick="${() => this.updateFamilyHandler()}" 
-              buttonType="primary">
-              Save
-            </cal-button>
-
-            <cal-button
-              slot="footer"
               .onClick="${() => this.hideDialog('dialog-edit-family')}" 
               buttonType="secondary">
               Cancel
+            </cal-button>
+
+            <cal-button
+              id="update-submit"
+              slot="footer"
+              .onClick="${() => this.updateFamilyHandler()}" 
+              buttonType="primary">
+              Save
             </cal-button>
           </sl-dialog>
           
@@ -487,19 +487,19 @@ class FamilyView {
             If you leave this family, you'll need an invitation from a current member to rejoin.
 
             <cal-button
-              id="leave-submit"
               slot="footer"
               addStyle="margin-inline-end: 1rem;"
-              .onClick="${() => this.removeFamilyHandler()}"
-              buttonType="primary">
-              Leave
-            </cal-button>
-
-            <cal-button
-              slot="footer"
               .onClick="${() => this.hideDialog('dialog-leave-family')}" 
               buttonType="secondary">
               Cancel
+            </cal-button>
+
+            <cal-button
+              id="leave-submit"
+              slot="footer"
+              .onClick="${() => this.removeFamilyHandler()}"
+              buttonType="primary">
+              Leave
             </cal-button>
           </sl-dialog>
           
@@ -516,19 +516,19 @@ class FamilyView {
             </cal-input>
 
             <cal-button
-              id="invite-submit"
               slot="footer"
               addStyle="margin-inline-end: 1rem;"
-              .onClick="${() => this.sendInvitationHandler()}" 
-              buttonType="primary">
-              Invite
-            </cal-button>
-
-            <cal-button
-              slot="footer"
               .onClick="${() => this.hideDialog('dialog-invite-member')}" 
               buttonType="secondary">
               Cancel
+            </cal-button>
+
+            <cal-button
+              id="invite-submit"
+              slot="footer"
+              .onClick="${() => this.sendInvitationHandler()}" 
+              buttonType="primary">
+              Invite
             </cal-button>
           </sl-dialog>
           
@@ -561,19 +561,19 @@ class FamilyView {
             </cal-input>
 
             <cal-button
-              id="create-submit"
               slot="footer"
               addStyle="margin-inline-end: 1rem;"
-              .onClick="${() => this.createFamilyHandler()}" 
-              buttonType="primary">
-              Create
-            </cal-button>
-
-            <cal-button
-              slot="footer"
               .onClick="${() => this.hideDialog('dialog-create-family')}" 
               buttonType="secondary">
               Cancel
+            </cal-button>
+
+            <cal-button
+              id="create-submit"
+              slot="footer"
+              .onClick="${() => this.createFamilyHandler()}" 
+              buttonType="primary">
+              Create
             </cal-button>
           </sl-dialog>`
       }

@@ -628,20 +628,20 @@ class CalendarView {
             </form>
 
             <cal-button
-              id="create-submit"
               slot="footer"
               addStyle="min-width: 8rem; margin-inline-end: 1rem;"
-              .onClick=${() => this.createEventHandler()} 
-              buttonType="primary">
-              Save
-            </cal-button>
-
-            <cal-button
-              slot="footer"
-              addStyle="min-width: 8rem;"
               .onClick=${() => this.hideDialog('dialog-create-event')} 
               buttonType="secondary">
               Cancel
+            </cal-button>
+
+            <cal-button
+              id="create-submit"
+              slot="footer"
+              addStyle="min-width: 8rem;"
+              .onClick=${() => this.createEventHandler()} 
+              buttonType="primary">
+              Save
             </cal-button>
           </sl-dialog>
 
@@ -681,25 +681,29 @@ class CalendarView {
                 buttonType="primary">
                 <i class="fa-solid fa-trash-can"></i>
               </cal-button>
-            </sl-tooltip>
+            </sl-tooltip>`
+          }
 
+            <cal-button
+              slot="footer"
+              addStyle="min-width: 6rem; margin-inline: 12rem 1rem;"
+              .onClick="${() => this.hideDialog('dialog-show-event')}" 
+              buttonType="secondary">
+              Close
+            </cal-button>
+
+            ${Auth.currentUser.accessLevel === 3
+            ? html``
+            : html`
             <cal-button
               id="edit-btn"
               slot="footer"
-              addStyle="min-width: 6rem; margin-inline: 12rem 1rem;"
+              addStyle="min-width: 6rem;"
               .onClick="${() => this.populateDialogForm()}" 
               buttonType="primary">
               Edit
             </cal-button>`
           }
-
-            <cal-button
-              slot="footer"
-              addStyle="min-width: 6rem;"
-              .onClick="${() => this.hideDialog('dialog-show-event')}" 
-              buttonType="secondary">
-              Close
-            </cal-button>
           </sl-dialog>
 
           <!-- Dialog box to confirm deleting event -->
@@ -709,19 +713,19 @@ class CalendarView {
             </span>
 
             <cal-button
-              id="delete-submit"
               slot="footer"
               addStyle="margin-inline-end: 1rem;"
-              .onClick="${() => this.deleteEventHandler()}"
-              buttonType="primary">
-              Delete
-            </cal-button>
-
-            <cal-button
-              slot="footer"
               .onClick="${() => this.hideDialog('dialog-delete-event')}" 
               buttonType="secondary">
               Cancel
+            </cal-button>
+
+            <cal-button
+              id="delete-submit"
+              slot="footer"
+              .onClick="${() => this.deleteEventHandler()}"
+              buttonType="primary">
+              Delete
             </cal-button>
           </sl-dialog>
         `}
