@@ -139,7 +139,7 @@ class EditProfileView {
         ? html`<main-spinner></main-spinner>`
         : html`
               <div class="register-wrapper">
-                <h1>Edit your Profile</h1>
+                <h1>Edit your Account</h1>
 
                 <form class="form-register">
                   <div class="input-wrapper avatar-wrapper">

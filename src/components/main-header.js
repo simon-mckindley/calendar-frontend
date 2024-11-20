@@ -87,6 +87,39 @@ customElements.define('main-header', class AppHeader extends LitElement {
         font-size: var(--app-header-title-font-size);
       }
 
+      .nav-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+      }
+
+      .main-nav {
+        display: flex;
+        gap: 1rem;
+        height: var(--app-header-height);
+      }
+      
+      .main-nav .nav-link {
+        position: relative;
+        font: inherit;
+        font-size: 1.2em;
+        padding: 0;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+      }
+      
+      .main-nav .nav-link div {
+        position: relative;
+        bottom: -20%;
+        width: 100%;
+        padding: 0.25rem 0.5rem;
+        text-align: center;
+        border-radius: 100px;
+        box-shadow: 1px 1px 2px 1px var(--shadow-color);
+        transition: background-color 300ms, translate 500ms ease;
+      }
+
       .top-nav button {
         display: flex;
         align-items: center;
@@ -113,10 +146,11 @@ customElements.define('main-header', class AppHeader extends LitElement {
         display: flex;
         flex-direction: column;
         gap: 0.75em;
-        align-items: start;
+        align-items: center;
         font-family: "Maven-Medium";
+        font-size: 1.2em;
         background-color: #fff;
-        padding: 1em 1.5em;
+        padding: 1em 2em;
         border: 1px solid var(--secondary-color);
         border-radius: 5px;
         box-shadow: 2px 2px 4px 0px var(--shadow-color);
@@ -124,19 +158,20 @@ customElements.define('main-header', class AppHeader extends LitElement {
         transition: right 500ms
       }
 
-      .show-menu {
-        right: 2vw;
-        /* animation: show-menu 500ms ease forwards; */
-      }
-      
-      @keyframes show-menu {
-        100% {
-          right: 2vw;
-        }
+      .nav-img {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        width: 50px;
+        rotate: -20deg;
       }
 
-      .nav-link:not(:disabled):hover {
-        text-decoration: underline;
+      .show-menu {
+        right: 1vw;
+      }
+
+      .nav-link:not(:disabled):hover div {
+        background-color: var(--secondary-color);
       }
 
       /* active nav link */
@@ -145,9 +180,23 @@ customElements.define('main-header', class AppHeader extends LitElement {
         cursor: default;
       }
 
+      .nav-link:disabled div {
+        animation: link-move 500ms ease forwards;
+      }
+      
+      @keyframes link-move {
+        100% {
+          translate: 0 -40%;
+        }
+      }
+
       /* RESPONSIVE - MOBILE ------------------- */
-      @media all and (max-width: 768px){       
-        .top-nav {
+      @media all and (max-width: 768px){   
+        .app-title {
+          font-size: 0.5em;
+        }    
+
+        .main-nav {
           display: none;
         }
       }
@@ -158,6 +207,20 @@ customElements.define('main-header', class AppHeader extends LitElement {
       <span class="app-title">ClanCalendar</span>
 
       ${Auth.currentUser ? html`
+      <div class="nav-wrapper">
+        <nav class="main-nav">
+          <button type="button" id="home-link" class="nav-link" @click="${() => gotoRoute('/')}"><div>Home</div></button>  
+          <button type="button" id="calendar-link" class="nav-link" @click="${() => gotoRoute('/calendar')}">
+            <div><i class="fa-regular fa-calendar"></i> Calendar</div>
+          </button>
+          <button type="button" id="family-link" class="nav-link" @click="${() => gotoRoute('/family')}">
+            <div><i class="fa-solid fa-people-group"></i> Family</div>
+          </button>
+          <button type="button" id="account-link" class="nav-link" @click="${() => gotoRoute('/account')}">
+            <div><i class="fa-regular fa-address-card"></i> Account</div>
+          </button>
+        </nav>
+
         <nav class="top-nav">
           <button type="button" class="nav-button" @click="${() => this.showMenu()}">
             <div class="user-title">
@@ -169,18 +232,30 @@ customElements.define('main-header', class AppHeader extends LitElement {
           </button>
           <div class="nav-dropdown-menu"> 
               <button type="button" id="home-link" class="nav-link" @click="${() => gotoRoute('/')}">Home</button>  
-              <button type="button" id="family-link" class="nav-link" @click="${() => gotoRoute('/family')}">Family</button>        
-              <button type="button" id="account-link" class="nav-link" @click="${() => gotoRoute('/account')}">Profile</button>
-              <button type="button" id="editprofile-link" class="nav-link" @click="${() => gotoRoute('/editProfile')}">Edit Profile</button>
-              <button type="button" id="calendar-link" class="nav-link" @click="${() => gotoRoute('/calendar')}">Calendar</button>
-              <button type="button" class="nav-link" @click="${() => Auth.signOut()}">Sign Out</button>
+              <button type="button" id="calendar-link" class="nav-link" @click="${() => gotoRoute('/calendar')}">
+                <i class="fa-regular fa-calendar"></i> Calendar
+              </button>
+              <button type="button" id="family-link" class="nav-link" @click="${() => gotoRoute('/family')}">
+                <i class="fa-solid fa-people-group"></i> Family
+              </button>  
+              <button type="button" id="account-link" class="nav-link" @click="${() => gotoRoute('/account')}">
+                <i class="fa-regular fa-address-card"></i> Account
+              </button>
+              <button type="button" id="editAccount-link" class="nav-link" @click="${() => gotoRoute('/editProfile')}">
+                <i class="fa-solid fa-user-pen"></i> Edit Account
+              </button>
+              <br>
+              <button type="button" class="nav-link" @click="${() => Auth.signOut()}">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
+              </button>
+
+              <img class="nav-img" width="10" src="/images/calendar_image_small.png">
           </div>
         </nav>
-      ` :
-        html``
+      </div>`
+        : html``
       }
-    </header>
-    `
+    </header>`
   }
 
 })
