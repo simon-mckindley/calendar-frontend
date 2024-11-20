@@ -97,29 +97,32 @@ class UserHomeView {
           <div class="userhome-wrapper">
 
             <div class="links-wrapper">
-              <cal-button
-                buttonType="secondary"
-                addStyle="width: 100%"
-                .onClick=${() => gotoRoute('/calendar')}
-              >Calendar</cal-button>
+              <h1>Hi ${Utils.titleCase(Auth.currentUser.firstName)}</h1>
+              <div class="button-wrapper">
+                <cal-button
+                  buttonType="secondary"
+                  addStyle="width: 100%"
+                  .onClick=${() => gotoRoute('/calendar')}
+                >Calendar</cal-button>
 
-              <cal-button
-                buttonType="secondary"
-                addStyle="width: 100%;"
-                .onClick=${() => gotoRoute('/account')}
-              >Account</cal-button>
-
-              <div style="position: relative;">
                 <cal-button
                   buttonType="secondary"
                   addStyle="width: 100%;"
-                  .onClick=${() => gotoRoute('/family')}
-                >Family</cal-button>
-        ${Auth.currentUser.invitation
+                  .onClick=${() => gotoRoute('/account')}
+                >Account</cal-button>
+
+                <div style="position: relative;">
+                  <cal-button
+                    buttonType="secondary"
+                    addStyle="width: 100%;"
+                    .onClick=${() => gotoRoute('/family')}
+                  >Family</cal-button>
+          ${Auth.currentUser.invitation
             ? html`
-                <sl-badge class="alert-pill" variant="danger" pill pulse>!</sl-badge>`
+                  <sl-badge class="alert-pill" variant="danger" pill pulse>!</sl-badge>`
             : html``
           }
+                </div>
               </div>
             </div>
 
@@ -145,6 +148,12 @@ class UserHomeView {
           
           <!---------- Dialog box to show event details ------------->
           <sl-dialog id="dialog-show-event">
+            <sl-tooltip content="Go to Calendar" slot="header-actions">
+              <button type="button" @click=${() => gotoRoute('/calendar')} class="calendar-link">
+                <i class="fa-regular fa-calendar"></i>
+              </button>
+            </sl-tooltip>
+
             <div class="show-event-body">
               <div class="all-day-wrap">
                 <i class="fa-regular fa-calendar-check"></i>

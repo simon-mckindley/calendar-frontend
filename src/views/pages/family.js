@@ -438,15 +438,14 @@ class FamilyView {
 
                   <div class="members-wrapper data-scroll-box">
                     ${this.familyData.users && this.familyData.users.length > 1
-                ? html`
-                        ${this.familyData.users
+                ? this.familyData.users
                     .filter(item => item.email !== Auth.currentUser.email) // Exclude current user
                     .sort((a, b) => a.accessLevel - b.accessLevel) // Sort by accessLevel ascending
                     .map(member => html`
                       <user-tile 
                         .user="${member}"
                         .onClick="${() => this.displayFamilyMember(member)}" >
-                      </user-tile>`)}`
+                      </user-tile>`)
                 : html`<div>No other family members</div>`}
                   </div>
             </div>`

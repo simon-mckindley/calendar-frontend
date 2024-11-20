@@ -45,6 +45,7 @@ class FamilyAPI {
       // console log error
       const err = await response.json()
       if (err) console.log(err)
+
       // throw error (exit this function)      
       throw new Error('Problem getting event')
     }
@@ -52,6 +53,33 @@ class FamilyAPI {
     // convert response payload into json - store as data
     const data = await response.json()
 
+    // return data
+    return data
+  }
+
+
+  async searchEvent(filter, message= "") {
+    // validate
+    if (!filter) return;
+
+    // fetch the json data
+    const response = await fetch(`${App.apiBase}/event/filter/${filter}`, {
+      headers: { "Authorization": `Bearer ${localStorage.cal_accessToken}` }
+    });
+
+    // if response not ok
+    if (!response.ok) {
+      // console log error
+      const err = await response.json()
+      if (err) console.log(err);
+      if (message) Toast.show('Problem searching events', 'err');
+      // throw error (exit this function)      
+      throw new Error('Problem searching events')
+    }
+
+    // convert response payload into json - store as data
+    const data = await response.json()
+    if (message) Toast.show(message);
     // return data
     return data
   }

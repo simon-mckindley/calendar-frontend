@@ -98,9 +98,6 @@ a {
   height: 70vh;
   overflow-y: auto;
   margin-inline: 0.5em;
-  // border-top: 2px solid var(--shadow-color);
-  // border-bottom: 2px solid var(--shadow-color);
-  // box-shadow: inset 0px 0px 6px 1px var(--shadow-color);
 }
 
 .alert-pill {
@@ -108,6 +105,18 @@ a {
   top: -10px;
   right: 5px;
   font-family: "Maven-Bold";
+}
+
+@keyframes move-in-left {
+  0% {
+    translate: -5rem;
+    opacity: 0;
+  }
+
+  100% {
+    translate: 0;
+    opacity: 1;
+  }
 }
 
 // root ---------------
@@ -137,7 +146,7 @@ a {
   place-content: center;
 }
 
-// login + register pages ----------
+// login + register + edit pages ----------
 .login-wrapper {
   display: flex;
   flex-wrap: wrap;
@@ -220,6 +229,15 @@ a {
     background-color: var(--light-secondary-color);
     box-shadow: 1px 1px 2px 0px var(--shadow-color);
   }
+
+  .avatar-wrapper {
+    display: flex;
+    gap: 1rem;
+
+    >div {
+      flex-grow: 1;
+    }
+  }
 }
 
 .input-wrapper:not(:first-child) {
@@ -236,10 +254,16 @@ a {
 
   .links-wrapper {
     grid-area: links;
-    display: flex;
-    flex-direction: column;
-    gap: 2em;
-    margin-block-start: 3.5em;
+
+    h1 {
+      margin-inline-start: 2rem;
+    }
+
+    .button-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 2em;
+    }
   }
 }
 
@@ -254,6 +278,13 @@ a {
     font-size: 1.2em;
     font-weight: bold;
     margin-block-end: 3px;
+  }
+
+  .calendar-link {
+    border: none;
+    background: none;
+    cursor: pointer;
+    margin-inline-end: 1rem;
   }
 
   .all-day-wrap {
@@ -508,13 +539,91 @@ a {
   text-transform: capitalize;
 }
 
-// Admin home
+// Admin home + results
 .adminhome-wrapper {
   display: flex;
   flex-direction: column;
   row-gap: 2em;
   width: clamp(5em, 95vw, 30em);
   margin-block-end: 20vh;
+}
+
+.results-wrapper {
+  display: grid;
+  grid-template:
+    "display data-wrapper" / 1.25fr 1fr;
+  column-gap: 3em;
+  width: clamp(5em, 95vw, 70em);
+
+  .data-display-wrapper {
+    grid-area: data-wrapper;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: fit-content;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 1px 1px 2px 1px var(--shadow-color);
+    transition: all 500ms;
+
+    .head {
+      display: grid;
+      place-items: center;
+      gap: 1rem;
+      background-color: var(--light-secondary-color);
+      padding: 1rem;
+      border-radius: 10px 10px 0 0;
+      font-family: "Maven-SemiBold";
+      font-size: 1.2em;
+
+      .title {
+        font-size: 1.5em;
+      }
+    }
+
+    .data-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      font-size: 1.2em;
+      padding: 1rem;
+      margin-bottom: 2rem;
+
+      >div {
+        --_delay: 150ms;
+        text-align: center;
+        opacity: 0;
+        animation: move-in-left 300ms var(--_delay) ease forwards;
+      }
+
+      >div:nth-child(2) {
+        --_delay: 300ms;
+      }
+
+      >div:nth-child(3) {
+        --_delay: 450ms;
+      }
+
+      >div:nth-child(4) {
+        --_delay: 600ms;
+      }
+
+      span {
+        font-weight: bold;
+      }
+
+      .family-members>div {
+        font-weight: bold;
+        margin-block-start: 0.25rem;
+      }
+    }
+
+    .foot {
+      width: 100%;
+      text-align: center;
+    }
+  }
 }
 
 // guide page ----------------

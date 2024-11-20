@@ -84,6 +84,33 @@ class UserAPI {
   }
 
 
+  async userSearch(filter, message = "") {
+    // validate
+    if (!filter) return
+
+    // fetch the json data
+    const response = await fetch(`${App.apiBase}/user/filter/${filter}`, {
+      headers: { "Authorization": `Bearer ${localStorage.cal_accessToken}` }
+    })
+
+    // if response not ok
+    if (!response.ok) {
+      // console log error
+      const err = await response.json()
+      if (err) console.log(err)
+      if (message) Toast.show('Problem searching users', 'err');
+      // throw error (exit this function)      
+      throw new Error('Problem searching users')
+    }
+
+    // convert response payload into json - store as data
+    const data = await response.json()
+    if (message) Toast.show(message);
+    // return data
+    return data
+  }
+
+
   async removeInvitation(userId, familyId, message = "") {
     // validate
     if (!userId || !familyId) return

@@ -84,6 +84,33 @@ class FamilyAPI {
   }
 
 
+  async searchFamily(filter, message = "") {
+    // validate
+    if (!filter) return;
+
+    // fetch the json data
+    const response = await fetch(`${App.apiBase}/family/filter/${filter}`, {
+      headers: { "Authorization": `Bearer ${localStorage.cal_accessToken}` }
+    });
+
+    // if response not ok
+    if (!response.ok) {
+      // console log error
+      const err = await response.json()
+      if (err) console.log(err)
+      if (message) Toast.show('Problem searching families', 'err');
+      // throw error (exit this function)      
+      throw new Error('Problem searching families')
+    }
+
+    // convert response payload into json - store as data
+    const data = await response.json()
+    if (message) Toast.show(message);
+    // return data
+    return data
+  }
+
+
   async addUser(familyId, userId, message = "") {
     if (!familyId && !userId) return;
 

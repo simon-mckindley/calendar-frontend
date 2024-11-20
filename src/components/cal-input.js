@@ -61,6 +61,15 @@ class CalInput extends LitElement {
       .cal-input-wrapper .error {
         outline: 1px solid var(--primary-color);
       }
+
+      input::file-selector-button {
+        font-family: inherit;
+        color: #fff;
+        background-color: var(--light-secondary-color);
+        border: none;
+        border-radius: 100px;
+        box-shadow: 1px 1px 2px 0px var(--shadow-color);
+      }
     `;
   }
 

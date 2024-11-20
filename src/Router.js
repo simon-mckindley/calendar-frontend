@@ -3,6 +3,7 @@ import Auth from './Auth.js'
 // import views
 import homeView from './views/pages/user_home'
 import adminHomeView from './views/pages/admin_home'
+import resultsView from './views/pages/results'
 import fourOFourView from './views/pages/404'
 import loginView from './views/pages/login'
 import registerView from './views/pages/register'
@@ -16,6 +17,7 @@ import guideView from './views/pages/guide'
 const routes = {
 	'/': homeView,
 	'/admin': adminHomeView,
+	'/results': resultsView,
 	'404': fourOFourView,
 	'/login': loginView,
 	'/register': registerView,

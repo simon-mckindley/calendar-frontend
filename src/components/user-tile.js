@@ -1,7 +1,8 @@
 import { LitElement, html, css } from 'lit-element';
 import Utils from '../Utils';
+import App from '../App'
 
-let userTypes = { 2: "Adult", 3: "Child" };
+let userTypes = { 1: "Admin", 2: "Adult", 3: "Child" };
 
 class UserTile extends LitElement {
   static get properties() {
