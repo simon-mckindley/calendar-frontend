@@ -194,8 +194,16 @@ class CalendarView {
   }
 
 
-  // Clears and resets the form input elements
+  // Clears and resets the form elements
   resetCreateForm() {
+    const dialog = document.getElementById("dialog-create-event");
+    dialog.setAttribute("label", "Create event");
+
+    const submitBtn = dialog.querySelector('#create-submit');
+    if (submitBtn) {
+      submitBtn.onClick = () => this.createEventHandler();
+    }
+
     const inputs = document.querySelectorAll(".create-event-form cal-input");
     if (inputs) {
       inputs.forEach(input => input.value = "");
@@ -210,6 +218,11 @@ class CalendarView {
         checkbox.checked = checkbox.value === Auth.currentUser.id;
       });
     }
+  }
+
+  closeCreateDialog() {
+    this.hideDialog('dialog-create-event');
+    this.resetCreateForm();
   }
 
 
@@ -625,7 +638,7 @@ class CalendarView {
             <cal-button
               slot="footer"
               addStyle="min-width: 8rem; margin-inline-end: 1rem;"
-              .onClick=${() => this.hideDialog('dialog-create-event')} 
+              .onClick=${() => this.closeCreateDialog()} 
               buttonType="secondary">
               Cancel
             </cal-button>
