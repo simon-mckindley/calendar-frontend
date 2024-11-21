@@ -1,0 +1,100 @@
+// Calendar page
+.calendar-head {
+    position: sticky;
+    top: 0rem;
+    margin: 1rem 3rem;
+    width: clamp(10rem, 80vw, 16rem);
+    z-index: 10;
+}
+
+.create-event-form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1.5em;
+
+    .date-inputs {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .all-day-input {
+        margin-inline: auto;
+        font-size: 1.2em;
+    }
+
+    .input-label {
+        font-size: 1em;
+        font-family: "Maven-SemiBold";
+        margin-left: 1em;
+        margin-bottom: 3px;
+    }
+
+    #checkbox-wrapper {
+        display: flex;
+        gap: 0.5em;
+        flex-wrap: wrap;
+    }
+
+    input[type=checkbox] {
+        display: none;
+    }
+
+    .checkbox-label {
+        background-color: #fff;
+        border-radius: 1000px;
+        padding: 0.25em 1em;
+        outline: var(--light-secondary-color) solid 1px;
+        cursor: pointer;
+        box-shadow: 2px 2px 3px 1px var(--shadow-color);
+        transition: background-color 300ms, color 300ms, box-shadow 300ms;
+    }
+
+    input[type=checkbox]:checked+label {
+        color: #fff;
+        background-color: var(--light-secondary-color);
+        box-shadow: 1px 1px 2px 0px var(--shadow-color);
+        ;
+    }
+}
+
+.delete-text {
+    color: var(--primary-color);
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.current-user-event {
+    border: 3px solid var(--primary-color);
+}
+
+.fc .fc-button {
+    text-transform: capitalize;
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    box-shadow: 2px 2px 5px 1px var(--shadow-color);
+}
+
+.fc .fc-button:active {
+    box-shadow: 1px 1px 2px 0px var(--shadow-color);
+}
+
+.fc .fc-button-primary:focus {
+    box-shadow: 1px 1px 2px 0px var(--shadow-color);
+}
+
+.fc-event-title {
+    text-transform: capitalize;
+}
+
+// RESPONSIVE - MOBILE -------------------
+@media all and (max-width: 800px) {
+
+    .calendar-head {
+        margin-inline: auto;
+    }
+
+    #calendar {
+        font-size: 0.5em;
+    }
+}

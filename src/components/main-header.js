@@ -28,7 +28,7 @@ customElements.define('main-header', class AppHeader extends LitElement {
 
   navActiveLinks() {
     let currentPath = window.location.pathname.slice(1).toLowerCase();
-    if (currentPath === "") currentPath = "home";
+    if (currentPath === "" || currentPath === "admin") currentPath = "home";
     const navLinks = this.querySelectorAll('.nav-link');
     navLinks.forEach(navLink => {
       if (navLink.id.split("-")[0].toLowerCase() === currentPath) {
@@ -115,6 +115,7 @@ customElements.define('main-header', class AppHeader extends LitElement {
         width: 100%;
         padding: 0.25rem 0.5rem;
         text-align: center;
+        background-color: rgba(255, 255, 255, 0.2);;
         border-radius: 100px;
         box-shadow: 1px 1px 2px 1px var(--shadow-color);
         transition: background-color 300ms, translate 500ms ease;
@@ -142,7 +143,7 @@ customElements.define('main-header', class AppHeader extends LitElement {
       .nav-dropdown-menu {
         position: absolute;
         top: 90%;
-        right: -12em;
+        right: -13em;
         display: flex;
         flex-direction: column;
         gap: 0.75em;
@@ -191,14 +192,16 @@ customElements.define('main-header', class AppHeader extends LitElement {
       }
 
       /* RESPONSIVE - MOBILE ------------------- */
-      @media all and (max-width: 768px){   
+      @media all and (max-width: 800px){   
         .app-title {
-          font-size: 0.5em;
+          font-size: 1.2rem;
         }    
 
-        .main-nav {
+        .main-nav,
+        .user-title {
           display: none;
         }
+
       }
 
     </style>
@@ -209,13 +212,19 @@ customElements.define('main-header', class AppHeader extends LitElement {
       ${Auth.currentUser ? html`
       <div class="nav-wrapper">
         <nav class="main-nav">
-          <button type="button" id="home-link" class="nav-link" @click="${() => gotoRoute('/')}"><div>Home</div></button>  
+          <button type="button" id="home-link" class="nav-link" @click="${() => gotoRoute('/')}">
+            <div>${(Auth.currentUser.accessLevel === 1) ? "Search" : "Home"}</div>
+          </button>  
+          ${(Auth.currentUser.accessLevel === 1)
+          ? html``
+          : html`
           <button type="button" id="calendar-link" class="nav-link" @click="${() => gotoRoute('/calendar')}">
             <div><i class="fa-regular fa-calendar"></i> Calendar</div>
           </button>
           <button type="button" id="family-link" class="nav-link" @click="${() => gotoRoute('/family')}">
             <div><i class="fa-solid fa-people-group"></i> Family</div>
           </button>
+          `}
           <button type="button" id="account-link" class="nav-link" @click="${() => gotoRoute('/account')}">
             <div><i class="fa-regular fa-address-card"></i> Account</div>
           </button>
@@ -231,17 +240,23 @@ customElements.define('main-header', class AppHeader extends LitElement {
           `${App.apiBase}/images/${Auth.currentUser.avatar}` : ''}></sl-avatar> 
           </button>
           <div class="nav-dropdown-menu"> 
-              <button type="button" id="home-link" class="nav-link" @click="${() => gotoRoute('/')}">Home</button>  
+              <button type="button" id="home-link" class="nav-link" @click="${() => gotoRoute('/')}">
+                ${(Auth.currentUser.accessLevel === 1) ? "Search" : "Home"}
+              </button>  
+              ${(Auth.currentUser.accessLevel === 1)
+          ? html``
+          : html`
               <button type="button" id="calendar-link" class="nav-link" @click="${() => gotoRoute('/calendar')}">
                 <i class="fa-regular fa-calendar"></i> Calendar
               </button>
               <button type="button" id="family-link" class="nav-link" @click="${() => gotoRoute('/family')}">
                 <i class="fa-solid fa-people-group"></i> Family
               </button>  
+              `}
               <button type="button" id="account-link" class="nav-link" @click="${() => gotoRoute('/account')}">
                 <i class="fa-regular fa-address-card"></i> Account
               </button>
-              <button type="button" id="editAccount-link" class="nav-link" @click="${() => gotoRoute('/editProfile')}">
+              <button type="button" id="editProfile-link" class="nav-link" @click="${() => gotoRoute('/editProfile')}">
                 <i class="fa-solid fa-user-pen"></i> Edit Account
               </button>
               <br>

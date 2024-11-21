@@ -1,0 +1,94 @@
+// user home page
+.userhome-wrapper {
+    display: grid;
+    grid-template:
+        "links display" / 1fr 1.25fr;
+    column-gap: 3em;
+    width: clamp(5em, 90vw, 75em);
+
+    .links-wrapper {
+        grid-area: links;
+
+        h1 {
+            margin-inline-start: 2rem;
+        }
+
+        .button-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 2em;
+        }
+    }
+}
+
+#dialog-show-event {
+    .show-event-body {
+        display: flex;
+        flex-direction: column;
+        row-gap: 1.5rem;
+    }
+
+    .data-label {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-block-end: 3px;
+    }
+
+    .calendar-link {
+        border: none;
+        background: none;
+        cursor: pointer;
+        margin-inline-end: 1rem;
+    }
+
+    .all-day-wrap {
+        font-weight: bold;
+
+        i {
+            color: var(--primary-color);
+            font-size: 1.4em;
+            margin-inline-end: 0.25rem;
+        }
+    }
+
+    .event-dates span {
+        font-weight: bold;
+    }
+
+    #event-description {
+        min-height: 4.5rem;
+        padding: 0.5rem;
+        border: 1px solid var(--secondary-color);
+        border-radius: 10px;
+        box-shadow: 1px 1px 2px 1px var(--shadow-color);
+    }
+
+    #event-participants {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding: 0.25rem;
+
+        >* {
+            padding: 0.25rem 0.75rem;
+            border-radius: 10px;
+            box-shadow: 1px 1px 2px 1px var(--shadow-color);
+        }
+    }
+}
+
+// RESPONSIVE - MOBILE -------------------
+@media all and (max-width: 800px) {
+
+    .userhome-wrapper {
+        grid-template:
+            "links"
+            "display" / 1fr;
+        row-gap: 2em;
+
+        .links-wrapper .button-wrapper {
+            gap: 1.25em;
+        }
+
+    }
+}

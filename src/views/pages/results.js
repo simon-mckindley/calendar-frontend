@@ -247,9 +247,9 @@ class ResultsView {
 
             <div class="foot">
               <cal-button
-              buttonType="primary"
-              addStyle="width: 80%; margin-bottom: 1rem"
-              .onClick=${() => gotoRoute('/result')}
+                buttonType="primary"
+                addStyle="width: 80%; margin-bottom: 1rem"
+                .onClick=${() => gotoRoute('/results')}
               >Edit</cal-button>
             </div>
           </div >

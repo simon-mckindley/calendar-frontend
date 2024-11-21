@@ -81,7 +81,7 @@ class LoginView {
 
       <div class="page-content page-centered" style="overflow: hidden;">
         <div class="login-wrapper">
-          <div>
+          <div class="logo-wrapper">
             <img class="login-logo login-logo-show" src="/images/calendar_image_med.png">      
           </div>
  

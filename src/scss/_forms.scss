@@ -4,3 +4,118 @@
   display: flex;
   flex-direction: column;
 }
+
+// login + register + edit pages ----------
+.login-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3em;
+
+  >* {
+    width: 35vw;
+  }
+}
+
+.login-logo {
+  margin-left: auto;
+  max-width: 28em;
+  translate: 0 40rem;
+  rotate: -20deg;
+  scale: 1.2;
+  filter: drop-shadow(6px 6px 8px var(--shadow-color));
+}
+
+.login-logo-show {
+  animation: login-logo 1500ms ease-out 800ms forwards;
+}
+
+@keyframes login-logo {
+  60% {
+    rotate: -20deg;
+    scale: 1.2;
+    filter: drop-shadow(6px 6px 8px var(--shadow-color));
+  }
+
+  100% {
+    translate: 0 0;
+    rotate: -10deg;
+    scale: 1;
+    filter: drop-shadow(3px 3px 4px var(--shadow-color));
+  }
+}
+
+.register-wrapper {
+  width: clamp(20em, 50vw, 40em);
+  padding-bottom: 5em;
+
+  .acc-link {
+    text-align: center;
+
+    a {
+      font-weight: bold;
+    }
+  }
+
+  .input-label {
+    font-size: 1em;
+    font-family: "Maven-SemiBold";
+    margin-left: 1em;
+    margin-bottom: 3px;
+  }
+
+  .radio-wrapper {
+    display: flex;
+    gap: 0.5em;
+    flex-wrap: wrap;
+  }
+
+  input[type=radio] {
+    display: none;
+  }
+
+  label {
+    flex-grow: 1;
+    background-color: #fff;
+    border-radius: 1000px;
+    padding: 0.25em 1em;
+    cursor: pointer;
+    box-shadow: 2px 2px 3px 1px var(--shadow-color);
+    transition: background-color 300ms, color 300ms, box-shadow 300ms;
+  }
+
+  input[type=radio]:checked+label {
+    color: #fff;
+    background-color: var(--light-secondary-color);
+    box-shadow: 1px 1px 2px 0px var(--shadow-color);
+  }
+
+  .avatar-wrapper {
+    display: flex;
+    gap: 1rem;
+
+    >div {
+      flex-grow: 1;
+    }
+  }
+}
+
+.input-wrapper:not(:first-child) {
+  margin-block-start: 0.5em;
+}
+
+
+// RESPONSIVE - MOBILE -------------------
+@media all and (max-width: 800px) {
+
+  .login-wrapper {
+    flex-direction: column;
+    .login-logo {
+        max-width: 80%;
+        margin-inline: auto;
+      }
+
+    >* {
+      width: 90vw;
+    }
+  }
+}
