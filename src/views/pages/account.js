@@ -56,7 +56,6 @@ class AccountView {
         : html`
         <div class="user-wrapper">
           <sl-avatar
-            style="--size: 10rem;"
             image="${this.user.avatar
             ? `${App.apiBase}/images/${this.getUser.avatar}`
             : ''}">

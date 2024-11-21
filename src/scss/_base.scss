@@ -208,6 +208,7 @@ a {
   }
 
   sl-avatar {
+    --size: 10rem;
     margin-inline: auto;
   }
 
@@ -249,7 +250,13 @@ a {
 // RESPONSIVE - MOBILE -------------------
 @media all and (max-width: 800px) {
 
+  .user-wrapper {
+    sl-avatar {
+      --size: 8rem;
+    }
+  }
+
   .data-scroll-box {
-    height: 50vh;
+    height: 40vh;
   }
 }

@@ -606,12 +606,14 @@ class CalendarView {
                 <cal-input 
                   label="Start" 
                   name="start" 
+                  addStyle="min-width: 4rem;"
                   type="datetime-local"
                   @input-change=${this.handleInputChange}>
                 </cal-input>
                 <cal-input 
                   label="End" 
                   name="end" 
+                  addStyle="min-width: 4rem;"
                   type="datetime-local"
                   @input-change=${this.handleInputChange}>
                 </cal-input>

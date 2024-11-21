@@ -173,16 +173,17 @@ customElements.define('main-header', class AppHeader extends LitElement {
       }
 
       .nav-link:not(:disabled):hover div {
-        background-color: var(--secondary-color);
+        background-color: var(--light-secondary-color);
       }
 
       /* active nav link */
       .nav-link:disabled {
-        color: var(--primary-color);
+        color: var(--secondary-color);
         cursor: default;
       }
 
       .nav-link:disabled div {
+        background-color: #fff;
         animation: link-move 500ms ease forwards;
       }
       
