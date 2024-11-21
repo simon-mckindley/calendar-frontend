@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit-element'
 import Utils from '../Utils'
 
-
+// Tile for showing family invitations
 class InviteTile extends LitElement {
   static get properties() {
     return {
@@ -55,16 +55,6 @@ class InviteTile extends LitElement {
         </div>
 
         <div class="invitation-buttons">
-          <sl-tooltip content="Accept invitation">
-            <cal-button
-              id="invite-accept"
-              @click="${this.acceptOnClick}"
-              addStyle="padding-inline: 0.7em;"
-              buttonType="primary">
-              <i class="fa-solid fa-check"></i>
-            </cal-button>
-          </sl-tooltip>
-
           <sl-tooltip content="Decline invitation">
             <cal-button
               id="invite-decline"
@@ -74,6 +64,16 @@ class InviteTile extends LitElement {
               <i class="fa-solid fa-xmark"></i>
             </cal-button>
           <sl-tooltip>
+
+          <sl-tooltip content="Accept invitation">
+            <cal-button
+              id="invite-accept"
+              @click="${this.acceptOnClick}"
+              addStyle="padding-inline: 0.7em;"
+              buttonType="primary">
+              <i class="fa-solid fa-check"></i>
+            </cal-button>
+          </sl-tooltip>
         </div>
       </div>
     `;

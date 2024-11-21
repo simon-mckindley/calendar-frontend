@@ -19,7 +19,7 @@ class AccountView {
     this.getUser();
   }
 
-
+  // Gets current user data
   async getUser() {
     try {
       this.user = await UserAPI.getUser(Auth.currentUser.id);
@@ -34,12 +34,12 @@ class AccountView {
     }
   }
 
+  // Gets user family data
   async getFamily() {
     try {
       if (this.user.family) {
         this.familyData = await FamilyAPI.getFamily(this.user.family);
       }
-      console.log(this.familyData)
     } catch (err) {
       console.log(err)
       Toast.show('Error getting family data', 'error');

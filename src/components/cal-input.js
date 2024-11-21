@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 
+// Primary input component
 class CalInput extends LitElement {
   static get properties() {
     return {

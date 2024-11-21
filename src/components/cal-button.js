@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit-element'
 
+// Primary button component
 class CalButton extends LitElement {
   static get properties() {
     return {

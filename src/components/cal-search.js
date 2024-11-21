@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 
+// Search input component based on the primary input component
 class CalSearch extends LitElement {
   static get properties() {
     return {

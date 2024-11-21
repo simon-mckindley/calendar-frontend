@@ -15,18 +15,6 @@ class LoginView {
     Utils.pageIntroAnim();
   }
 
-  // handleLogoAnimation() {
-  //   console.log("Logo Animation");
-  //   document.querySelector(".login-logo").classList.add("login-logo-show");
-  // }
-
-  keyboardSubmit(event) {
-    if (event.key === "Enter") {
-      console.log("Keyboard Submit :-(");
-      this.loginSubmitHandler;
-    }
-  }
-
   // Handle input changes
   handleInputChange(event) {
     event.target.removeAttribute("hasError");

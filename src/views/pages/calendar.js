@@ -11,14 +11,12 @@ import UserAPI from '../../UserAPI'
 
 let formData;
 
-
 class CalendarView {
   constructor() {
     this.calendar = null;  // Declare calendar as a class property
   }
 
   async init() {
-    console.log(Auth.currentUser);
     document.title = 'Calendar';
 
     formData = {};
@@ -33,7 +31,7 @@ class CalendarView {
     await this.getFamily();
   }
 
-
+  // Creates and renders the calendar
   showCalendar() {
     const calendarEl = document.getElementById('calendar');
 
@@ -86,7 +84,6 @@ class CalendarView {
       if (Auth.currentUser.family) {
         this.familyData = await FamilyAPI.getFamily(Auth.currentUser.family);
       }
-
       this.getAllEvents();
 
     } catch (err) {
@@ -129,8 +126,6 @@ class CalendarView {
         id: _id,
         ...rest
       }));
-
-      console.log(this.events);
 
       this.render();
       setTimeout(() => {
@@ -733,7 +728,6 @@ class CalendarView {
   `;
     render(template, App.rootEl);
   }
-
 }
 
 

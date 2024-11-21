@@ -230,7 +230,6 @@ class FamilyView {
     } catch (error) {
       console.log(error);
     }
-
   }
 
 

@@ -4,6 +4,7 @@ import App from '../App'
 
 let userTypes = { 1: "Admin", 2: "Adult", 3: "Child" };
 
+// Tile for displaying user data
 class UserTile extends LitElement {
   static get properties() {
     return {

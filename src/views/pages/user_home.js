@@ -7,6 +7,7 @@ import Utils from './../../Utils'
 import UserAPI from '../../UserAPI'
 import EventAPI from '../../EventAPI'
 
+// Non admin user home page
 class UserHomeView {
   init() {
     console.log('UserHomeView.init');

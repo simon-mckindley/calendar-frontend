@@ -9,6 +9,7 @@ import Toast from '../../Toast'
 
 let formData;
 
+// Home page for the admin type user
 class AdminHomeView {
   constructor() {
     this.searchResults = null
@@ -29,7 +30,7 @@ class AdminHomeView {
     formData[name] = value;  // Dynamically update form data
   }
 
-
+  // Handles the search submit
   async searchSubmitHandler(searchType = true, button) {
     // Checks if all data is present
     if (formData.q) {
@@ -46,6 +47,7 @@ class AdminHomeView {
     button.innerHTML = buttonText;
 
     try {
+      // Calls Api based on search type
       if (searchType === "user") {
         this.searchResults = await UserAPI.userSearch(formData.q);
         buttonText = "Search Users";
@@ -59,6 +61,7 @@ class AdminHomeView {
 
       this.searchResults.searchType = searchType;
 
+      // Go to results page if search is successful
       this.searchResults.num === 0
         ? Toast.show('No results for this query', 'error')
         : gotoRoute('/results');

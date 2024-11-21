@@ -4,6 +4,7 @@ import Auth from '../Auth'
 import App from '../App'
 import Utils from '../Utils'
 
+// App header
 customElements.define('main-header', class AppHeader extends LitElement {
   constructor() {
     super()

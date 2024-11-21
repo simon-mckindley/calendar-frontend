@@ -10,7 +10,7 @@ let formData;
 
 class EditProfileView {
   init() {
-    console.log('EditProfileView.init', Auth.currentUser);
+    console.log('EditProfileView.init');
     document.title = 'Edit Profile';
     this.user = null;
     formData = {}; // Reset formData
@@ -105,10 +105,6 @@ class EditProfileView {
         }
       }
     }
-
-    console.log(formData, encodedFormData);
-    // return;
-
 
     const submitBtn = document.querySelector("cal-button");
     submitBtn.innerHTML = "<sl-spinner></sl-spinner>";

@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 
+// Textarea input component
 class CalTextInput extends LitElement {
   static get properties() {
     return {

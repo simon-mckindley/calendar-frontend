@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 
+// App main spinner
 class MainSpinner extends LitElement {
   static get properties() {
     return {

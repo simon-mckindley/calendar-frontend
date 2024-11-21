@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 
+// Tile for displaying events or family data
 class DataTile extends LitElement {
   static get properties() {
     return {
@@ -63,7 +64,7 @@ class DataTile extends LitElement {
 
   constructor() {
     super();
-    this.type = 'event';     // Default tile type
+    this.type = 'icon';     // Default tile type
     this.icon = 'event_icon.svg';  // Data icon
     this.label = '';         // Default title
     this.date = '';          // Default date
@@ -74,7 +75,7 @@ class DataTile extends LitElement {
     return html`
       <div class="data-tile" @click="${this.onClick}" tabindex="0">
         <div class="tile-head">
-      ${this.type === 'event'
+      ${this.type === 'icon'
         ? html`<img src="/images/icons/${this.icon}">`
         : html``
       }  
