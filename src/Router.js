@@ -80,7 +80,7 @@ export function gotoRoute(pathname) {
 // allows anchor <a> links to load routes
 export function anchorRoute(e) {
 	e.preventDefault()
-	const pathname = e.target.closest('a').pathname
+	let pathname = e.target.closest('a').pathname
 	if (Auth.currentUser && Auth.currentUser.accessLevel === 1 && pathname === '/') {
 		pathname = '/admin'
 	}
