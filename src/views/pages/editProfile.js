@@ -59,6 +59,7 @@ class EditProfileView {
     }
   }
 
+
   async updateProfileHandler() {
     const fields = ["firstName", "lastName", "email", "password"];
 
@@ -126,13 +127,14 @@ class EditProfileView {
     submitBtn.textContent = "Update";
   }
 
+
   render() {
     const template = html`
       <main-header></main-header>
 
       <div class="page-content page-centered">
         ${this.user == null
-        ? html`<main-spinner></main-spinner>`
+        ? html`<main-spinner style="align-content: center;"></main-spinner>`
         : html`
               <div class="register-wrapper">
                 <h1>Edit your Account</h1>

@@ -52,7 +52,7 @@ class AccountView {
 
       <div class="page-content page-centered">
         ${!this.user
-        ? html`<main-spinner></main-spinner>`
+        ? html`<main-spinner style="align-content: center;"></main-spinner>`
         : html`
         <div class="user-wrapper">
           <sl-avatar

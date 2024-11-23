@@ -10,6 +10,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: 3em;
+  margin-top: 2em;
+  align-content: center;
 
   >* {
     width: 35vw;
@@ -46,7 +48,8 @@
 
 .register-wrapper {
   width: clamp(20em, 50vw, 40em);
-  padding-bottom: 5em;
+  margin-top: 1em;
+  align-content: center;
 
   .acc-link {
     text-align: center;
@@ -109,13 +112,19 @@
 
   .login-wrapper {
     flex-direction: column;
+    align-content: unset;
+
     .login-logo {
-        max-width: 80%;
-        margin-inline: auto;
-      }
+      max-width: 80%;
+      margin-inline: auto;
+    }
 
     >* {
       width: 90vw;
     }
+  }
+
+  .register-wrapper {
+    align-content: unset;
   }
 }

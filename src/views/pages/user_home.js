@@ -93,7 +93,7 @@ class UserHomeView {
       
       <div class="page-content page-centered">
       ${this.events == null
-        ? html`<main-spinner></main-spinner>`
+        ? html`<main-spinner style="align-content: center;"></main-spinner>`
         : html`
           <div class="userhome-wrapper">
 

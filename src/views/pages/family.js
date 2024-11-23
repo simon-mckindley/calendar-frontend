@@ -318,7 +318,7 @@ class FamilyView {
 
     <div class="page-content page-centered">
       ${this.familyData == null
-        ? html`<main-spinner></main-spinner>`
+        ? html`<main-spinner style="align-content: center;"></main-spinner>`
         : html`
           <div class="family-wrapper">
             <div class="user-column">

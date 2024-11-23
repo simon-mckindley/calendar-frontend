@@ -572,7 +572,7 @@ class CalendarView {
       ${this.events == null
         ? html`
         <div class="page-centered" style="height: 80vh;">
-          <main-spinner></main-spinner>
+          <main-spinner style="align-content: center;"></main-spinner>
         </div>`
         : html`
           <div class="calendar-head">    

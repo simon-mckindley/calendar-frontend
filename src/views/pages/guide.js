@@ -92,7 +92,7 @@ class GuideView {
         <article class="guide-article">
           <div class="guide-text">
             <div>
-              <h2>Calendar</h2>
+              <h2>Family</h2>
               <p>
                 View and manage your family group from this page to ensure smooth 
                 coordination and communication. Add or remove family members, 
