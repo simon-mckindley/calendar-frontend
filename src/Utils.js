@@ -11,16 +11,19 @@ class Utils {
     }
   }
 
+  
   pageIntroAnim() {
     const pageContent = document.querySelector('.page-content')
     if (!pageContent) return
     gsap.fromTo(pageContent, { opacity: 0, y: -12 }, { opacity: 1, y: 0, ease: 'power2.out', duration: 0.3 })
   }
 
+
   validateEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   }
+
 
   titleCase(txt) {
     if (!txt) return;
@@ -45,6 +48,7 @@ class Utils {
     return formattedDate.toLocaleDateString("en-AU", options);
   }
 
+
   formatDateTimeAU(date) {
     const formattedDate = new Date(date);
 
@@ -62,6 +66,7 @@ class Utils {
     // Combine time and date parts
     return `${hours}:${minutes}${ampm} ${datePart}`;
   }
+
 
   validateDates(startDate, endDate) {
     const now = new Date();

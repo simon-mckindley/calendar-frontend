@@ -73,6 +73,7 @@ class AdminHomeView {
     button.textContent = buttonText
   }
 
+  
   render() {
     const template = html`
         <main-header></main-header>

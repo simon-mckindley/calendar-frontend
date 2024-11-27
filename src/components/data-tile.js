@@ -8,6 +8,7 @@ class DataTile extends LitElement {
       icon: { type: String },     // Data icon
       label: { type: String },      // Tile title
       date: { type: String },       // Tile date
+      selected: { type: Boolean, reflect: true },
       onClick: { type: Function }   // Click event handler
     };
   }
@@ -32,7 +33,8 @@ class DataTile extends LitElement {
         box-shadow: 2px 2px 5px 1px var(--shadow-color);
       }
 
-      .data-tile.active {
+      .data-tile:active,
+      .data-tile[selected] {
         outline: 2px solid var(--secondary-color);
         outline-offset: -2px;
       }
@@ -68,12 +70,13 @@ class DataTile extends LitElement {
     this.icon = 'event_icon.svg';  // Data icon
     this.label = '';         // Default title
     this.date = '';          // Default date
+    this.selected = false;
     this.onClick = () => { }; // Default empty function for onClick
   }
 
   render() {
     return html`
-      <div class="data-tile" @click="${this.onClick}" tabindex="0">
+      <div class="data-tile" ?selected=${this.selected} @click="${this.onClick}" tabindex="0">
         <div class="tile-head">
       ${this.type === 'icon'
         ? html`<img src="/images/icons/${this.icon}">`

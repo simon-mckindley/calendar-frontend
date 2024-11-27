@@ -9,6 +9,7 @@ class UserTile extends LitElement {
   static get properties() {
     return {
       user: { type: Object },     // User
+      selected: { type: Boolean, reflect: true },
       onClick: { type: Function }   // Click event handler
     };
   }
@@ -33,7 +34,8 @@ class UserTile extends LitElement {
         box-shadow: 2px 2px 5px 1px var(--shadow-color);
       }
 
-      .user-tile.active {
+      .user-tile:active,
+      .user-tile[selected] {
         outline: 2px solid var(--secondary-color);
         outline-offset: -2px;
       }
@@ -64,7 +66,7 @@ class UserTile extends LitElement {
 
   render() {
     return html`
-      <div class="user-tile" @click="${this.onClick}" tabindex="0">
+      <div class="user-tile" ?selected=${this.selected} @click="${this.onClick}" tabindex="0">
         <div class="tile-user">
           <sl-avatar style="--size: 32px;" image=${(this.user && this.user.avatar) ?
         `${App.apiBase}/images/${this.user.avatar}` : ''}></sl-avatar>

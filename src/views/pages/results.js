@@ -13,7 +13,6 @@ class ResultsView {
     this.render();
     Utils.pageIntroAnim();
     this.results = AdminHomeView.searchResults;
-    console.log(this.results);
     this.render();
     this.selectFirstData();
   }
@@ -22,20 +21,23 @@ class ResultsView {
     if (!this.results) return;
 
     if (this.results.searchType === "user") {
-      this.populateUserData(this.results.users[0]);
+      this.populateUserData(this.results.users[0], 0);
     } else if (this.results.searchType === "family") {
-      this.populateFamilyData(this.results.familys[0]);
+      this.populateFamilyData(this.results.familys[0], 0);
     } else if (this.results.searchType === "event") {
-      this.populateEventData(this.results.events[0]);
+      this.populateEventData(this.results.events[0], 0);
     }
   }
 
 
-  async populateUserData(userData) {
-    console.log(userData);
+  async populateUserData(userData, index) {
     // Find the data-display-wrapper element
     const wrapper = document.querySelector('.data-display-wrapper');
     if (!wrapper) return;
+
+    document.querySelectorAll("user-tile").forEach((dataTile, i) => {
+      dataTile.selected = (index === i);
+    });
 
     // Populate the title
     const titleElement = wrapper.querySelector('.head .title');
@@ -49,7 +51,6 @@ class ResultsView {
     if (userData.family) {
       familyData = await FamilyAPI.getFamily(userData.family);
     }
-    console.log(familyData);
 
     // Populate the data body
     const bodyElement = wrapper.querySelector('.data-body');
@@ -86,11 +87,14 @@ class ResultsView {
   }
 
 
-  async populateFamilyData(familyData) {
-    console.log(familyData);
+  async populateFamilyData(familyData, index) {
     // Find the data-display-wrapper element
     const wrapper = document.querySelector('.data-display-wrapper');
     if (!wrapper) return;
+
+    document.querySelectorAll("data-tile").forEach((dataTile, i) => {
+      dataTile.selected = (index === i);
+    });
 
     // Populate the title
     const titleElement = wrapper.querySelector('.head .title');
@@ -125,11 +129,14 @@ class ResultsView {
   }
 
 
-  async populateEventData(eventData) {
-    console.log(eventData);
+  async populateEventData(eventData, index) {
     // Find the data-display-wrapper element
     const wrapper = document.querySelector('.data-display-wrapper');
     if (!wrapper) return;
+
+    document.querySelectorAll("data-tile").forEach((dataTile, i) => {
+      dataTile.selected = (index === i);
+    });
 
     // Populate the title
     const titleElement = wrapper.querySelector('.head .title');
@@ -189,7 +196,7 @@ class ResultsView {
       
       <div class="page-content page-centered">
       ${(!this.results)
-        ? html`<main-spinner></main-spinner>`
+        ? html`<main-spinner style="align-content: center;"></main-spinner>`
         : html`
           <div class="results-wrapper">
             <div class="display-box">
@@ -200,10 +207,10 @@ class ResultsView {
 
               ${this.results.users
             ? this.results.users
-              .map(user => html`
+              .map((user, i) => html`
                 <user-tile 
                   .user="${user}"
-                  .onClick="${() => this.populateUserData(user)}" >
+                  .onClick="${() => this.populateUserData(user, i)}" >
                 </user-tile>
               `)
             : html``
@@ -211,12 +218,12 @@ class ResultsView {
 
                ${this.results.familys
             ? this.results.familys
-              .map(item => html`
+              .map((item, i) => html`
                 <data-tile
                   label=${Utils.titleCase(item.name)} 
                   date=${Utils.formatDateTimeAU(item.createdAt)} 
                   icon="family.svg"
-                  .onClick=${() => this.populateFamilyData(item)}>
+                  .onClick=${(e) => this.populateFamilyData(item, i)}>
                 </data-tile>
               `)
             : html``
@@ -225,11 +232,11 @@ class ResultsView {
               ${this.results.events
             ? this.results.events
               .sort((a, b) => new Date(b.start) - new Date(a.start)) // Sort by start time descending
-              .map(item => html`
+              .map((item, i) => html`
                 <data-tile 
                   label=${Utils.titleCase(item.title)} 
                   date=${Utils.formatDateTimeAU(item.start)} 
-                  .onClick=${() => this.populateEventData(item)}>
+                  .onClick=${() => this.populateEventData(item, i)}>
                 </data-tile>
               `)
             : html``

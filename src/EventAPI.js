@@ -1,7 +1,7 @@
 import App from './App'
 import Toast from './Toast'
 
-class FamilyAPI {
+class EventAPI {
 
   async createEvent(eventData) {
     if (!eventData) return;
@@ -142,4 +142,4 @@ class FamilyAPI {
 
 }
 
-export default new FamilyAPI()
+export default new EventAPI()
