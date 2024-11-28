@@ -35,7 +35,8 @@ class CalendarView {
   showCalendar() {
     const calendarEl = document.getElementById('calendar');
 
-    if (calendarEl && !this.calendar) {  // Initialize only if calendar is not already created
+    if (calendarEl) {
+      console.log("Creating calendar");
       this.calendar = new Calendar(calendarEl, {
         initialView: 'dayGridMonth',
 
