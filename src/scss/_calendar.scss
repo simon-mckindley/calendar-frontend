@@ -58,6 +58,11 @@
     }
 }
 
+#dialog-show-event::part(footer) {
+    display: flex;
+    justify-content: space-between;
+}
+
 .delete-text {
     color: var(--primary-color);
     font-size: 1.2em;

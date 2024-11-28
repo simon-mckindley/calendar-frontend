@@ -24,11 +24,14 @@ class CalButton extends LitElement {
         padding: 0.5em 1.5em;
         border-radius: 1000px;
         border: none;
-        outline-width: 2px;
-        outline-style: solid;
-        outline-offset: -2px;
+        // outline-width: 2px;
+        // outline-style: solid;
+        // outline-offset: -2px;
         cursor: pointer;
-        box-shadow: 2px 2px 5px 1px var(--shadow-color);
+        box-shadow: 
+          2px 2px 5px 1px var(--shadow-color),
+          inset 4px 4px 10px 1px #ffffff70,
+          inset -4px -4px 10px 1px #00000080;
         transition: background-color 300ms ease, color 300ms ease;
       }
 

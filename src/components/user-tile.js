@@ -34,9 +34,13 @@ class UserTile extends LitElement {
         box-shadow: 2px 2px 5px 1px var(--shadow-color);
       }
 
-      .user-tile:active,
-      .user-tile[selected] {
+      .user-tile:active {
         outline: 2px solid var(--secondary-color);
+        outline-offset: -2px;
+      }
+        
+      .data-tile[selected] {
+        outline: 4px solid var(--secondary-color);
         outline-offset: -2px;
       }
 

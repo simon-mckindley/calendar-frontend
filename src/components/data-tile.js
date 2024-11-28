@@ -33,9 +33,13 @@ class DataTile extends LitElement {
         box-shadow: 2px 2px 5px 1px var(--shadow-color);
       }
 
-      .data-tile:active,
-      .data-tile[selected] {
+      .data-tile:active {
         outline: 2px solid var(--secondary-color);
+        outline-offset: -2px;
+      }
+
+      .data-tile[selected] {
+        outline: 4px solid var(--secondary-color);
         outline-offset: -2px;
       }
 

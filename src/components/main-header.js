@@ -117,7 +117,7 @@ customElements.define('main-header', class AppHeader extends LitElement {
         padding: 0.25rem 0.5rem;
         text-align: center;
         background-color: rgba(255, 255, 255, 0.2);;
-        border-radius: 100px;
+        border-radius: 5px;
         box-shadow: 1px 1px 2px 0px var(--shadow-color);
         transition: background-color 300ms, translate 500ms ease;
       }

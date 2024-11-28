@@ -270,7 +270,7 @@ class CalendarView {
     }
 
     if (usersArray.length === 0) {
-      error += error ? ', USER' : 'USER';
+      error += error ? ', PARTICIPANT' : 'PARTICIPANT';
     }
 
     if (error) {
@@ -680,27 +680,28 @@ class CalendarView {
               </div>
             </div>
 
-            ${Auth.currentUser.accessLevel === 3
+              ${Auth.currentUser.accessLevel === 3
             ? html``
             : html`
-            <sl-tooltip content="Delete event" slot="footer">
-              <cal-button
-                id="delete-event-btn"
-                .onClick="${() => this.showDeleteConfirmDialog()}" 
-                addStyle="padding-inline: 0.7em;"
-                buttonType="primary">
-                <i class="fa-solid fa-trash-can"></i>
-              </cal-button>
-            </sl-tooltip>`
+              <sl-tooltip content="Delete event" slot="footer">
+                <cal-button
+                  id="delete-event-btn"
+                  .onClick="${() => this.showDeleteConfirmDialog()}" 
+                  addStyle="padding-inline: 0.7em;"
+                  buttonType="primary">
+                  <i class="fa-solid fa-trash-can"></i>
+                </cal-button>
+              </sl-tooltip>`
           }
 
-            <cal-button
-              slot="footer"
-              addStyle="min-width: 6rem; margin-inline: 12rem 1rem;"
-              .onClick="${() => this.hideDialog('dialog-show-event')}" 
-              buttonType="secondary">
-              Close
-            </cal-button>
+            <div slot="footer" style="margin-left: auto;">
+              <cal-button
+                slot="footer"
+                addStyle="min-width: 6rem;"
+                .onClick="${() => this.hideDialog('dialog-show-event')}" 
+                buttonType="secondary">
+                Close
+              </cal-button>
 
             ${Auth.currentUser.accessLevel === 3
             ? html``
@@ -708,11 +709,12 @@ class CalendarView {
             <cal-button
               id="edit-btn"
               slot="footer"
-              addStyle="min-width: 6rem;"
+              addStyle="min-width: 6rem; margin-left: 1rem;"
               .onClick="${() => this.populateDialogForm()}" 
               buttonType="primary">
               Edit
-            </cal-button>`
+            </cal-button>
+                        </div>`
           }
           </sl-dialog>
 
