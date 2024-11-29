@@ -391,16 +391,6 @@ class FamilyView {
                 </div>
 
                 <div class="invitation-buttons">
-                  <sl-tooltip content="Accept invitation">
-                    <cal-button
-                      id="invite-accept"
-                      .onClick="${() => this.acceptInvitationHandler()}" 
-                      addStyle="padding-inline: 0.7em;"
-                      buttonType="primary">
-                      <i class="fa-solid fa-check"></i>
-                    </cal-button>
-                  </sl-tooltip>
-
                   <sl-tooltip content="Decline invitation">
                     <cal-button
                       id="invite-decline"
@@ -410,6 +400,16 @@ class FamilyView {
                       <i class="fa-solid fa-xmark"></i>
                     </cal-button>
                   <sl-tooltip>
+
+                  <sl-tooltip content="Accept invitation">
+                    <cal-button
+                      id="invite-accept"
+                      .onClick="${() => this.acceptInvitationHandler()}" 
+                      addStyle="padding-inline: 0.7em;"
+                      buttonType="primary">
+                      <i class="fa-solid fa-check"></i>
+                    </cal-button>
+                  </sl-tooltip>
                 </div>
                 <sl-badge class="alert-pill" variant="danger" pill pulse>!</sl-badge>
               </div>`
