@@ -399,7 +399,7 @@ class FamilyView {
                       buttonType="secondary">
                       <i class="fa-solid fa-xmark"></i>
                     </cal-button>
-                  <sl-tooltip>
+                  </sl-tooltip>
 
                   <sl-tooltip content="Accept invitation">
                     <cal-button
