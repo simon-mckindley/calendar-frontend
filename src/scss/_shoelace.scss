@@ -22,6 +22,11 @@ sl-dialog::part(panel) {
 sl-dialog::part(title) {
   font-family: "Maven-SemiBold";
   font-size: 1.6em;
+  text-align: left;
+}
+
+sl-dialog::part(body) {
+  text-align: left;
 }
 
 sl-checkbox::part(control--checked) {

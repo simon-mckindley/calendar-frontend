@@ -58,7 +58,7 @@
     }
 }
 
-#dialog-show-event::part(footer) {
+.calendar-event::part(footer) {
     display: flex;
     justify-content: space-between;
 }

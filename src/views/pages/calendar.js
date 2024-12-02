@@ -658,7 +658,7 @@ class CalendarView {
 
 
            <!---------- Dialog box to show event details ------------->
-          <sl-dialog id="dialog-show-event">
+          <sl-dialog id="dialog-show-event"  class="calendar-event">
             <div class="show-event-body">
               <div class="all-day-wrap">
                 <i class="fa-regular fa-calendar-check"></i>
