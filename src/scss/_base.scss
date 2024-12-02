@@ -265,4 +265,14 @@ a {
   .guide-head {
     grid-template-columns: 1fr;
   }
+
+  .guide-article:nth-of-type(odd) {
+    :first-child {
+      grid-area: unset;
+    }
+
+    :last-child {
+      grid-area: unset;
+    }
+  }
 }

@@ -13,6 +13,10 @@ class RegisterView {
     formData = {};
     this.render();
     Utils.pageIntroAnim();
+    this.checkbox = document.getElementById('show-checkbox');
+    if (this.checkbox) {
+      this.checkbox.addEventListener('input', () => this.showPassword());
+    }
   }
 
   // Handle input changes
@@ -26,7 +30,7 @@ class RegisterView {
   registerSubmitHandler() {
     // Checks if all data is present
     let error = "";
-    const fields = ['firstName', 'lastName', 'email', 'password'];
+    const fields = ['firstName', 'lastName', 'email', 'password', 'confirm'];
 
     fields.forEach(field => {
       if (formData[field]) {
@@ -35,7 +39,8 @@ class RegisterView {
 
       if (!formData[field]) {
         document.querySelector(`cal-input[name="${field}"]`).setAttribute("hasError", "true");
-        let fieldName = field.includes('Name') ? field.slice(0, -4).concat(" ", "name") : field;
+        let fieldName = field.includes('confirm') ? "PASSWORD CONFIRMATION" : field;
+        fieldName = field.includes('Name') ? field.slice(0, -4).concat(" ", "name") : fieldName;
         error += error ? `, ${fieldName.toUpperCase()}` : fieldName.toUpperCase();
       }
     });
@@ -47,8 +52,22 @@ class RegisterView {
 
     // Validates email address
     if (!Utils.validateEmail(formData['email'])) {
-      document.querySelector(`cal-input[name="email"]`).setAttribute("hasError", "true");
-      Toast.show(`Please enter a valid EMAIL address`, 'error');
+      document.querySelector('cal-input[name="email"]').setAttribute("hasError", "true");
+      Toast.show('Please enter a valid EMAIL address', 'error');
+      return;
+    }
+
+    // Validate password
+    const minPasswordLength = 6;
+    if (formData['password'].length < minPasswordLength) {
+      document.querySelector('cal-input[name="password"]').setAttribute("hasError", "true");
+      Toast.show(`PASSWORD must be a least ${minPasswordLength} characters`, 'error');
+      return;
+    }
+
+    if (formData['password'] !== formData['confirm']) {
+      document.querySelector('cal-input[name="confirm"]').setAttribute("hasError", "true");
+      Toast.show('PASSWORD CONFIRMATION mismatch', 'error');
       return;
     }
 
@@ -64,6 +83,8 @@ class RegisterView {
       return;
     }
 
+    delete formData.confirm;
+
     let encodedFormData = new FormData();
     for (const key in formData) {
       if (formData.hasOwnProperty(key)) {
@@ -78,6 +99,21 @@ class RegisterView {
       submitBtn.textContent = "Register";
     });
   }
+
+  // Shows or hides the password input data
+  showPassword() {
+    const input = document.querySelector('cal-input[name="password"]');
+    input.type = this.checkbox.checked ? 'text' : 'password';
+
+    // Hides automatically after a set time
+    if (this.checkbox.checked) {
+      setTimeout(() => {
+        this.checkbox.checked = false;
+        input.type = 'password';
+      }, 8000);
+    }
+  }
+
 
   render() {
     const template = html`   
@@ -102,8 +138,14 @@ class RegisterView {
                 @input-change=${this.handleInputChange}>
               </cal-input>
             </div>
-            <div class="input-wrapper">
-              <cal-input label="Password" name="password" type="text"
+            <div class="input-wrapper password-wrapper">
+              <div class="password-inner">
+                <cal-input label="Password" name="password" type="password"
+                  @input-change=${this.handleInputChange}>
+                </cal-input>
+                <sl-checkbox id="show-checkbox" size="small" tabindex="-1">Show</sl-checkbox>
+              </div>
+              <cal-input label="Confirm Password" name="confirm" type="password"
                 @input-change=${this.handleInputChange}>
               </cal-input>
             </div>

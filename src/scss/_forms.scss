@@ -51,6 +51,25 @@
   margin-top: 1em;
   align-content: center;
 
+  .password-wrapper {
+    display: flex;
+    gap: 0.5em;
+
+    >* {
+      flex-grow: 1;
+    }
+
+    .password-inner {
+      position: relative;
+
+      sl-checkbox {
+        position: absolute;
+        top: -2px;
+        right: 1em;
+      }
+    }
+  }
+
   .acc-link {
     text-align: center;
 
@@ -126,5 +145,9 @@
 
   .register-wrapper {
     align-content: unset;
+
+    .password-wrapper {
+      flex-direction: column;
+    }
   }
 }

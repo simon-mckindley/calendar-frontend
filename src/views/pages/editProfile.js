@@ -13,6 +13,7 @@ class EditProfileView {
     console.log('EditProfileView.init');
     document.title = 'Edit Profile';
     this.user = null;
+    this.checkbox = null;
     formData = {}; // Reset formData
     this.render();
     Utils.pageIntroAnim();
@@ -24,6 +25,10 @@ class EditProfileView {
       this.user = await UserAPI.getUser(Auth.currentUser.id);
       this.render();
       this.setUserAccessLevel();
+      this.checkbox = document.getElementById('show-checkbox');
+      if (this.checkbox) {
+        this.checkbox.addEventListener('input', () => this.showPassword());
+      }
     } catch (err) {
       console.log(err);
       Toast.show('Error fetching user data', 'error');
@@ -36,6 +41,8 @@ class EditProfileView {
         input.setAttribute('checked', 'true');
       }
     });
+
+    formData["accessLevel"] = this.user.accessLevel;
   }
 
   resetForm() {
@@ -61,7 +68,7 @@ class EditProfileView {
 
 
   async updateProfileHandler() {
-    const fields = ["firstName", "lastName", "email", "password"];
+    const fields = ["firstName", "lastName", "email", "password", "confirm"];
 
     fields.forEach((field) => {
       if (formData[field]) {
@@ -73,6 +80,22 @@ class EditProfileView {
       document.querySelector(`cal-input[name="email"]`).setAttribute("hasError", "true");
       Toast.show("Please enter a valid EMAIL address", "error");
       return;
+    }
+
+    // Validate password
+    if (formData['password']) {
+      const minPasswordLength = 6;
+      if (formData['password'].length < minPasswordLength) {
+        document.querySelector('cal-input[name="password"]').setAttribute("hasError", "true");
+        Toast.show(`PASSWORD must be a least ${minPasswordLength} characters`, 'error');
+        return;
+      }
+
+      if (formData['password'] !== formData['confirm']) {
+        document.querySelector('cal-input[name="confirm"]').setAttribute("hasError", "true");
+        Toast.show('PASSWORD CONFIRMATION mismatch', 'error');
+        return;
+      }
     }
 
     document.querySelectorAll('input[name="access-level"]').forEach((input) => {
@@ -117,14 +140,28 @@ class EditProfileView {
       Auth.currentUser = this.user;
       Auth.currentUser.id = this.user._id;
       this.render();
-      this.resetForm();
       formData = {};
+      this.resetForm();
 
     } catch (err) {
       console.log(err);
     }
 
     submitBtn.textContent = "Update";
+  }
+
+  // Shows or hides the password input data
+  showPassword() {
+    const input = document.querySelector('cal-input[name="password"]');
+    input.type = this.checkbox.checked ? 'text' : 'password';
+
+    // Hides automatically after a set time
+    if (this.checkbox.checked) {
+      setTimeout(() => {
+        this.checkbox.checked = false;
+        input.type = 'password';
+      }, 8000);
+    }
   }
 
 
@@ -186,11 +223,22 @@ class EditProfileView {
                     >
                     </cal-input>
                   </div>
-                  <div class="input-wrapper">
-                    <cal-input label="Password" name="password" type="text" @input-change=${this.handleInputChange}>
+                  <div class="input-wrapper password-wrapper">
+                    <div class="password-inner">
+                      <cal-input label="Password" name="password" type="password"
+                        @input-change=${this.handleInputChange}>
+                      </cal-input>
+                      <sl-checkbox id="show-checkbox" size="small" tabindex="-1">Show</sl-checkbox>
+                    </div>
+                    <cal-input label="Confirm Password" name="confirm" type="password"
+                      @input-change=${this.handleInputChange}>
                     </cal-input>
                   </div>
-                  <div class="input-wrapper">
+
+                  ${this.user.accessLevel === 3
+            ? html``
+            : html`
+                  <div class="input-wrapper ">
                     <div class="input-label">User Type</div>
                     <div class="radio-wrapper">
                       <input type="radio" id="adult-access" name="access-level" value="2" />
@@ -201,6 +249,7 @@ class EditProfileView {
                       <label for="admin-access">Admin</label>
                     </div>
                   </div>
+                  `}
 
                   <cal-button
                     buttonType="primary"
