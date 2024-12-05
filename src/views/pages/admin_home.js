@@ -73,7 +73,7 @@ class AdminHomeView {
     button.textContent = buttonText
   }
 
-  
+
   render() {
     const template = html`
         <main-header></main-header>
@@ -89,7 +89,7 @@ class AdminHomeView {
 
             <cal-button
               buttonType="secondary"
-              addStyle="width: 100%"
+              addStyle="width: 100%; margin-top: 1em;"
               .onClick=${(e) => this.searchSubmitHandler("user", e.target)}
             >Search Users</cal-button>
 

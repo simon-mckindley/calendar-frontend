@@ -33,6 +33,11 @@ sl-checkbox::part(control--checked) {
   background: var(--secondary-color);
 }
 
+sl-spinner {
+  --indicator-color: white;
+  --track-color: var(--light-secondary-color);
+}
+
 
 // RESPONSIVE - MOBILE -------------------
 @media all and (max-width: 768px) {

@@ -39,7 +39,7 @@ class UserTile extends LitElement {
         outline-offset: -2px;
       }
         
-      .data-tile[selected] {
+      .user-tile[selected] {
         outline: 4px solid var(--secondary-color);
         outline-offset: -2px;
       }
