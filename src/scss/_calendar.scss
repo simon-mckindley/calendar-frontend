@@ -30,13 +30,15 @@
         margin-bottom: 3px;
     }
 
-    #checkbox-wrapper {
+    #checkbox-wrapper,
+    .radio-wrapper {
         display: flex;
         gap: 0.5em;
         flex-wrap: wrap;
     }
 
-    input[type=checkbox] {
+    input[type=checkbox],
+    input[type=radio] {
         display: none;
     }
 
@@ -48,13 +50,21 @@
         cursor: pointer;
         box-shadow: 2px 2px 3px 1px var(--shadow-color);
         transition: background-color 300ms, color 300ms, box-shadow 300ms;
+
+        img {
+            filter: brightness(0.75);
+        }
     }
 
-    input[type=checkbox]:checked+label {
+    input[type=checkbox]:checked+label,
+    input[type=radio]:checked+label {
         color: #fff;
         background-color: var(--light-secondary-color);
         box-shadow: 1px 1px 2px 0px var(--shadow-color);
-        ;
+        
+        img {
+            filter: brightness(0.5);
+        }
     }
 }
 

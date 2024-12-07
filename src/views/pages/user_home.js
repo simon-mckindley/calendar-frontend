@@ -137,7 +137,8 @@ class UserHomeView {
               .map(item => html`
                 <data-tile 
                   label=${Utils.titleCase(item.title)} 
-                  date=${Utils.formatDateTimeAU(item.start)} 
+                  date=${Utils.formatDateTimeAU(item.start)}
+                  icon=${item.icon || undefined}
                   .onClick=${() => this.displayEvent(item)}>
                 </data-tile>
               `)

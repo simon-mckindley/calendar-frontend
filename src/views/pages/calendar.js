@@ -131,6 +131,12 @@ class CalendarView {
       this.render();
       setTimeout(() => {
         this.createUserCheckboxes();
+        const createDialog = document.getElementById('dialog-create-event');
+        if (createDialog) {
+          createDialog.addEventListener('sl-hide', () => {
+            this.resetCreateForm();
+          });
+        }
         this.showCalendar();
       }, 3000);
 
@@ -219,11 +225,13 @@ class CalendarView {
         checkbox.checked = checkbox.value === Auth.currentUser.id;
       });
     }
-  }
 
-  closeCreateDialog() {
-    this.hideDialog('dialog-create-event');
-    this.resetCreateForm();
+    const iconInputs = document.querySelectorAll('.create-event-form input[type="radio"]');
+    if (iconInputs) {
+      iconInputs.forEach((input, i) => {
+        input.checked = (i === 0);
+      });
+    }
   }
 
 
@@ -272,6 +280,20 @@ class CalendarView {
 
     if (usersArray.length === 0) {
       error += error ? ', PARTICIPANT' : 'PARTICIPANT';
+    }
+
+    // Validates icon inputs
+    const iconInputs = document.querySelectorAll('input[name="icon"]');
+    if (iconInputs) {
+      iconInputs.forEach(input => {
+        if (input.checked) {
+          formData.icon = input.value;
+        }
+      });
+    }
+
+    if (!formData.icon) {
+      error += error ? ', ICON' : 'ICON';
     }
 
     if (error) {
@@ -361,7 +383,17 @@ class CalendarView {
     }
 
     if (usersArray.length === 0) {
-      error += error ? ', USER' : 'USER';
+      error += error ? ', PARTICIPANT' : 'PARTICIPANT';
+    }
+
+    // Validates icon inputs
+    const iconInputs = document.querySelectorAll('input[name="icon"]');
+    if (iconInputs) {
+      iconInputs.forEach(input => {
+        if (input.checked) {
+          formData.icon = input.value;
+        }
+      });
     }
 
     if (error) {
@@ -484,7 +516,7 @@ class CalendarView {
     const dialog = document.getElementById("dialog-create-event");
 
     if (this.displayEvent) {
-      const { _id, title, start, end, allDay, description, users } = this.displayEvent;
+      const { _id, title, start, end, allDay, description, users, icon } = this.displayEvent;
 
       // Format text fields
       const titleFormat = title ? Utils.titleCase(title) : "";
@@ -522,6 +554,15 @@ class CalendarView {
       if (checkboxWrapper && users) {
         Array.from(checkboxWrapper.querySelectorAll('input[type="checkbox"]')).forEach(checkbox => {
           checkbox.checked = users.some(user => user._id === checkbox.value);
+        });
+      }
+
+      // Populate icon radio if they exist
+      const iconWrapper = dialog.querySelector('.radio-wrapper');
+      if (iconWrapper && icon) {
+        Array.from(iconWrapper.querySelectorAll('input[type="radio"]')).forEach(input => {
+          console.log(input.value, icon);
+          input.checked = (icon === input.value);
         });
       }
 
@@ -636,12 +677,54 @@ class CalendarView {
                 <div class="input-label">Participants</div>          
                 <div id="checkbox-wrapper"></div>
               </div>
+
+              <div>
+                <div class="input-label">Icon</div>
+                <div class="radio-wrapper">
+                  <input type="radio" id="event" name="icon" value="event_icon.svg" checked>
+                  <label class="checkbox-label" for="event">
+                    <img src="/images/icons/event_icon.svg">
+                  </label>
+                  <input type="radio" id="celebration" name="icon" value="celebration_icon.svg">
+                  <label class="checkbox-label" for="celebration">
+                    <img src="/images/icons/celebration_icon.svg">
+                  </label>
+                  <input type="radio" id="dining" name="icon" value="dining_icon.svg">
+                  <label class="checkbox-label" for="dining">
+                    <img src="/images/icons/dining_icon.svg">
+                  </label>
+                  <input type="radio" id="medical" name="icon" value="medical_icon.svg">
+                  <label class="checkbox-label" for="medical">
+                    <img src="/images/icons/medical_icon.svg">
+                  </label>
+                  <input type="radio" id="meeting" name="icon" value="meeting_icon.svg">
+                  <label class="checkbox-label" for="meeting">
+                    <img src="/images/icons/meeting_icon.svg">
+                  </label>
+                  <input type="radio" id="school" name="icon" value="school_icon.svg">
+                  <label class="checkbox-label" for="school">
+                    <img src="/images/icons/school_icon.svg">
+                  </label>
+                  <input type="radio" id="travel" name="icon" value="travel_icon.svg">
+                  <label class="checkbox-label" for="travel">
+                    <img src="/images/icons/travel_icon.svg">
+                  </label>
+                  <input type="radio" id="work" name="icon" value="work_icon.svg">
+                  <label class="checkbox-label" for="work">
+                    <img src="/images/icons/work_icon.svg">
+                  </label>
+                  <input type="radio" id="sport" name="icon" value="sport_icon.svg">
+                  <label class="checkbox-label" for="sport">
+                    <img src="/images/icons/sport_icon.svg">
+                  </label>
+                </div>
+              </div>
             </form>
 
             <cal-button
               slot="footer"
               addStyle="min-width: 8rem; margin-inline-end: 1rem;"
-              .onClick=${() => this.closeCreateDialog()} 
+              .onClick=${() => this.hideDialog('dialog-create-event')} 
               buttonType="secondary">
               Cancel
             </cal-button>

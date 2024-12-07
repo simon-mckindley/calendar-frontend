@@ -235,7 +235,8 @@ class ResultsView {
               .map((item, i) => html`
                 <data-tile 
                   label=${Utils.titleCase(item.title)} 
-                  date=${Utils.formatDateTimeAU(item.start)} 
+                  date=${Utils.formatDateTimeAU(item.start)}
+                  icon=${item.icon || undefined}
                   .onClick=${() => this.populateEventData(item, i)}>
                 </data-tile>
               `)

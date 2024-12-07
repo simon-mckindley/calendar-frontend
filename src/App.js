@@ -7,7 +7,8 @@ class App {
   constructor() {
     this.name = "ClanCalendar"
     this.version = "1.0.0"
-    this.apiBase = 'https://smck-calendar-backend-e2c67e518cad.herokuapp.com'//'http://localhost:3000'//
+    // this.apiBase = 'http://localhost:3000'
+    this.apiBase = 'https://smck-calendar-backend-e2c67e518cad.herokuapp.com'
     this.rootEl = document.getElementById("root")
     this.version = "1.0.0"
   }

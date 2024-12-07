@@ -117,9 +117,19 @@
         padding: 1rem 2rem;
         box-shadow: 1px 1px 2px 1px var(--shadow-color);
 
-        .event-title {
-            font-size: 1.2em;
-            font-weight: bold;
+        .title {
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+
+            .event-title {
+                font-size: 1.2em;
+                font-weight: bold;
+            }
+            
+            img {
+                width: 1.5em;
+            }
         }
     }
 }

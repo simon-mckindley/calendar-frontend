@@ -104,7 +104,10 @@ class FamilyView {
 
     document.getElementById("show-next-event").innerHTML = nextEvent
       ? `Next Event:<br>
-        <span class="event-title">${Utils.titleCase(nextEvent.title)}</span><br><br>
+        <div class="title">
+          <img src="/images/icons/${nextEvent.icon || 'event_icon.svg'}">
+          <span class="event-title">${Utils.titleCase(nextEvent.title)}</span><br><br>
+        </div>
         <i class="fa-regular fa-clock"></i> 
         <span>${Utils.formatDateTimeAU(nextEvent.start)}</span><br><br>
         ${Utils.formatTextWithLineBreaks(Utils.titleCase(nextEvent.description))}`

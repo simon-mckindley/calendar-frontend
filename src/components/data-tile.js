@@ -46,7 +46,7 @@ class DataTile extends LitElement {
       .tile-head {
         display: flex;
         align-items: center;
-        coulmn-gap: 0.5rem;
+        column-gap: 0.5rem;
       }
 
       .tile-head img{
@@ -83,7 +83,7 @@ class DataTile extends LitElement {
       <div class="data-tile" ?selected=${this.selected} @click="${this.onClick}" tabindex="0">
         <div class="tile-head">
       ${this.type === 'icon'
-        ? html`<img src="/images/icons/${this.icon}">`
+        ? html`<img src="/images/icons/${this.icon || 'event_icon.svg'}">`
         : html``
       }  
           <div class="tile-title">${this.label}</div>
