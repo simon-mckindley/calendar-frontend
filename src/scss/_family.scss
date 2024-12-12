@@ -73,6 +73,7 @@
         margin-block-start: 2rem;
         padding: 0.5rem;
         box-shadow: 1px 1px 2px 1px var(--shadow-color);
+        animation: move-in-left 300ms ease forwards;
 
         .invitation-text {
             font-size: 1.2em;
@@ -126,7 +127,7 @@
                 font-size: 1.2em;
                 font-weight: bold;
             }
-            
+
             img {
                 width: 1.5em;
             }
