@@ -414,7 +414,8 @@ class CalendarView {
 
     // Add allDay and users to formdata
     const allDay = document.querySelector(".all-day-input");
-    if (allDay.checked) formData.allDay = true;
+    // if (allDay.checked) formData.allDay = true;
+    formData.allDay = allDay.checked;
 
     formData.users = usersArray;
 
